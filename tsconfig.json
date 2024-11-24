@@ -1,7 +1,20 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+	"files": [],
+	"references": [
+		{ "path": "./tsconfig.app.json" },
+		{ "path": "./tsconfig.node.json" }
+	],
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@components/*": ["src/components/*"],
+			"@features/*": ["src/features/*"],
+			"@custom-types/*": ["src/types/*"],
+			"@hooks/*": ["src/hooks/*"],
+			"@styles/*": ["src/styles/*"],
+			"@assets/*": ["src/assets/*"],
+			"@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+		},
+		"types": ["@types/testing-library__react", "vitest/globals", "node"]
+	}
 }
