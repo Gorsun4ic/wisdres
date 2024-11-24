@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const StyledBookDescription = styled.div`
 	&& {
+		margin-bottom: 60px;
 		h2 {
 			margin-bottom: 64px;
 			text-align: center;

@@ -6,7 +6,7 @@ import { StyledBookReviews } from "./style";
 const BookReviews = () => {
 	return (
 		<StyledBookReviews>
-			<Stack direction="row" spacing={12} sx={{justifyContent: "space-between"}}>
+			<Stack direction="row" spacing={12} sx={{justifyContent: "space-between", alignItems: "flex-start"}}>
 				<ReviewsList />
 				<Form />
 			</Stack>
