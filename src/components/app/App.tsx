@@ -3,8 +3,9 @@ import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { Container } from "@mui/material";
 import GlobalStyle from "@styles/GlobalStyle";
 import theme from "@styles/theme";
+// Pages
 import BookPage from "@pages/Book";
-import Hero from "@features/hero";
+import MainPage from "@pages/Main";
 
 function App() {
 	return (
@@ -20,7 +21,7 @@ function App() {
 					}}>
 					<Router>
 						<Routes>
-							<Route path="/" element={<Hero />} />
+							<Route path="/" element={<MainPage />} />
 							<Route path="/book" element={<BookPage />} />
 						</Routes>
 					</Router>

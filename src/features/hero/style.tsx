@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const StyledHero = styled.div`
 	&& {
+		margin-bottom: 60px;
 		span {
 			position: absolute;
 			font-size: ${({ theme }) => theme?.fontSizes?.h1};
