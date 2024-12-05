@@ -1,0 +1,211 @@
+{
+  "books": [
+  {
+    "img": "https://m.media-amazon.com/images/I/81K3WBwcGRL._AC_UF1000,1000_QL80_.jpg",
+    "rating": 4.5,
+    "title": "The Great Adventure",
+    "genre": ["Fiction", "Adventure"],
+    "author": "John Doe",
+    "publisher": "Penguin Random House",
+    "language": "English",
+    "year": 2020,
+    "pages": 350
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/A1udJcTBv1L._AC_UF1000,1000_QL80_.jpg",
+    "rating": 4.0,
+    "title": "Mystery in the Woods",
+    "genre": ["Mystery", "Thriller"],
+    "author": "Jane Smith",
+    "publisher": "HarperCollins",
+    "language": "English",
+    "year": 2019,
+    "pages": 280
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/A1-7Eb8saYL._AC_UF1000,1000_QL80_.jpg",
+    "rating": 4.7,
+    "title": "The Silent World",
+    "genre": ["Science Fiction", "Drama"],
+    "author": "Michael Johnson",
+    "publisher": "Macmillan",
+    "language": "English",
+    "year": 2021,
+    "pages": 420
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/71KtB-HJ7fL._AC_UF1000,1000_QL80_.jpg",
+    "rating": 3.9,
+    "title": "The Lost City",
+    "genre": ["Historical Fiction", "Adventure"],
+    "author": "Emily Davis",
+    "publisher": "Hachette Book Group",
+    "language": "English",
+    "year": 2018,
+    "pages": 310
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/71zwgBWQz2L._AC_UF1000,1000_QL80_.jpg",
+    "rating": 4.8,
+    "title": "Beyond the Stars",
+    "genre": ["Science Fiction", "Adventure"],
+    "author": "Alexandra Brown",
+    "publisher": "Oxford University Press",
+    "language": "English",
+    "year": 2022,
+    "pages": 500
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/81qAGqyZQIL._AC_UF1000,1000_QL80_.jpg",
+    "rating": 4.3,
+    "title": "Into the Dark",
+    "genre": ["Horror", "Thriller"],
+    "author": "David Clark",
+    "publisher": "Simon & Schuster",
+    "language": "English",
+    "year": 2020,
+    "pages": 280
+  },
+  {
+    "img": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1650582371i/59573806.jpg",
+    "rating": 4.2,
+    "title": "The Hidden Truth",
+    "genre": ["Mystery", "Thriller"],
+    "author": "Sophia White",
+    "publisher": "Springer",
+    "language": "English",
+    "year": 2017,
+    "pages": 340
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/8181lAis52L._AC_UF1000,1000_QL80_.jpg",
+    "rating": 4.9,
+    "title": "The Red Flag",
+    "genre": ["Historical Fiction", "War"],
+    "author": "John Miller",
+    "publisher": "Cambridge University Press",
+    "language": "English",
+    "year": 2019,
+    "pages": 450
+  },
+  {
+    "img": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1716174736i/213675875.jpg",
+    "rating": 4.4,
+    "title": "Whispers in the Wind",
+    "genre": ["Romance", "Drama"],
+    "author": "Olivia Parker",
+    "publisher": "Wiley",
+    "language": "English",
+    "year": 2021,
+    "pages": 390
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/81msn-DRemL._AC_UF1000,1000_QL80_.jpg",
+    "rating": 3.8,
+    "title": "A Walk in the Forest",
+    "genre": ["Adventure", "Children"],
+    "author": "Mark Adams",
+    "publisher": "Pearson",
+    "language": "English",
+    "year": 2018,
+    "pages": 150
+  },
+  {
+    "img": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1639074889i/59782335.jpg",
+    "rating": 5.0,
+    "title": "Echoes of the Past",
+    "genre": ["Fantasy", "Adventure"],
+    "author": "Charlotte Lee",
+    "publisher": "HarperCollins UK",
+    "language": "English",
+    "year": 2023,
+    "pages": 580
+  },
+  {
+    "img": "https://book-ye.com.ua/upload/iblock/265/a0b3f9be_7e58_11e6_80c0_000c29ae1566_0ab5cd1f_9d28_11ef_81b4_005056857596.jpg",
+    "rating": 4.6,
+    "title": "Nightfall",
+    "genre": ["Horror", "Mystery"],
+    "author": "Aaron Green",
+    "publisher": "Scholastic",
+    "language": "English",
+    "year": 2019,
+    "pages": 320
+  },
+  {
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFNq002BhbYovqW_nPBaezLbStTaAFLibfaA&s",
+    "rating": 3.7,
+    "title": "The Shattered Glass",
+    "genre": ["Thriller", "Action"],
+    "author": "Emily Turner",
+    "publisher": "Routledge",
+    "language": "English",
+    "year": 2020,
+    "pages": 280
+  },
+  {
+    "img": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564701795l/50039304.jpg",
+    "rating": 4.3,
+    "title": "A Dream of Fire",
+    "genre": ["Fantasy", "Adventure"],
+    "author": "Samuel King",
+    "publisher": "Princeton University Press",
+    "language": "English",
+    "year": 2017,
+    "pages": 460
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/81OJtKz7V7L._AC_UF1000,1000_QL80_.jpg",
+    "rating": 4.2,
+    "title": "Lost Horizons",
+    "genre": ["Fiction", "Adventure"],
+    "author": "Sarah Harris",
+    "publisher": "Cengage Learning",
+    "language": "English",
+    "year": 2022,
+    "pages": 300
+  },
+  {
+    "img": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1556292871i/45308234.jpg",
+    "rating": 4.8,
+    "title": "The Eternal Storm",
+    "genre": ["Fantasy", "Action"],
+    "author": "James Stewart",
+    "publisher": "Tyndale House Publishers",
+    "language": "English",
+    "year": 2021,
+    "pages": 400
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/71jgNqUOClL._AC_UF1000,1000_QL80_.jpg",
+    "rating": 3.9,
+    "title": "Revenge of the Fallen",
+    "genre": ["Action", "Thriller"],
+    "author": "Jack Long",
+    "publisher": "HarperCollins",
+    "language": "English",
+    "year": 2020,
+    "pages": 290
+  },
+  {
+    "img": "https://m.media-amazon.com/images/I/81VyrLLvbtL.jpg",
+    "rating": 4.7,
+    "title": "The City of Secrets",
+    "genre": ["Mystery", "Fantasy"],
+    "author": "Sophia Green",
+    "publisher": "Wiley",
+    "language": "English",
+    "year": 2021,
+    "pages": 360
+  },
+  {
+    "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650064667l/59580653.jpg",
+    "rating": 4.4,
+    "title": "The Wild Hunt",
+    "genre": ["Fantasy", "Adventure"],
+    "author": "Daniel White",
+    "publisher": "HarperCollins",
+    "language": "English",
+    "year": 2018,
+    "pages": 400
+  }]}

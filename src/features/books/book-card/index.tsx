@@ -6,16 +6,15 @@ import Button from "@components/button";
 import { IBookInfo } from "@custom-types/book";
 
 const BookCard: React.FC<{ data: IBookInfo }> = ({ data }) => {
-	const { img, rating, title, author } = data;
+	const { img, rating, title, author, year } = data;
 	return (
 		<StyledCard
 			className="book-card"
 			sx={{
-				maxWidth: "230px",
 				boxShadow: "none",
 				border: `1px solid ${theme?.colors?.darkGrey}`,
 			}}>
-			<img src={img} className="book-card__img" />
+			<img src={img} className="book-card__img" width="200" height="380"/>
 			<StyledCardContent>
 				<Stack
 					direction="row"

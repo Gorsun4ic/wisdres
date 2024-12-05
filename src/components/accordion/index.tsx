@@ -10,6 +10,7 @@ const Accordion = ({
 	title,
 	children,
 	id,
+	...props
 }: {
 	title: string;
 	children: React.ReactNode;
@@ -20,7 +21,7 @@ const Accordion = ({
 			<StyleAccordionSummary
 				id={id}
 				aria-controls={`${id}-content`}
-				expandIcon={<ExpandMoreIcon />}>
+				expandIcon={<ExpandMoreIcon />} {...props}>
 				{title}
 			</StyleAccordionSummary>
 			<StyledAccordionDetails id={`${id}-content`}>

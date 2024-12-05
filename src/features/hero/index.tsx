@@ -22,8 +22,7 @@ const Hero = () => {
 					allowTouchMove={false}
 					speed={3000}
 					loop={true}
-					onSwiper={(swiper) => console.log(swiper)}
-					onSlideChange={() => console.log("slide change")}>
+					>
 					<SwiperSlide>
 						<img
 							src="https://m.media-amazon.com/images/I/6158m1qLqFL._AC_UF1000,1000_QL80_.jpg"
@@ -137,8 +136,7 @@ const Hero = () => {
 					speed={3000}
 					dir="rtl"
 					loop={true}
-					onSwiper={(swiper) => console.log(swiper)}
-					onSlideChange={() => console.log("slide change")}>
+					>
 					<SwiperSlide>
 						<img
 							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQei8UwvedGRmp_7ppTOQZQ1I9IMK6dTt0fzg&s"

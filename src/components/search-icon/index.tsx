@@ -1,7 +1,7 @@
 import theme from "../../styles/theme";
 
 const SearchIcon = ({
-	size = 24,
+	size = 20,
 	color = theme.colors.grey,
 }: {
 	size?: number;

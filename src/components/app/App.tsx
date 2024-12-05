@@ -3,31 +3,39 @@ import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { Container } from "@mui/material";
 import GlobalStyle from "@styles/GlobalStyle";
 import theme from "@styles/theme";
+import Header from "@components/header";
 // Pages
-import BookPage from "@pages/Book";
 import MainPage from "@pages/Main";
+import BooksPage from "@pages/Books";
+import BookPage from "@pages/Book";
+import GenrePage from "@pages/Genre";
+import AuthorsPage from "@pages/Authors";
+import PublishersPage from "@pages/Publishers";
 
 function App() {
 	return (
-		<>
+		<StyledThemeProvider theme={theme}>
 			<GlobalStyle />
-			<StyledThemeProvider theme={theme}>
+			<Router>
 				<Container
 					maxWidth="lg"
 					sx={{
 						"&.MuiContainer-maxWidthLg": {
-							maxWidth: "1248px",
+							maxWidth: "1600px",
 						},
 					}}>
-					<Router>
-						<Routes>
-							<Route path="/" element={<MainPage />} />
-							<Route path="/book" element={<BookPage />} />
-						</Routes>
-					</Router>
+					<Header />
+					<Routes>
+						<Route path="/" element={<MainPage />} />
+						<Route path="/books" element={<BooksPage />} />
+						<Route path="/book" element={<BookPage />} />
+						<Route path="/genre" element={<GenrePage />} />
+						<Route path="/authors" element={<AuthorsPage />} />
+						<Route path="/publishers" element={<PublishersPage />} />
+					</Routes>
 				</Container>
-			</StyledThemeProvider>
-		</>
+			</Router>
+		</StyledThemeProvider>
 	);
 }
 

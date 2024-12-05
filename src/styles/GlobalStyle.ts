@@ -34,6 +34,23 @@ const GlobalStyle = createGlobalStyle`
     font-size: ${theme?.fontSizes?.h4};
   }
 
+  a {
+    text-decoration: none;
+    color: ${theme?.colors?.black};
+    transition: color 0.3s ease;
+    			&:hover {
+				color: ${theme?.colors?.green};
+			}
+  }
+
+  /* For inputs make */
+  .MuiOutlinedInput-root {
+			fieldset {
+				border-color: ${theme?.colors?.grey} !important;
+        border-width: 1px !important;
+			}
+    }
+
   .visually-hidden {
     			position: absolute;
 			width: 1px;

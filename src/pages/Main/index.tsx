@@ -7,9 +7,8 @@ const MainPage = () => {
 		<div className="main-page">
 			<Hero />
 			<GenresCollection />
-			<BookCollection title="The most popular" />
-			<BookCollection title="New Arrivals" />
-			<BookCollection title="Staff picks" />
+			<BookCollection filterBy="popularity" number={5} title="The most popular" />
+			<BookCollection filterBy="date" number={5} title="New Arrivals" />
 		</div>
 	);
 }

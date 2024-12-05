@@ -14,6 +14,8 @@
 			"@pages/*": ["src/pages/*"],
 			"@styles/*": ["src/styles/*"],
 			"@assets/*": ["src/assets/*"],
+			"@api/*": ["src/api/*"],
+			"@store/*": ["src/store/*"],
 			"@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
 		},
 		"types": ["@types/testing-library__react", "vitest/globals", "node"]

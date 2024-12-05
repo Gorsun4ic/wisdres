@@ -14,15 +14,7 @@ export const StyledForm = styled.form`
 		button {
 			max-width: 140px;
 		}
-		.MuiOutlinedInput-root {
-			fieldset {
-				border-color: ${({ theme }) => theme.colors.grey};
-			}
-			&.Mui-focused fieldset {
-				border-color: ${({ theme }) => theme.colors.grey};
-				border-width: 1px;
-			}
-		}
+
 		.MuiFormHelperText-root {
 			margin-left: 0;
 		}
