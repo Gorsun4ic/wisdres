@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,7 +10,6 @@ import Button from "@components/button";
 import FormField from "@components/formField";
 
 import { StyledForm } from "./style";
-import { useEffect } from "react";
 
 type FormFields = {
 	title: string;
@@ -23,6 +22,45 @@ type FormFields = {
 	pages: number;
 };
 
+const useWatchImg = (watch: any) => {
+	const [img, setImg] = useState<string | undefined>(undefined);
+	const watchImg = watch("img");
+
+	const imageTypes: string[] = [
+		"jpeg",
+		"png",
+		"gif",
+		"webp",
+		"bmp",
+		"svg+xml",
+		"tiff",
+		"heif",
+		"heic",
+		"jpg",
+	];
+
+	// Check if the image type is valid
+	const isValidImageType = (fileName: string): boolean => {
+		return imageTypes.some((type) => fileName.includes(`.${type}`));
+	};
+
+	useEffect(() => {
+		if (watchImg && isValidImageType(watchImg)) {
+			setImg(watchImg); // Set the image if it's valid
+		} else {
+			setImg(null);
+		}
+	}, [watchImg]);
+
+	return img;
+};
+
+const useResetOnSuccess = (reset: () => void, isSubmitSuccessful: boolean) => {
+		useEffect(() => {
+			if (isSubmitSuccessful) reset();
+		}, [isSubmitSuccessful]);
+} 
+
 const AddBookForm = () => {
 	const {
 		register,
@@ -33,16 +71,8 @@ const AddBookForm = () => {
 	} = useForm<FormFields>();
 
 	const [addBook, { isLoading }] = useAddBookMutation();
-	const [img, setImg] = useState();
-	const watchImg = watch("img");
-
-	useEffect(() => {
-		setImg(watchImg)
-	}, [watchImg])
-
-	useEffect(() => {
-		reset();
-	}, [isSubmitSuccessful])
+	const img = useWatchImg(watch);
+	useResetOnSuccess(reset, isSubmitSuccessful);
 
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
 		addBook({
