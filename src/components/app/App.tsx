@@ -11,6 +11,7 @@ import BookPage from "@pages/Book";
 import GenrePage from "@pages/Genre";
 import AuthorsPage from "@pages/Authors";
 import PublishersPage from "@pages/Publishers";
+import Admin from "@pages/Admin";
 
 function App() {
 	return (
@@ -32,6 +33,7 @@ function App() {
 						<Route path="/genre" element={<GenrePage />} />
 						<Route path="/authors" element={<AuthorsPage />} />
 						<Route path="/publishers" element={<PublishersPage />} />
+						<Route path="/admin" element={<Admin />} />
 					</Routes>
 				</Container>
 			</Router>

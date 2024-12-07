@@ -1,4 +1,4 @@
-import { Stack, Link } from "@mui/material";
+import { Stack, Link, CircularProgress } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useEffect, useState } from "react";
 import { useGetBooksQuery } from "@api/apiBooksSlice";
@@ -45,7 +45,7 @@ const BookCollection = ({ title, filterBy, number }: { title: string, filterBy: 
 					</Stack>
 				</Link>
 			</Stack>
-			<BookList arr={List}/>
+			{isLoading ? <CircularProgress /> : <BookList arr={List}/>}
 		</StyledBookCollection>
 	);
 };

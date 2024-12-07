@@ -6,7 +6,7 @@ import Button from "@components/button";
 import { IBookInfo } from "@custom-types/book";
 
 const BookCard: React.FC<{ data: IBookInfo }> = ({ data }) => {
-	const { img, rating, title, author, year } = data;
+	const { img, rating, title, author } = data;
 	return (
 		<StyledCard
 			className="book-card"

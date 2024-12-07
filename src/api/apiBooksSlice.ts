@@ -6,8 +6,15 @@ export const apiBooksSlice = createApi({
 	endpoints: builder => ({
 		getBooks: builder.query({
 			query: () => "/books"
+		}),
+		addBook: builder.mutation({
+			query: book => ({
+				url: "/books",
+				method: "POST",
+				body: book
+			})
 		})
 	})
 })
 
-export const {useGetBooksQuery} = apiBooksSlice;
+export const {useGetBooksQuery, useAddBookMutation} = apiBooksSlice;
