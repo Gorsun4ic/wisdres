@@ -15,6 +15,7 @@ const theme: Theme = {
 		white: "#fff",
 		green: "#5EB168",
 		darkGreen: "#519a5a",
+		red: "#d32f2f",
 	},
 	fontWeights: {
 		bold: "700",

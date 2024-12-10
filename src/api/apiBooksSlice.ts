@@ -9,6 +9,12 @@ export const apiBooksSlice = createApi({
 			query: () => "/books",
 			providesTags: ["Books"],
 		}),
+		getBookById: builder.query({
+			query: (id) => ({
+				url: `/books/${id}`,
+				providesTags: ["Books"]
+			})
+		}),
 		addBook: builder.mutation({
 			query: (book) => ({
 				url: "/books",
@@ -24,7 +30,14 @@ export const apiBooksSlice = createApi({
 			}),
 			invalidatesTags: ["Books"],
 		}),
+		updateBook: builder.mutation({
+			query: ({id, updatedBook}) => ({
+				url: `/books/${id}`,
+				method: "PUT",
+				body: updatedBook
+			})
+		})
 	}),
 });
 
-export const {useGetBooksQuery, useAddBookMutation, useDeleteBookMutation} = apiBooksSlice;
+export const {useGetBooksQuery, useAddBookMutation, useDeleteBookMutation, useUpdateBookMutation, useLazyGetBookByIdQuery} = apiBooksSlice;

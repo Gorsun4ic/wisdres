@@ -4,10 +4,17 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Grid2, CircularProgress } from "@mui/material";
 
-import { useAddBookMutation } from "@api/apiBooksSlice";
+import {
+	useAddBookMutation,
+	useUpdateBookMutation,
+	useLazyGetBookByIdQuery,
+} from "@api/apiBooksSlice";
+import { useFindDifference } from "@hooks/useDiffBetweenObj";
+import { useUpperCaseFirstLetter } from "@hooks/useUpperCaseFLetter";
 
 import Button from "@components/button";
 import FormField from "@components/formField";
+import ConfirmAction from "@components/confirmAction";
 
 import { StyledForm } from "./style";
 
@@ -20,10 +27,11 @@ type FormFields = {
 	language: string;
 	year: number;
 	pages: number;
+	id?: string;
 };
 
-const useWatchImg = (watch: any) => {
-	const [img, setImg] = useState<string | undefined>(undefined);
+const useWatchImg = (watch: (arg0: string) => string) => {
+	const [img, setImg] = useState<string | null | undefined>(undefined);
 	const watchImg = watch("img");
 
 	const imageTypes: string[] = [
@@ -41,7 +49,7 @@ const useWatchImg = (watch: any) => {
 
 	// Check if the image type is valid
 	const isValidImageType = (fileName: string): boolean => {
-		return imageTypes.some((type) => fileName.includes(`.${type}`));
+		return imageTypes.some((type) => fileName.endsWith(`.${type}`));
 	};
 
 	useEffect(() => {
@@ -56,12 +64,20 @@ const useWatchImg = (watch: any) => {
 };
 
 const useResetOnSuccess = (reset: () => void, isSubmitSuccessful: boolean) => {
-		useEffect(() => {
-			if (isSubmitSuccessful) reset();
-		}, [isSubmitSuccessful]);
-} 
+	useEffect(() => {
+		if (isSubmitSuccessful) reset();
+	}, [isSubmitSuccessful]);
+};
 
-const AddBookForm = () => {
+const AdminBookForm = ({
+	bookId,
+	mode,
+	openModal,
+}: {
+	bookId: string | null;
+	mode: "add" | "edit";
+	openModal: (arg0: boolean) => void;
+}) => {
 	const {
 		register,
 		handleSubmit,
@@ -70,21 +86,100 @@ const AddBookForm = () => {
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	const [addBook, { isLoading }] = useAddBookMutation();
+	const [addBook, { isLoading: isAdding }] = useAddBookMutation();
+	const [updateBook] = useUpdateBookMutation();
+	const [getBookById, { data: bookData, isLoading }] =
+		useLazyGetBookByIdQuery();
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
+	const difference = useFindDifference(bookData, dataToEdit);
+
 	const img = useWatchImg(watch);
 	useResetOnSuccess(reset, isSubmitSuccessful);
 
+	useEffect(() => {
+		onEditMode(mode, bookId);
+	}, [bookId, mode, bookData]);
+
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
-		addBook({
-			id: uuidv4(),
-			...data,
-		});
+		switch (mode) {
+			case "add":
+				addBook({
+					id: uuidv4(),
+					...data,
+				});
+				break;
+			case "edit":
+				setOpenDialog(true);
+				setDataToEdit(data);
+				break;
+		}
+		onEditMode(mode, bookId);
 	};
+
+	const onEditMode = (mode: "add" | "edit", id: string | null) => {
+		if (mode === "edit" && id) {
+			getBookById(id);
+			reset(bookData);
+		}
+	};
+
+	const handleEdit = (confirm: boolean) => {
+		if (confirm) {
+			updateBook({
+				id: bookId,
+				updatedBook: dataToEdit,
+			});
+			openModal(false);
+		} else {
+			console.log("Action was canceled");
+		}
+		setOpenDialog(false);
+	};
+
+	const defineFormTitle = (mode: "edit" | "add") => {
+		switch (mode) {
+			case "edit":
+				return `Edit ${bookData?.title || null} book`;
+			case "add":
+				return "Add new book";
+			default:
+				throw "There is no defined mode";
+		}
+	};
+
+	const showTheDifference = () => {
+		if (difference) {
+			return Object.entries(difference).map(([key, value]) => {
+				const uppercasedKey = useUpperCaseFirstLetter(key);
+				return (
+					<div className="edit-property">
+						<p className="edit-property__title">{uppercasedKey}</p>
+						<p className="edit-property__old">Old version: {value?.from}</p>
+						<p className="edit-property__new">New version: {value?.to}</p>
+					</div>
+				);
+			});
+		}
+		return null;
+	};
+
+	if (openDialog) {
+		return (
+			<ConfirmAction
+				title={`Are you confirm to change the ${bookData.title || null} book info?`}
+				openDialog={openDialog}
+				onConfirm={handleEdit}
+				onCancel={() => handleEdit(false)}>
+				{showTheDifference()}
+			</ConfirmAction>
+		);
+	}
 
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)} className="add-book-form">
-			<h3 className="form-title">Add new book form</h3>
-			{isLoading ? (
+			<h3 className="form-title">{defineFormTitle(mode)}</h3>
+			{isAdding || isLoading ? (
 				<CircularProgress />
 			) : (
 				<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
@@ -214,10 +309,10 @@ const AddBookForm = () => {
 				</Grid2>
 			)}
 			<Button size="big" submit={true}>
-				Publish
+				{mode === "edit" ? "Edit" : "Publish"}
 			</Button>
 		</StyledForm>
 	);
 };
 
-export default AddBookForm;
+export default AdminBookForm;

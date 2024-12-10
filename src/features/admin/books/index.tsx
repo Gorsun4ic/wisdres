@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import { Stack, Box } from "@mui/material";
+import { Stack } from "@mui/material";
 import TabPanel from "@mui/lab/TabPanel";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import AdminBooksGrid from "./grid-data";
-import AddBookForm from "./add-book";
+import AdminBookForm from "./book-form";
 import Modal from "@components/modal";
 import Button from "@components/button";
 
@@ -13,7 +13,13 @@ import { StyledAdminBooks } from "./style";
 const AdminBooks = () => {
 
 		const [open, setOpen] = useState(false);
-		const handleOpen = () => setOpen(true);
+		const [formMode, setFormMode] = useState<"add" | "edit">("add");
+		const [bookToEditId, setBookToEditId] = useState<string | null>(null);
+		const handleOpen = (mode: ("add" | "edit"), id?: string) => {
+			setOpen(true);
+			setFormMode(mode);
+			if (id) setBookToEditId(id)
+		}
 		const handleClose = () => setOpen(false);
 
 	return (
@@ -28,14 +34,14 @@ const AdminBooks = () => {
 						<LibraryBooksIcon fontSize="large" />
 						<p>Books</p>
 					</Stack>
-					<Button size="small" onClick={handleOpen}>
+					<Button size="small" onClick={() => handleOpen("add")}>
 						Add new book
 					</Button>
 					<Modal open={open} onClose={handleClose}>
-						<AddBookForm />
+						<AdminBookForm mode={formMode} bookId={bookToEditId} openModal={setOpen}/>
 					</Modal>
 				</Stack>
-				<AdminBooksGrid />
+				<AdminBooksGrid handleEdit={handleOpen} />
 			</TabPanel>
 		</StyledAdminBooks>
 	);

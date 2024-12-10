@@ -7,38 +7,19 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useGetBooksQuery, useDeleteBookMutation } from "@api/apiBooksSlice";
 
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
+import ConfirmAction from "@components/confirmAction";
 
-const ConfirmDelete = ({ title, openDialog, onConfirm, onCancel }) => (
-	<Dialog
-		open={openDialog}
-		onClose={onCancel}
-		aria-labelledby="alert-dialog-title"
-		aria-describedby="alert-dialog-description">
-		<DialogTitle id="alert-dialog-title">
-			{`Delete the book "${title}"?`}
-		</DialogTitle>
-		<DialogActions>
-			<Button onClick={() => onConfirm(true)} color="error">
-				Yes
-			</Button>
-			<Button onClick={() => onConfirm(false)} autoFocus>
-				No
-			</Button>
-		</DialogActions>
-	</Dialog>
-);
+import { IBookInfo } from "@custom-types/book";
 
-const AdminBooksGrid = () => {
-	const { data, error, isLoading } = useGetBooksQuery();
+
+
+const AdminBooksGrid = ({handleEdit}: {handleEdit: (mode: "add" | "edit", id?: string) => void}) => {
+	const { data, isLoading } = useGetBooksQuery(null);
 	const [deleteBook] = useDeleteBookMutation();
-	const [books, setBooks] = useState([]);
-	const [selectedBook, setSelectedBook] = useState(null); // Stores selected book for delete dialog
-	const [openDialog, setOpenDialog] = useState(false);
-	const [alertMessage, setAlertMessage] = useState(false);
+	const [books, setBooks] = useState<IBookInfo[] | []>([]);
+	const [selectedBook, setSelectedBook] = useState<null | IBookInfo>(null); // Stores selected book for delete dialog
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [alertMessage, setAlertMessage] = useState<null | boolean>(false);
 
 	// Effect to update books when data from the API changes
 	useEffect(() => {
@@ -48,16 +29,16 @@ const AdminBooksGrid = () => {
 	}, [data]);
 
 	// Open delete confirmation dialog
-	const openDeleteDialog = (rowData) => {
-		setSelectedBook(rowData);-
+	const openDeleteDialog = (rowData: IBookInfo) => {
+		setSelectedBook(rowData);
 		setOpenDialog(true);
 	};
 
 	// Handle dialog actions
-	const handleDialogAction = (confirm) => {
-		if (confirm && selectedBook) {
+	const handleDialogAction = (confirm: boolean) => {
+		if (confirm && selectedBook?.id) {
 			deleteBook(selectedBook.id); // Trigger API call to delete the book
-			setBooks((prev) => prev.filter((book) => book.id !== selectedBook.id)); // Optimistic UI update
+			setBooks((prev) => prev.filter((book) => book?.id !== selectedBook?.id)); // Optimistic UI update
 			setAlertMessage(true);
 			setTimeout(() => {
 				setAlertMessage(false);
@@ -69,8 +50,9 @@ const AdminBooksGrid = () => {
 		}, 2000);
 	};
 	// Handle change/edit click
-	const handleChangeClick = (rowData) => {
+	const handleChangeClick = (rowData: IBookInfo) => {
 		console.log("Row data:", rowData); // Do something with the row data
+		handleEdit("edit", rowData?.id)
 	};
 
 	// Columns definition (must come after handler functions)
@@ -182,8 +164,8 @@ const AdminBooksGrid = () => {
 				disableRowSelectionOnClick
 			/>
 			{openDialog && (
-				<ConfirmDelete
-					title={selectedBook?.title || ""}
+				<ConfirmAction
+					title={`Delete the book ${selectedBook?.title}`}
 					openDialog={openDialog}
 					onConfirm={handleDialogAction}
 					onCancel={() => handleDialogAction(false)}

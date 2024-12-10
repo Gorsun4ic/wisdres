@@ -1,21 +1,6 @@
 {
   "books": [
     {
-      "img": "https://m.media-amazon.com/images/I/81OJtKz7V7L._AC_UF1000,1000_QL80_.jpg",
-      "rating": 4.2,
-      "title": "Lost Horizons",
-      "genre": [
-        "Fiction",
-        "Adventure"
-      ],
-      "author": "Sarah Harris",
-      "publisher": "Cengage Learning",
-      "language": "English",
-      "year": 2022,
-      "pages": 300,
-      "id": "d0e2"
-    },
-    {
       "img": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1556292871i/45308234.jpg",
       "rating": 4.8,
       "title": "The Eternal Storm",
@@ -33,32 +18,17 @@
     {
       "img": "https://m.media-amazon.com/images/I/71jgNqUOClL._AC_UF1000,1000_QL80_.jpg",
       "rating": 3.9,
-      "title": "Revenge of the Fallen",
+      "title": "Fourth titlessad",
       "genre": [
         "Action",
         "Thriller"
       ],
-      "author": "Jack Long",
+      "author": "Jack Longasdasd",
       "publisher": "HarperCollins",
       "language": "English",
       "year": 2020,
       "pages": 290,
       "id": "f007"
-    },
-    {
-      "img": "https://m.media-amazon.com/images/I/81VyrLLvbtL.jpg",
-      "rating": 4.7,
-      "title": "The City of Secrets",
-      "genre": [
-        "Mystery",
-        "Fantasy"
-      ],
-      "author": "Sophia Green",
-      "publisher": "Wiley",
-      "language": "English",
-      "year": 2021,
-      "pages": 360,
-      "id": "7dc5"
     },
     {
       "id": "ec2f3330-2425-42e2-be93-f7ed17cb37af",
@@ -70,17 +40,6 @@
       "language": "Italian",
       "year": "2004",
       "pages": "106"
-    },
-    {
-      "id": "c03f0837-2ce7-4391-be27-565f238cad3b",
-      "img": "https://m.media-amazon.com/images/I/6158m1qLqFL._AC_UF1000,1000_QL80_.jpg",
-      "title": "Ranger Handbook",
-      "genre": "Military",
-      "author": "Pentagon",
-      "publisher": "Pentagon",
-      "language": "English",
-      "year": "2017",
-      "pages": "654"
     }
   ]
 }
