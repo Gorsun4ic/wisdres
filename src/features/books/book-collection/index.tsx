@@ -15,7 +15,7 @@ const BookCollection = ({ title, filterBy, number }: { title: string, filterBy: 
 	useEffect(() => {
 		setBooks(data);
 		console.log(books);
-	}, [isLoading]);
+	}, [data]);
 	
 	const List = useFilterArr(books, filterBy, number);
 

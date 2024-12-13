@@ -27,7 +27,7 @@ export const StyledAdminPanel = styled.div`
 		.MuiButtonBase-root {
 			align-items: center;
 			gap: 8px;
-			padding: 8px 0;
+			padding: 8px;
 			min-height: 32px;
 			text-transform: inherit;
 			min-width: 0;

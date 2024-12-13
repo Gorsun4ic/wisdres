@@ -1,5 +1,6 @@
 export interface IBookInfo {
-	id: string;
+	id?: string;
+	_id: string;
 	img: string;
 	rating: number;
 	title: string;

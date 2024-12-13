@@ -16,7 +16,9 @@
 			"@styles/*": ["./src/styles/*"],
 			"@assets/*": ["./src/assets/*"],
 			"@api/*": ["./src/api/*"],
-			"@store/*": ["./src/store/*"]
+			"@store/*": ["./src/store/*"],
+			"@reducers/*": ["./src/reducers/*"],
+			"@actions/*": ["./src/actions/*"]
 		},
 
 		/* Bundler mode */

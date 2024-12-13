@@ -1,32 +1,39 @@
 import { useState, useEffect } from "react";
+
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { IconButton, Tooltip } from "@mui/material";
-import Alert from "@mui/material/Alert";
-
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import { useGetBooksQuery, useDeleteBookMutation } from "@api/apiBooksSlice";
+import { useAlert } from "@hooks/useAlert";
 
 import ConfirmAction from "@components/confirmAction";
+import ErrorMessage from "@components/error";
 
 import { IBookInfo } from "@custom-types/book";
 
-
-
-const AdminBooksGrid = ({handleEdit}: {handleEdit: (mode: "add" | "edit", id?: string) => void}) => {
-	const { data, isLoading } = useGetBooksQuery(null);
+const AdminBooksGrid = ({
+	handleEdit,
+}: {
+	handleEdit: (mode: "add" | "edit", id?: string) => void;
+}) => {
+	const { data, isLoading, error } = useGetBooksQuery(null);
 	const [deleteBook] = useDeleteBookMutation();
 	const [books, setBooks] = useState<IBookInfo[] | []>([]);
 	const [selectedBook, setSelectedBook] = useState<null | IBookInfo>(null); // Stores selected book for delete dialog
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
-	const [alertMessage, setAlertMessage] = useState<null | boolean>(false);
+	const triggerAlert = useAlert();
 
 	// Effect to update books when data from the API changes
 	useEffect(() => {
 		if (data) {
-			setBooks(data);
+			const correctData = handleId(data);
+			setBooks(correctData);
 		}
 	}, [data]);
+
 
 	// Open delete confirmation dialog
 	const openDeleteDialog = (rowData: IBookInfo) => {
@@ -39,10 +46,10 @@ const AdminBooksGrid = ({handleEdit}: {handleEdit: (mode: "add" | "edit", id?: s
 		if (confirm && selectedBook?.id) {
 			deleteBook(selectedBook.id); // Trigger API call to delete the book
 			setBooks((prev) => prev.filter((book) => book?.id !== selectedBook?.id)); // Optimistic UI update
-			setAlertMessage(true);
-			setTimeout(() => {
-				setAlertMessage(false);
-			}, 2000);
+			triggerAlert({
+				title: `The book ${selectedBook?.title} was successfully deleted`,
+				color: "success",
+			});
 		}
 		setOpenDialog(false);
 		setTimeout(() => {
@@ -52,12 +59,21 @@ const AdminBooksGrid = ({handleEdit}: {handleEdit: (mode: "add" | "edit", id?: s
 	// Handle change/edit click
 	const handleChangeClick = (rowData: IBookInfo) => {
 		console.log("Row data:", rowData); // Do something with the row data
-		handleEdit("edit", rowData?.id)
+		handleEdit("edit", rowData?.id);
+	};
+
+	const handleId = (data: IBookInfo[]) => {
+		return data.map((item: IBookInfo) => {
+			return {
+				id: item._id,
+				...item,
+			};
+		});
 	};
 
 	// Columns definition (must come after handler functions)
 	const columns: GridColDef[] = [
-		{ field: "id", headerName: "ID", width: 90 },
+		{ field: "_id", headerName: "ID", width: 90 },
 		{
 			field: "img",
 			headerName: "Image",
@@ -139,7 +155,11 @@ const AdminBooksGrid = ({handleEdit}: {handleEdit: (mode: "add" | "edit", id?: s
 		},
 	];
 
-	if (isLoading) return <div>Loading...</div>;
+	if (isLoading) {
+		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
+	} else if (error) {
+		return <ErrorMessage />;
+	}
 
 	return (
 		<>
@@ -170,11 +190,6 @@ const AdminBooksGrid = ({handleEdit}: {handleEdit: (mode: "add" | "edit", id?: s
 					onConfirm={handleDialogAction}
 					onCancel={() => handleDialogAction(false)}
 				/>
-			)}
-			{alertMessage && (
-				<Alert severity="error">
-					Book {selectedBook?.title} was successfully deleted
-				</Alert>
 			)}
 		</>
 	);

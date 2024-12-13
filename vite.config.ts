@@ -24,6 +24,8 @@ export default defineConfig({
 			"@assets": path.resolve(__dirname, "src/assets"),
 			"@api": path.resolve(__dirname, "src/api"),
 			"@store": path.resolve(__dirname, "src/store"),
+			"@reducers": path.resolve(__dirname, "src/reducers"),
+			"@actions": path.resolve(__dirname, "src/actions"),
 		},
 	},
 });
