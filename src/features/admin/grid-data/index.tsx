@@ -1,28 +1,30 @@
 import { useState, useEffect } from "react";
 
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { IconButton, Tooltip } from "@mui/material";
+import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
+import { IconButton, Tooltip, CircularProgress } from "@mui/material";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CircularProgress from "@mui/material/CircularProgress";
 
-import { useGetBooksQuery, useDeleteBookMutation } from "@api/apiBooksSlice";
-import { useAlert } from "@hooks/useAlert";
+import useAlert from "@hooks/useAlert";
 
 import ConfirmAction from "@components/confirmAction";
 import ErrorMessage from "@components/error";
 
 import { IBookInfo } from "@custom-types/book";
 
-const AdminBooksGrid = ({
+const AdminGrid = ({
 	handleEdit,
+	data,
+	isLoading,
+	error,
+	deleteMethod,
+	columns
 }: {
 	handleEdit: (mode: "add" | "edit", id?: string) => void;
 }) => {
-	const { data, isLoading, error } = useGetBooksQuery(null);
-	const [deleteBook] = useDeleteBookMutation();
-	const [books, setBooks] = useState<IBookInfo[] | []>([]);
-	const [selectedBook, setSelectedBook] = useState<null | IBookInfo>(null); // Stores selected book for delete dialog
+	const [info, setInfo] = useState<IBookInfo[] | []>([]);
+	const [selectedInfo, setSelectedInfo] = useState<null | IBookInfo>(null); // Stores selected book for delete dialog
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const triggerAlert = useAlert();
 
@@ -30,30 +32,29 @@ const AdminBooksGrid = ({
 	useEffect(() => {
 		if (data) {
 			const correctData = handleId(data);
-			setBooks(correctData);
+			setInfo(correctData);
 		}
 	}, [data]);
 
-
 	// Open delete confirmation dialog
 	const openDeleteDialog = (rowData: IBookInfo) => {
-		setSelectedBook(rowData);
+		setSelectedInfo(rowData);
 		setOpenDialog(true);
 	};
 
 	// Handle dialog actions
 	const handleDialogAction = (confirm: boolean) => {
-		if (confirm && selectedBook?.id) {
-			deleteBook(selectedBook.id); // Trigger API call to delete the book
-			setBooks((prev) => prev.filter((book) => book?.id !== selectedBook?.id)); // Optimistic UI update
+		if (confirm && selectedInfo?.id) {
+			deleteMethod(selectedInfo.id); // Trigger API call to delete the book
+			setInfo((prev) => prev.filter((book) => book?.id !== selectedInfo?.id)); // Optimistic UI update
 			triggerAlert({
-				title: `The book ${selectedBook?.title} was successfully deleted`,
+				title: `The ${selectedInfo?.title} was successfully deleted`,
 				color: "success",
 			});
 		}
 		setOpenDialog(false);
 		setTimeout(() => {
-			setSelectedBook(null); // Clear selection
+			setSelectedInfo(null); // Clear selection
 		}, 2000);
 	};
 	// Handle change/edit click
@@ -71,58 +72,16 @@ const AdminBooksGrid = ({
 		});
 	};
 
+	if (isLoading) {
+		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
+	} else if (error) {
+		return <ErrorMessage />;
+	}
+
 	// Columns definition (must come after handler functions)
-	const columns: GridColDef[] = [
+	const columnsInfo: GridColDef[] = [
 		{ field: "_id", headerName: "ID", width: 90 },
-		{
-			field: "img",
-			headerName: "Image",
-			width: 80,
-			renderCell: (params) => <img src={params.value} width="40" />,
-		},
-		{
-			field: "title",
-			headerName: "Title",
-			width: 150,
-		},
-		{
-			field: "author",
-			headerName: "Author",
-			width: 150,
-		},
-		{
-			field: "publisher",
-			headerName: "Publisher",
-			width: 150,
-		},
-		{
-			field: "genre",
-			headerName: "Genres",
-			width: 150,
-		},
-		{
-			field: "language",
-			headerName: "Language",
-			width: 80,
-		},
-		{
-			field: "year",
-			headerName: "Year",
-			width: 60,
-			type: "number",
-		},
-		{
-			field: "pages",
-			headerName: "Pages",
-			width: 60,
-			type: "number",
-		},
-		{
-			field: "reviews",
-			headerName: "Reviews",
-			width: 80,
-			type: "number",
-		},
+		...columns,
 		{
 			field: "delete",
 			headerName: "Delete",
@@ -155,17 +114,11 @@ const AdminBooksGrid = ({
 		},
 	];
 
-	if (isLoading) {
-		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
-	} else if (error) {
-		return <ErrorMessage />;
-	}
-
 	return (
 		<>
 			<DataGrid
-				rows={books}
-				columns={columns}
+				rows={info}
+				columns={columnsInfo}
 				initialState={{
 					pagination: {
 						paginationModel: {
@@ -185,7 +138,7 @@ const AdminBooksGrid = ({
 			/>
 			{openDialog && (
 				<ConfirmAction
-					title={`Delete the book ${selectedBook?.title}`}
+					title={`Delete the book ${info?.title}`}
 					openDialog={openDialog}
 					onConfirm={handleDialogAction}
 					onCancel={() => handleDialogAction(false)}
@@ -195,4 +148,4 @@ const AdminBooksGrid = ({
 	);
 };
 
-export default AdminBooksGrid;
+export default AdminGrid;

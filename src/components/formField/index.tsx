@@ -1,18 +1,16 @@
+import React from "react";
 import { TextField } from "@mui/material";
+import { UseFormRegister } from "react-hook-form";
 
 interface FormFieldProps<T> {
-	name: keyof T; // Ensure this matches your form field structure
+	name: keyof T;
 	placeholder: string;
-	register: (
-		name: keyof T,
-		rules?: Record<string, unknown>
-	) => Record<string, unknown>; // Register function's return is an object for spreading
-	validation?: Record<string, unknown>; // Validation rules
-	error?: string; // Error message
-	size?: number; // Grid size
-	multiline?: boolean; // Multiline support
-	rows?: number; // Number of rows for multiline
-	type?: string; // Content type (number|string)
+	register: UseFormRegister<T>;
+	validation?: Record<string, unknown>;
+	error?: string;
+	multiline?: boolean;
+	rows?: number;
+	type?: string;
 }
 
 const FormField = <T extends Record<string, unknown>>({
@@ -29,7 +27,7 @@ const FormField = <T extends Record<string, unknown>>({
 		<>
 			<p className="input-label">{placeholder}</p>
 			<TextField
-				{...register(name, validation)} // Ensures the returned object can be spread
+				{...register(name, validation)} // Spread the register function's returned object
 				placeholder={placeholder}
 				error={!!error}
 				helperText={error}

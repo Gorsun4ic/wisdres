@@ -2,7 +2,9 @@ import { Swiper as SwiperInstance } from "swiper"; // Ensure this import is corr
 import { ReactNode, useState } from "react";
 import { Thumbs as SwiperThumbs, EffectFade, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import useGetAmount from "@hooks/useGetAmount";
+
+import getArrLength from "@utils/getArrLength";
+
 import { StyledThumb } from "./style";
 
 // @ts-expect-error Cuz it's correct swiper styles import
@@ -42,7 +44,7 @@ const Thumbs = ({images, bookName}: {images: string[], bookName: string}) => {
 						modules={[SwiperThumbs, Mousewheel]}>
 						{imgsList(100, 128, "additional")}
 					</Swiper>
-					<p>Additional photos ({useGetAmount(images, 3)})</p>
+					<p>Additional photos ({getArrLength(images, 3)})</p>
 				</div>
 				<Swiper
 					loop={true}

@@ -1,6 +1,8 @@
 import { List, Stack } from "@mui/material";
-import useGetAmount from "@hooks/useGetAmount";
 import StarIcon from "@mui/icons-material/Star";
+
+import getArrLength from "@utils/getArrLength";
+
 import { StyledReviewsList } from "./style";
 
 interface Review {
@@ -57,7 +59,7 @@ const ReviewItem = (data: Review) => {
 
 const ReviewsList = () => {
 
-	const reviewsAmount = useGetAmount(reviewsArr);
+	const reviewsAmount = getArrLength(reviewsArr);
 
 	const list = reviewsArr.map(item => {
 		const { author, date, rating, text } = item;

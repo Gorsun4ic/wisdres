@@ -26,6 +26,8 @@ export default defineConfig({
 			"@store": path.resolve(__dirname, "src/store"),
 			"@reducers": path.resolve(__dirname, "src/reducers"),
 			"@actions": path.resolve(__dirname, "src/actions"),
+			"@utils": path.resolve(__dirname, "src/utils"),
+			"@server": path.resolve(__dirname, "src/server"),
 		},
 	},
 });

@@ -3,7 +3,7 @@ import { showAlert, hideAlert } from "@reducers/alert";
 import { IAlert } from "@custom-types/alert";
 
 // Custom hook to trigger alert
-export function useAlert() {
+const useAlert = () => {
   const dispatch = useDispatch();
 
   // Trigger an alert with title and color
@@ -18,3 +18,5 @@ export function useAlert() {
 
   return triggerAlert;
 }
+
+export default useAlert;

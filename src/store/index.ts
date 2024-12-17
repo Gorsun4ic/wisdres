@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { apiBooksSlice } from "@api/apiBooksSlice";
+import { apiAuthorsSlice } from "@api/apiAuthorsSlice";
 import alertReducer from "@reducers/alert";
 
 
@@ -8,10 +9,11 @@ import alertReducer from "@reducers/alert";
 export const store = configureStore({
 	reducer: {
 		[apiBooksSlice.reducerPath]: apiBooksSlice.reducer,
-		alert: alertReducer
+		[apiAuthorsSlice.reducerPath]: apiAuthorsSlice.reducer,
+		alert: alertReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(apiBooksSlice.middleware),
+		getDefaultMiddleware().concat(apiBooksSlice.middleware, apiAuthorsSlice.middleware),
 });
 
 // Set up listeners for refetching queries

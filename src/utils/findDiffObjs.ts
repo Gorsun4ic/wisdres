@@ -5,8 +5,7 @@ type Difference<T> = {
 	};
 };
 
-
-export const useFindDifference = <T extends object>(
+const findDifferenceObjs = <T extends object>(
 	obj1: T,
 	obj2: T
 ): Difference<T> => {
@@ -20,3 +19,5 @@ export const useFindDifference = <T extends object>(
 	}
 	return {};
 };
+
+export default findDifferenceObjs;

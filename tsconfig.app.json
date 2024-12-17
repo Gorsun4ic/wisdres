@@ -18,7 +18,9 @@
 			"@api/*": ["./src/api/*"],
 			"@store/*": ["./src/store/*"],
 			"@reducers/*": ["./src/reducers/*"],
-			"@actions/*": ["./src/actions/*"]
+			"@actions/*": ["./src/actions/*"],
+			"@utils/*": ["./src/utils/*"],
+			"@server/*": ["./src/server/*"]
 		},
 
 		/* Bundler mode */

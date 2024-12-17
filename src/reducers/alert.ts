@@ -19,12 +19,9 @@ const alertSlice = createSlice({
 	initialState,
 	reducers: {
 		showAlert: (state, action: PayloadAction<IAlert>) => {
-			console.log("Inside showAlert reducer");
-			console.log("Payload received:", action.payload);
 			state.alert = action.payload;
 		},
 		hideAlert: (state) => {
-			console.log("Inside hideAlert reducer");
 			state.alert = null;
 		},
 	},

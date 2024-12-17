@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
-import { Grid2, CircularProgress } from "@mui/material";
+import { Grid2, CircularProgress, Autocomplete, TextField } from "@mui/material";
 
 import {
 	useAddBookMutation,
 	useUpdateBookMutation,
 	useLazyGetBookByIdQuery,
 } from "@api/apiBooksSlice";
-import { useFindDifference } from "@hooks/useDiffBetweenObj";
-import { useUpperCaseFirstLetter } from "@hooks/useUpperCaseFLetter";
-import { useAlert } from "@hooks/useAlert";
+import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 
+// Custom hooks
+import useAlert from "@hooks/useAlert";
+import useWatchImg from "@hooks/useWatchImg";
+import useHandleAdminForm from "@hooks/useAdminForm";
+
+// Custom components
 import Button from "@components/button";
 import FormField from "@components/formField";
 import ConfirmAction from "@components/confirmAction";
 import ErrorMessage from "@components/error";
+
+import ChangedInfo from "@features/admin/changedInfo";
 
 import { StyledForm } from "./style";
 
@@ -29,45 +35,6 @@ type FormFields = {
 	year: number;
 	pages: number;
 	id?: string;
-};
-
-const useWatchImg = (watch: (arg0: string) => string) => {
-	const [img, setImg] = useState<string | null | undefined>(undefined);
-	const watchImg = watch("img");
-
-	const imageTypes: string[] = [
-		"jpeg",
-		"png",
-		"gif",
-		"webp",
-		"bmp",
-		"svg+xml",
-		"tiff",
-		"heif",
-		"heic",
-		"jpg",
-	];
-
-	// Check if the image type is valid
-	const isValidImageType = (fileName: string): boolean => {
-		return imageTypes.some((type) => fileName.endsWith(`.${type}`));
-	};
-
-	useEffect(() => {
-		if (watchImg && isValidImageType(watchImg)) {
-			setImg(watchImg); // Set the image if it's valid
-		} else {
-			setImg(null);
-		}
-	}, [watchImg]);
-
-	return img;
-};
-
-const useResetOnSuccess = (reset: () => void, isSubmitSuccessful: boolean) => {
-	useEffect(() => {
-		if (isSubmitSuccessful) reset();
-	}, [isSubmitSuccessful]);
 };
 
 const AdminBookForm = ({
@@ -84,6 +51,7 @@ const AdminBookForm = ({
 		handleSubmit,
 		watch,
 		reset,
+		control,
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
@@ -92,18 +60,28 @@ const AdminBookForm = ({
 	const [updateBook] = useUpdateBookMutation();
 	const [getBookById, { data: bookData, isLoading, error }] =
 		useLazyGetBookByIdQuery();
+	const { data: authorsList } = useGetAuthorsQuery(null);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
-	const difference = useFindDifference(bookData, dataToEdit);
 	const triggerAlert = useAlert();
-	const img = useWatchImg(watch);
-	useResetOnSuccess(reset, isSubmitSuccessful);
+	const { onEditMode, defineFormTitle, showTheDifference } = useHandleAdminForm(
+		{ mode, triggerAlert, reset }
+	);
+	const formTitle = defineFormTitle({
+		onEdit: `Edit ${bookData?.title || null} book`,
+		onAdd: "Add new book",
+	});
+	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
 
 	useEffect(() => {
-		onEditMode(mode, bookId);
+		onEditMode(bookId, getBookById, bookData);
 	}, [bookId, mode, bookData]);
 
-	const onSubmit: SubmitHandler<FormFields> = (data) => {
+	useEffect(() => {
+		if (isSubmitSuccessful) reset();
+	}, [isSubmitSuccessful]);
+
+	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
 				addBook(data);
@@ -116,14 +94,8 @@ const AdminBookForm = ({
 				setOpenDialog(true);
 				setDataToEdit(data);
 				break;
-		}
-		onEditMode(mode, bookId);
-	};
-
-	const onEditMode = (mode: "add" | "edit", id: string | null) => {
-		if (mode === "edit" && id) {
-			getBookById(id);
-			reset(bookData);
+			default:
+				console.warn(`Unknown mode: ${mode}`);
 		}
 	};
 
@@ -131,7 +103,7 @@ const AdminBookForm = ({
 		if (confirm) {
 			updateBook({
 				id: bookId,
-				updatedBook: dataToEdit,
+				updated: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
@@ -142,31 +114,23 @@ const AdminBookForm = ({
 		setOpenDialog(false);
 	};
 
-	const defineFormTitle = (mode: "edit" | "add") => {
-		switch (mode) {
-			case "edit":
-				return `Edit ${bookData?.title || null} book`;
-			case "add":
-				return "Add new book";
-			default:
-				throw "There is no defined mode";
-		}
-	};
+	const changedInfo = () => {
+		const differences = showTheDifference(bookData, dataToEdit);
 
-	const showTheDifference = () => {
-		if (difference) {
-			return Object.entries(difference).map(([key, value]) => {
-				const uppercasedKey = useUpperCaseFirstLetter(key);
-				return (
-					<div className="edit-property">
-						<p className="edit-property__title">{uppercasedKey}</p>
-						<p className="edit-property__old">Old version: {value?.from}</p>
-						<p className="edit-property__new">New version: {value?.to}</p>
-					</div>
-				);
-			});
+		// Handle case when there are no differences
+		if (!differences || differences.length === 0) {
+			return null;
 		}
-		return null;
+
+		const { propertyToChange, oldVersion, newVersion } = differences[0]; // Using the first difference for now
+
+		return (
+			<ChangedInfo
+				propertyToChange={propertyToChange}
+				oldVersion={oldVersion}
+				newVersion={newVersion}
+			/>
+		);
 	};
 
 	if (openDialog) {
@@ -178,7 +142,7 @@ const AdminBookForm = ({
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>
-				{showTheDifference()}
+				{changedInfo()}
 			</ConfirmAction>
 		);
 	}
@@ -191,15 +155,21 @@ const AdminBookForm = ({
 
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)} className="add-book-form">
-			<h3 className="form-title">{defineFormTitle(mode)}</h3>
+			<h3 className="form-title">{formTitle}</h3>
 			<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
-				<Grid2 size={12} className="img-input">
+				<Grid2 size={6} className="img-input">
 					<FormField<FormFields>
 						name="img"
 						placeholder="Image link"
 						register={register}
 						validation={{
 							required: "Image is required",
+							validate: (value) => {
+								if (value && isValidImageType(value)) {
+									return true; // Validation passed
+								}
+								return imgTypeError; // Validation failed
+							},
 						}}
 						error={errors.img?.message}
 					/>
@@ -236,7 +206,7 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
-					<FormField<FormFields>
+					{/* <FormField<FormFields>
 						name="author"
 						placeholder="Authors name"
 						register={register}
@@ -248,6 +218,30 @@ const AdminBookForm = ({
 							},
 						}}
 						error={errors.author?.message}
+					/> */}
+					<Controller
+						name="author"
+						control={control}
+						rules={{ required: "Author is required" }}
+						render={({ field }) => (
+							<>
+								<p className="input-label">Author</p>
+								<Autocomplete
+									{...field}
+									options={authorsList || []}
+									getOptionLabel={(option) => option.title || ""}
+									onChange={(event, value) => field.onChange(value)}
+									renderInput={(params) => (
+										<TextField
+											{...params}
+											name="author"
+											register={register}
+											placeholder="Authors name"
+										/>
+									)}
+								/>
+							</>
+						)}
 					/>
 				</Grid2>
 				<Grid2 size={6}>

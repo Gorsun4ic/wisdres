@@ -8,6 +8,7 @@ import TabContext from "@mui/lab/TabContext";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import AdminBooks from "@features/admin/books";
+import AdminAuthors from "@features/admin/authors";
 
 import { StyledAdminPanel } from "./style";
 const Admin = () => {
@@ -35,16 +36,11 @@ const Admin = () => {
 					/>
 					<Tab label="Third" value="3" />
 				</Tabs>
-				<AdminBooks />
+				<TabPanel value="1">
+					<AdminBooks />
+				</TabPanel>
 				<TabPanel value="2">
-					<Stack
-						gap={1}
-						direction="row"
-						sx={{ alignItems: "center" }}
-						className="active-tab-section">
-						<RecentActorsIcon fontSize="large" />
-						<p>Authors</p>
-					</Stack>
+					<AdminAuthors />
 				</TabPanel>
 				<TabPanel value="3">Third</TabPanel>
 			</TabContext>

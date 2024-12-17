@@ -2,7 +2,7 @@ interface Item {
 	[key: string]: number | null | undefined; // Accepts any number-based value or null/undefined for fields
 }
 
-export default function useSortNumbers(arr: Item[], option: string): Item[] {
+export default function sortNumbers(arr: Item[], option: string): Item[] {
 	if (!arr || !Array.isArray(arr)) {
 		console.error("Invalid array passed to useSortNumbers:", arr);
 		return []; // Return an empty array if arr is invalid

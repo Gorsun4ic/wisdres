@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const StyledAdminPanel = styled.div`
 	&& {
-
 		display: flex;
 
 		img {
@@ -12,20 +11,24 @@ export const StyledAdminPanel = styled.div`
 		.MuiTabs-root {
 			border-right: 1px solid ${({ theme }) => theme?.colors?.grey};
 			padding-right: 32px;
+			min-width: 140px;
 		}
 
+		.MuiTabPanel-root {
+			width: 100%;
+		}
 		.MuiTabs-flexContainer {
 			flex-direction: column;
 			align-items: flex-start;
 		}
 
 		.admin-panel__bar {
-			max-width: 300px;
 			margin-bottom: 32px;
 		}
 
 		.MuiButtonBase-root {
 			align-items: center;
+			width: auto;
 			gap: 8px;
 			padding: 8px;
 			min-height: 32px;

@@ -18,6 +18,8 @@
 			"@store/*": ["src/store/*"],
 			"@reducers/*": ["src/reducers/*"],
 			"@actions/*": ["src/actions/*"],
+			"@utils/*": ["src/utils/*"],
+			"@server/*": ["src/server/*"],
 			"@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
 		},
 		"types": ["@types/testing-library__react", "vitest/globals", "node"]

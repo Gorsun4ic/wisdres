@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useSortNumbers from "./useSortNumbers";
+import sortNumbers from "@utils/sortNumbers";
 
 type Item = {
 	[key: string]: number | null | undefined; // Dynamic keys like "rating", "popularity"
@@ -26,7 +26,7 @@ export default function useFilterArr(
 		}
 	}, [filter])
 	// Call the sorting hook unconditionally
-	const sortedArr = useSortNumbers(arr, option); // Use filter directly for dynamic sorting
+	const sortedArr = sortNumbers(arr, option); // Use filter directly for dynamic sorting
 
 	return sortedArr.slice(0, number + 1);
 }

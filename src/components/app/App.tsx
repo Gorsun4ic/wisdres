@@ -29,7 +29,7 @@ function App() {
 					<Routes>
 						<Route path="/" element={<MainPage />} />
 						<Route path="/books" element={<BooksPage />} />
-						<Route path="/book" element={<BookPage />} />
+						<Route path="/book/:bookId" element={<BookPage />} />
 						<Route path="/genre" element={<GenrePage />} />
 						<Route path="/authors" element={<AuthorsPage />} />
 						<Route path="/publishers" element={<PublishersPage />} />
