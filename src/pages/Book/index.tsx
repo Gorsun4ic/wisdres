@@ -1,10 +1,14 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 
 import { CircularProgress } from "@mui/material";
 import ErrorMessage from "@components/error";
 
 import { useLazyGetBookByIdQuery } from "@api/apiBooksSlice";
+import { useLazyGetAuthorByIdQuery } from "@api/apiAuthorsSlice";
+
+import { showBook } from "@reducers/activeBookPage";
 
 import BookOverview from "@features/books/book-overview";
 import BookDescription from "@features/books/book-description";
@@ -13,13 +17,21 @@ import BookCollection from "@features/books/book-collection";
 
 const BookPage = () => {
 	const { bookId } = useParams();
-	const [getBookById, { data, isLoading, error }] = useLazyGetBookByIdQuery();
+	const [getBookById, { data: bookData, isLoading, error }] =
+		useLazyGetBookByIdQuery();
+	const [getAuthorById, { data: authorData }] = useLazyGetAuthorByIdQuery();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if (bookId) {
 			getBookById(bookId); // Trigger the query manually
+			getAuthorById(bookData?.author);
+			dispatch(showBook({
+				...bookData,
+				aboutAuthor: authorData?.about,
+			}))
 		}
-	}, [bookId, getBookById]);
+	}, [bookId, getBookById, getAuthorById, bookData, authorData]);
 
 	if (isLoading) {
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
@@ -27,20 +39,18 @@ const BookPage = () => {
 		return <ErrorMessage />;
 	}
 
-	if (!data) {
+	if (!bookData) {
 		return (
 			<>
 				<p>No data available for this book.</p>
-				<Link to="../">
-					Back to previous page
-				</Link>
+				<Link to="../">Back to previous page</Link>
 			</>
 		);
 	}
 
 	return (
 		<div className="book-page">
-			<BookOverview data={data} />
+			<BookOverview />
 			<BookDescription />
 			<BookReviews />
 			<BookCollection title="Similar books" />

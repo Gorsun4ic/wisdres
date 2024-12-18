@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import { Stack } from "@mui/material";
 
-import { IBookInfo } from "@custom-types/book";
+import { IBook } from "@custom-types/book";
 
 import useShowAuthorsName from "@hooks/useShowAuthorsName";
 
@@ -12,9 +12,10 @@ import Button from "@components/button";
 import theme from "@styles/theme";
 import { StyledCard, StyledCardContent } from "./style";
 
-const BookCard: React.FC<{ data: IBookInfo }> = ({ data }) => {
-	const { img, rating, title, author, _id } = data;
-	const {getAuthorsNameElem} = useShowAuthorsName();
+const BookCard: React.FC<{ data: IBook }> = ({ data }) => {
+	const { info, _id } = data;
+	const { img, rating, title, author } = info;
+	const { getAuthorsNameElem } = useShowAuthorsName();
 	const authorsName = getAuthorsNameElem(author);
 
 	return (

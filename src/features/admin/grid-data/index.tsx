@@ -11,7 +11,8 @@ import useAlert from "@hooks/useAlert";
 import ConfirmAction from "@components/confirmAction";
 import ErrorMessage from "@components/error";
 
-import { IBookInfo } from "@custom-types/book";
+import { IBook } from "@custom-types/book";
+import { IBookInfo } from "@custom-types/bookInfo";
 
 const AdminGrid = ({
 	handleEdit,
@@ -19,12 +20,12 @@ const AdminGrid = ({
 	isLoading,
 	error,
 	deleteMethod,
-	columns
+	columns,
 }: {
 	handleEdit: (mode: "add" | "edit", id?: string) => void;
 }) => {
-	const [info, setInfo] = useState<IBookInfo[] | []>([]);
-	const [selectedInfo, setSelectedInfo] = useState<null | IBookInfo>(null); // Stores selected book for delete dialog
+	const [info, setInfo] = useState<IBook[] | []>([]);
+	const [selectedInfo, setSelectedInfo] = useState<null | IBook>(null); // Stores selected book for delete dialog
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const triggerAlert = useAlert();
 
@@ -34,10 +35,10 @@ const AdminGrid = ({
 			const correctData = handleId(data);
 			setInfo(correctData);
 		}
-	}, [data]);
+	}, [data, setInfo]);
 
 	// Open delete confirmation dialog
-	const openDeleteDialog = (rowData: IBookInfo) => {
+	const openDeleteDialog = (rowData: IBook) => {
 		setSelectedInfo(rowData);
 		setOpenDialog(true);
 	};
@@ -48,7 +49,7 @@ const AdminGrid = ({
 			deleteMethod(selectedInfo.id); // Trigger API call to delete the book
 			setInfo((prev) => prev.filter((book) => book?.id !== selectedInfo?.id)); // Optimistic UI update
 			triggerAlert({
-				title: `The ${selectedInfo?.title} was successfully deleted`,
+				title: `The ${selectedInfo?.info.title} was successfully deleted`,
 				color: "success",
 			});
 		}
@@ -58,16 +59,16 @@ const AdminGrid = ({
 		}, 2000);
 	};
 	// Handle change/edit click
-	const handleChangeClick = (rowData: IBookInfo) => {
-		console.log("Row data:", rowData); // Do something with the row data
+	const handleChangeClick = (rowData: IBook) => {
 		handleEdit("edit", rowData?.id);
 	};
 
-	const handleId = (data: IBookInfo[]) => {
-		return data.map((item: IBookInfo) => {
+	const handleId = (data: IBook[]) => {
+		return data.map((item: IBook) => {
+			const {info} = item;
 			return {
 				id: item._id,
-				...item,
+				...info,
 			};
 		});
 	};

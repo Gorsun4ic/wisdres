@@ -1,13 +1,11 @@
-export interface IBookInfo {
+import { IBookInfo } from "./bookInfo";
+import { IBookDetails } from "./bookDetails";
+import { IReview } from "./review";
+
+export interface IBook {
+	_id?: string;
 	id?: string;
-	_id: string;
-	img: string;
-	rating: number;
-	title: string;
-	genre: string[];
-	author: string;
-	publisher: string;
-	language: string;
-	year: number;
-	pages: number;
+	info: IBookInfo;
+	details: IBookDetails;
+	reviews: IReview[];
 }

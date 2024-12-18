@@ -13,7 +13,7 @@ import Alert from "@mui/material/Alert";
 import { useGetBooksQuery, useDeleteBookMutation } from "@api/apiBooksSlice";
 import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 
-import { IBookInfo } from "@custom-types/book";
+import { IBook } from "@custom-types/book";
 
 import useShowAuthorsName from "@hooks/useShowAuthorsName";
 
@@ -33,7 +33,7 @@ const AdminBooks = () => {
 	const { alert } = useSelector((state: RootState) => state.alert);
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
-	const [data, setData] = useState<IBookInfo[]>();
+	const [data, setData] = useState<IBook[]>();
 	const { getAuthorsNameArr } = useShowAuthorsName();
 
 	useEffect(() => {
@@ -42,7 +42,6 @@ const AdminBooks = () => {
 				booksData,
 				authorsData,
 			});
-			console.log(correctData)
 			setData(correctData);
 		}
 	}, [booksData, authorsData]);

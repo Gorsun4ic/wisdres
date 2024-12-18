@@ -3,7 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { apiBooksSlice } from "@api/apiBooksSlice";
 import { apiAuthorsSlice } from "@api/apiAuthorsSlice";
 import alertReducer from "@reducers/alert";
-
+import activeBookPageReducer from "@reducers/activeBookPage";
 
 // Define the store type
 export const store = configureStore({
@@ -11,6 +11,7 @@ export const store = configureStore({
 		[apiBooksSlice.reducerPath]: apiBooksSlice.reducer,
 		[apiAuthorsSlice.reducerPath]: apiAuthorsSlice.reducer,
 		alert: alertReducer,
+		activeBookPage: activeBookPageReducer
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(apiBooksSlice.middleware, apiAuthorsSlice.middleware),

@@ -10,6 +10,6 @@ export default function sortNumbers(arr: Item[], option: string): Item[] {
 
 	// Proceed with filtering and sorting if arr is valid
 	return arr
-		.filter((item) => item[option] !== null && item[option] !== undefined) // Remove items with no option
+		.filter((item) => item["info"][option] !== null && item["info"][option] !== undefined) // Remove items with no option
 		.sort((a, b) => (b[option] || 0) - (a[option] || 0)); // Sort by rating, defaulting to 0 if undefined
 }

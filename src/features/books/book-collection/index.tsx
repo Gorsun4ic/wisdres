@@ -1,23 +1,42 @@
+import { useEffect, useState } from "react";
+
 import { Stack, Link, CircularProgress } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useEffect, useState } from "react";
+
 import { useGetBooksQuery } from "@api/apiBooksSlice";
+
 import useFilterArr from "@hooks/useFilterArr";
+
 import BookList from "@features/books/book-list";
+
+import ErrorMessage from "@components/error";
+
 import theme from "@styles/theme";
 import { StyledBookCollection } from "./style";
 
-const BookCollection = ({ title, filterBy, number }: { title: string, filterBy: string, number: number }) => {
-
-	const { data, error, isLoading } = useGetBooksQuery();
+const BookCollection = ({
+	title,
+	filterBy,
+	number,
+}: {
+	title: string;
+	filterBy: string;
+	number: number;
+}) => {
+	const { data, isLoading, error } = useGetBooksQuery();
 	const [books, setBooks] = useState([]);
 
 	useEffect(() => {
 		setBooks(data);
-		console.log(books);
 	}, [data]);
-	
-	const List = useFilterArr(books, filterBy, number);
+
+	const list = useFilterArr(books, filterBy, number);
+
+	if (isLoading) {
+		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
+	} else if (error) {
+		return <ErrorMessage />;
+	}
 
 	return (
 		<StyledBookCollection className="collection">
@@ -45,7 +64,7 @@ const BookCollection = ({ title, filterBy, number }: { title: string, filterBy: 
 					</Stack>
 				</Link>
 			</Stack>
-			{isLoading ? <CircularProgress /> : <BookList arr={List}/>}
+			<BookList arr={list} />
 		</StyledBookCollection>
 	);
 };

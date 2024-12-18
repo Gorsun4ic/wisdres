@@ -15,6 +15,10 @@ export const StyledForm = styled.form`
 			max-width: 140px;
 		}
 
+		.input-label {
+			margin-bottom: 8px;
+		}
+		
 		.MuiFormHelperText-root {
 			margin-left: 0;
 		}

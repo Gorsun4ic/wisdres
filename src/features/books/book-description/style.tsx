@@ -13,6 +13,7 @@ export const StyledBookDescription = styled.div`
 		}
 		p {
 			color: ${({theme}) => theme?.colors?.grey};
+			word-break: break-word;
 		}
 	}
 `

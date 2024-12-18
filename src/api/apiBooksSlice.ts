@@ -1,19 +1,40 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import { IBookInfo } from "@custom-types/book";
+import { IBook } from "@custom-types/book";
+import { IBookInfo } from "@custom-types/bookInfo";
+import { IReview } from "@custom-types/review";
+import { IBookDetails } from "@custom-types/bookDetails";
 
 export const apiBooksSlice = createApi({
 	reducerPath: "booksApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
 	tagTypes: ["Books"],
 	endpoints: (builder) => ({
-		getBooks: builder.query<IBookInfo[], void>({
+		getBooks: builder.query<IBook[], void>({
 			query: () => "/books",
 			providesTags: ["Books"],
 		}),
-		getBookById: builder.query<IBookInfo, void>({
+		getBookById: builder.query<IBook, void>({
 			query: (id) => ({
 				url: `/books/${id}`,
 				providesTags: ["Books"],
+			}),
+		}),
+		getBookReviews: builder.query<IReview[], void>({
+			query: (id) => ({
+				url: `/books/${id}/reviews`,
+				providesTags: ["Books"],
+			}),
+		}),
+		getBookInfo: builder.query<IBookInfo, void>({
+			query: (id) => ({
+				url: `/books/${id}/info`,
+				providedTags: ["Books"],
+			}),
+		}),
+		getBookDetails: builder.query<IBookDetails, void>({
+			query: (id) => ({
+				url: `/books/${id}/details`,
+				providedTags: ["Books"],
 			}),
 		}),
 		addBook: builder.mutation({
@@ -32,14 +53,14 @@ export const apiBooksSlice = createApi({
 			invalidatesTags: ["Books"],
 		}),
 		updateBook: builder.mutation({
-			query: ({ id, updated }) => ({
+			query: ({ id, updates }) => ({
 				url: `/books/${id}`,
 				method: "PATCH",
-				body: updated,
+				body: updates,
 			}),
 			invalidatesTags: ["Books"],
 		}),
 	}),
 });
 
-export const {useGetBooksQuery, useAddBookMutation, useDeleteBookMutation, useUpdateBookMutation, useLazyGetBookByIdQuery} = apiBooksSlice;
+export const {useGetBooksQuery, useAddBookMutation, useDeleteBookMutation, useUpdateBookMutation, useLazyGetBookByIdQuery, useLazyGetBookReviewsQuery, useLazyGetBookDetailsQuery, useLazyGetBookInfoQuery} = apiBooksSlice;

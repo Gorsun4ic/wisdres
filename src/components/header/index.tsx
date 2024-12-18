@@ -60,7 +60,6 @@ const useHoverState = () => {
 	// Handle navigation item hover
 	const handleMouseEnterNav = useCallback((item: INavItem) => {
 		setHoveredItem(item); // Set the hovered item
-		console.log(item)
 	}, []);
 
 	// Handle navigation item mouse leave

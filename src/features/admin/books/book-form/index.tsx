@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 
-import { Grid2, CircularProgress, Autocomplete, TextField } from "@mui/material";
+import {
+	Grid2,
+	CircularProgress,
+	Autocomplete,
+	TextField,
+} from "@mui/material";
 
 import {
 	useAddBookMutation,
@@ -24,6 +29,7 @@ import ErrorMessage from "@components/error";
 import ChangedInfo from "@features/admin/changedInfo";
 
 import { StyledForm } from "./style";
+import { IBookInfo } from "@custom-types/book";
 
 type FormFields = {
 	title: string;
@@ -34,6 +40,8 @@ type FormFields = {
 	language: string;
 	year: number;
 	pages: number;
+	about_book: string;
+	about_auditory?: string;
 	id?: string;
 };
 
@@ -81,10 +89,21 @@ const AdminBookForm = ({
 		if (isSubmitSuccessful) reset();
 	}, [isSubmitSuccessful]);
 
-	const onSubmit = (data) => {
+	const onSubmit = (data: IBookInfo) => {
+		const { details, ...info } = data;
 		switch (mode) {
 			case "add":
-				addBook(data);
+				addBook({
+					info: {
+						...info,
+					},
+					details: {
+						book: details.book,
+						auditory: details.auditory,
+					},
+					reviews: [],
+				});
+
 				triggerAlert({
 					title: `The book ${data?.title} was successfully added`,
 					color: "success",
@@ -103,7 +122,7 @@ const AdminBookForm = ({
 		if (confirm) {
 			updateBook({
 				id: bookId,
-				updated: dataToEdit,
+				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
@@ -137,7 +156,7 @@ const AdminBookForm = ({
 		return (
 			<ConfirmAction
 				title={`Are you confirm to change the ${
-					bookData.title || null
+					bookData?.title || null
 				} book info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
@@ -164,7 +183,7 @@ const AdminBookForm = ({
 						register={register}
 						validation={{
 							required: "Image is required",
-							validate: (value) => {
+							validate: (value: string) => {
 								if (value && isValidImageType(value)) {
 									return true; // Validation passed
 								}
@@ -206,19 +225,6 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
-					{/* <FormField<FormFields>
-						name="author"
-						placeholder="Authors name"
-						register={register}
-						validation={{
-							required: "Author is required",
-							minLength: {
-								value: 4,
-								message: "Authors name must have at least 4 characters",
-							},
-						}}
-						error={errors.author?.message}
-					/> */}
 					<Controller
 						name="author"
 						control={control}
@@ -229,7 +235,7 @@ const AdminBookForm = ({
 								<Autocomplete
 									{...field}
 									options={authorsList || []}
-									getOptionLabel={(option) => option.title || ""}
+									getOptionLabel={(option) => option?.title || ""}
 									onChange={(event, value) => field.onChange(value)}
 									renderInput={(params) => (
 										<TextField
@@ -308,6 +314,41 @@ const AdminBookForm = ({
 							},
 						}}
 						error={errors.pages?.message}
+					/>
+				</Grid2>
+				<Grid2 size={6}>
+					<FormField<FormFields>
+						name="details.book"
+						placeholder="About the book"
+						register={register}
+						multiline
+						rows={4}
+						validation={{
+							required: "Information about the book is required",
+							minLength: {
+								value: 30,
+								message:
+									"Information about the book must have at least 30 characters",
+							},
+						}}
+						error={errors.about_book?.message}
+					/>
+				</Grid2>
+				<Grid2 size={6}>
+					<FormField<FormFields>
+						name="details.auditory"
+						placeholder="About the auditory"
+						register={register}
+						multiline
+						rows={4}
+						validation={{
+							minLength: {
+								value: 30,
+								message:
+									"Information about the auditory must have at least 30 characters",
+							},
+						}}
+						error={errors.about_auditory?.message}
 					/>
 				</Grid2>
 			</Grid2>

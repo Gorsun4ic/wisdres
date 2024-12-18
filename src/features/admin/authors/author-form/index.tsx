@@ -96,7 +96,7 @@ const AdminAuthorForm = ({
 		if (confirm) {
 			updateAuthor({
 				id: authorId,
-				updated: dataToEdit,
+				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({

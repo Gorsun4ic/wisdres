@@ -1,9 +1,17 @@
+import { useEffect } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
+
 import { Rating, Grid2 } from "@mui/material";
-import Button from "@components/button";
-import FormField from "@components/formField";
+
+import { useUpdateBookMutation } from "@api/apiBooksSlice";
+
 // @ts-expect-error Cuz it's old library and it's have type any, but it's strings array
 import badwordsArray from "badwords/array";
+
+import Button from "@components/button";
+import FormField from "@components/formField";
+
 import { StyledForm } from "./style";
 
 type FormFields = {
@@ -24,9 +32,27 @@ const ReviewForm = () => {
 		handleSubmit,
 		control,
 		formState: { errors },
+		reset
 	} = useForm<FormFields>();
+	const [updateBook] = useUpdateBookMutation();
+	const { activeBookPage } = useSelector((state: RootState) => state);
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
-		console.log(data);
+		const date = new Date();
+		const review = {
+			userName: data.name,
+			userEmail: data.email,
+			userRating: data.rating,
+			userText: data.text,
+			date: date.toLocaleDateString(), // Add the current date
+		};
+
+		// Make an API call to PATCH the book and update the reviews array
+		updateBook({
+			id: activeBookPage.activeBook._id, // Pass the current book ID
+			updates: { reviews: review },
+		});
+
+		reset()
 	};
 
 	return (
@@ -103,7 +129,6 @@ const ReviewForm = () => {
 								"Your input contains inappropriate words",
 						}}
 						error={errors.text?.message}
-						
 						multiline
 						rows={4}
 					/>

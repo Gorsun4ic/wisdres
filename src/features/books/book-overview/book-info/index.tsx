@@ -1,8 +1,10 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import { List, ListItem, Stack } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
-import { IBookInfo } from "@custom-types/book";
+import { useLazyGetBookInfoQuery } from "@api/apiBooksSlice";
 
 import useShowAuthorsName from "@hooks/useShowAuthorsName";
 
@@ -10,27 +12,33 @@ import Button from "@components/button";
 
 import { StyledBookInfo } from "./style";
 
-const BookInfo = ({ data }: { data: IBookInfo }) => {
-	const { title, author, publisher, genre, language, year, pages, rating, img } = data;
-	const {getAuthorsNameElem} = useShowAuthorsName();
-	const authorsName = getAuthorsNameElem(author);
+const BookInfo = () => {
+	const { activeBookPage } = useSelector((state: RootState) => state);
+	const bookId = activeBookPage?.activeBook?._id;
+	const [getInfoById, { data: info }] = useLazyGetBookInfoQuery();
+	const { getAuthorsNameElem } = useShowAuthorsName();
+	const authorsName = getAuthorsNameElem(info?.author);
+
+	useEffect(() => {
+		getInfoById(bookId);
+	}, [getInfoById, bookId, info]);
 
 	return (
 		<StyledBookInfo>
 			<Stack direction="row" gap={4}>
-				<img src={img} alt={title} width="350" height="500" />
+				<img src={info?.img} alt={info?.title} width="350" height="500" />
 				<div>
-					<h1 className="book-title">{title}</h1>
+					<h1 className="book-title">{info?.title}</h1>
 					<List>
 						<ListItem>Author: {authorsName}</ListItem>
-						<ListItem>Publisher: {publisher}</ListItem>
-						<ListItem>Genre: {genre}</ListItem>
-						<ListItem>Language: {language}</ListItem>
-						<ListItem>The year of publishing: {year}</ListItem>
-						<ListItem>Pages count: {pages}</ListItem>
-						{rating && (
+						<ListItem>Publisher: {info?.publisher}</ListItem>
+						<ListItem>Genre: {info?.genre}</ListItem>
+						<ListItem>Language: {info?.language}</ListItem>
+						<ListItem>The year of publishing: {info?.year}</ListItem>
+						<ListItem>Pages count: {info?.pages}</ListItem>
+						{info?.rating && (
 							<ListItem>
-								Rating: {rating}
+								Rating: {info?.rating}
 								<StarIcon color="warning" />
 							</ListItem>
 						)}
