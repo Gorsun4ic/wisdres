@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import {
 	Grid2,
 	CircularProgress,
-	Autocomplete,
-	TextField,
 } from "@mui/material";
 
 import {
@@ -14,7 +12,8 @@ import {
 	useLazyGetBookByIdQuery,
 } from "@api/apiBooksSlice";
 import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
-
+import { useGetPublishersQuery } from "@api/apiPublishersSlice";
+import { useGetGenresQuery } from "@api/apiGenresSlice";
 // Custom hooks
 import useAlert from "@hooks/useAlert";
 import useWatchImg from "@hooks/useWatchImg";
@@ -25,6 +24,8 @@ import Button from "@components/button";
 import FormField from "@components/formField";
 import ConfirmAction from "@components/confirmAction";
 import ErrorMessage from "@components/error";
+import SelectCheckboxes from "@components/selectCheckboxes";
+import AutoCompleteField from "@components/autoCompleteField";
 
 import ChangedInfo from "@features/admin/changedInfo";
 
@@ -69,6 +70,8 @@ const AdminBookForm = ({
 	const [getBookById, { data: bookData, isLoading, error }] =
 		useLazyGetBookByIdQuery();
 	const { data: authorsList } = useGetAuthorsQuery(null);
+	const { data: publishersList } = useGetPublishersQuery(null);
+	const { data: genresList } = useGetGenresQuery(null);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
 	const triggerAlert = useAlert();
@@ -81,6 +84,8 @@ const AdminBookForm = ({
 	});
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
 
+
+
 	useEffect(() => {
 		onEditMode(bookId, getBookById, bookData);
 	}, [bookId, mode, bookData]);
@@ -91,6 +96,7 @@ const AdminBookForm = ({
 
 	const onSubmit = (data: IBookInfo) => {
 		const { details, ...info } = data;
+		console.log(info)
 		switch (mode) {
 			case "add":
 				addBook({
@@ -103,6 +109,7 @@ const AdminBookForm = ({
 					},
 					reviews: [],
 				});
+				console.log(info)
 
 				triggerAlert({
 					title: `The book ${data?.title} was successfully added`,
@@ -210,59 +217,27 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
-					<FormField<FormFields>
-						name="genre"
-						placeholder="Genre"
-						register={register}
-						validation={{
-							required: "Genre is required",
-							minLength: {
-								value: 3,
-								message: "Genre must have at least 3 characters",
-							},
-						}}
-						error={errors.genre?.message}
-					/>
+					<p className="input-label">Genres</p>
+					<SelectCheckboxes dataList={genresList} control={control} name="genre" label="Genres"/>
 				</Grid2>
 				<Grid2 size={6}>
-					<Controller
+					<AutoCompleteField
 						name="author"
 						control={control}
 						rules={{ required: "Author is required" }}
-						render={({ field }) => (
-							<>
-								<p className="input-label">Author</p>
-								<Autocomplete
-									{...field}
-									options={authorsList || []}
-									getOptionLabel={(option) => option?.title || ""}
-									onChange={(event, value) => field.onChange(value)}
-									renderInput={(params) => (
-										<TextField
-											{...params}
-											name="author"
-											register={register}
-											placeholder="Authors name"
-										/>
-									)}
-								/>
-							</>
-						)}
+						options={authorsList || []}
+						placeholder="Authors name"
+						label="Author"
 					/>
 				</Grid2>
 				<Grid2 size={6}>
-					<FormField<FormFields>
+					<AutoCompleteField
 						name="publisher"
+						control={control}
+						rules={{ required: "Publisher is required" }}
+						options={publishersList || []}
 						placeholder="Publishers name"
-						register={register}
-						validation={{
-							required: "Publisher is required",
-							minLength: {
-								value: 4,
-								message: "Publishers name must have at least 4 characters",
-							},
-						}}
-						error={errors.publisher?.message}
+						label="Publisher"
 					/>
 				</Grid2>
 				<Grid2 size={6}>

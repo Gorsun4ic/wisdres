@@ -34,6 +34,7 @@ const AdminGrid = ({
 		if (data) {
 			const correctData = handleId(data);
 			setInfo(correctData);
+			console.log(info)
 		}
 	}, [data, setInfo]);
 
@@ -49,7 +50,7 @@ const AdminGrid = ({
 			deleteMethod(selectedInfo.id); // Trigger API call to delete the book
 			setInfo((prev) => prev.filter((book) => book?.id !== selectedInfo?.id)); // Optimistic UI update
 			triggerAlert({
-				title: `The ${selectedInfo?.info.title} was successfully deleted`,
+				title: `The ${selectedInfo?.info?.title} was successfully deleted`,
 				color: "success",
 			});
 		}
@@ -65,9 +66,10 @@ const AdminGrid = ({
 
 	const handleId = (data: IBook[]) => {
 		return data.map((item: IBook) => {
-			const {info} = item;
+			const {info, ...data} = item;
 			return {
 				id: item._id,
+				...data,
 				...info,
 			};
 		});

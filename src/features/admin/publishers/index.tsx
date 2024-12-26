@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@store/index";
 
@@ -10,32 +10,32 @@ import { GridColDef } from "@mui/x-data-grid";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import Alert from "@mui/material/Alert";
 
-import { useGetAuthorsQuery, useDeleteAuthorMutation } from "@api/apiAuthorsSlice";
+import {
+	useGetPublishersQuery,
+	useDeletePublisherMutation,
+} from "@api/apiPublishersSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminAuthorForm from "@features/admin/authors/author-form";
+import AdminPublisherForm from "./publisher-form";
+
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
-import { StyledAdminAuthors } from "./style";
+import { StyledAdminPublishers } from "./style";
 
-const AdminAuthors = () => {
+const AdminPublishers = () => {
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
-	const [authorToEditId, setAuthorToEditId] = useState<string | null>(null);
-	const { data, isLoading, error } = useGetAuthorsQuery(null);
-	const [deleteAuthor] = useDeleteAuthorMutation();
+	const [publisherToEditId, setPublisherToEditId] = useState<string | null>(null);
+	const { data, isLoading, error } = useGetPublishersQuery(null);
+	const [deletePublisher] = useDeletePublisherMutation();
 	const { alert } = useSelector((state: RootState) => state.alert);
-
-	useEffect(() => {
-		console.log(data)
-	}, []);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);
 		setFormMode(mode);
-		if (id) setAuthorToEditId(id);
+		if (id) setPublisherToEditId(id);
 	};
 
 	const handleClose = () => setOpen(false);
@@ -60,7 +60,7 @@ const AdminAuthors = () => {
 	];
 
 	return (
-		<StyledAdminAuthors>
+		<StyledAdminPublishers>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
 				<Stack
 					gap={1}
@@ -68,16 +68,16 @@ const AdminAuthors = () => {
 					sx={{ alignItems: "center" }}
 					className="active-tab-section">
 					<RecentActorsIcon fontSize="large" />
-					<p>Authors</p>
+					<p>Publishers</p>
 				</Stack>
 				<Button size="small" onClick={() => handleOpen("add")}>
-					Add a new author
+					Add a new publisher
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminAuthorForm
+						<AdminPublisherForm
 							mode={formMode}
-							authorId={authorToEditId}
+							publisherId={publisherToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>
@@ -89,13 +89,13 @@ const AdminAuthors = () => {
 					data={data}
 					isLoading={isLoading}
 					error={error}
-					deleteMethod={deleteAuthor}
+					deleteMethod={deletePublisher}
 					columns={gridColumns}
 				/>
 			</ErrorBoundary>
 			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}
-		</StyledAdminAuthors>
+		</StyledAdminPublishers>
 	);
 };
 
-export default AdminAuthors;
+export default AdminPublishers;

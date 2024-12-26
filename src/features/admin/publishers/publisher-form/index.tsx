@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { Grid2, CircularProgress } from "@mui/material";
 
 import {
-	useAddAuthorMutation,
-	useUpdateAuthorMutation,
-	useLazyGetAuthorByIdQuery,
-} from "@api/apiAuthorsSlice";
+	useAddPublisherMutation,
+	useUpdatePublisherMutation,
+	useLazyGetPublisherByIdQuery,
+} from "@api/apiPublishersSlice";
 
 // Custom hooks
 import useAlert from "@hooks/useAlert";
@@ -31,12 +31,12 @@ type FormFields = {
 	id?: string;
 };
 
-const AdminAuthorForm = ({
-	authorId,
+const AdminPublisherForm = ({
+	publisherId,
 	mode,
 	openModal,
 }: {
-	authorId: string | null;
+	publisherId: string | null;
 	mode: "add" | "edit";
 	openModal: (arg0: boolean) => void;
 }) => {
@@ -48,11 +48,11 @@ const AdminAuthorForm = ({
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	const [addAuthor, { isLoading: isAdding, error: addError }] =
-		useAddAuthorMutation();
-	const [updateAuthor] = useUpdateAuthorMutation();
-	const [getAuthorById, { data: authorData, isLoading, error }] =
-		useLazyGetAuthorByIdQuery();
+	const [addPublisher, { isLoading: isAdding, error: addError }] =
+		useAddPublisherMutation();
+	const [updatePublisher] = useUpdatePublisherMutation();
+	const [getPublisherById, { data: publisherData, isLoading, error }] =
+		useLazyGetPublisherByIdQuery();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
 	const triggerAlert = useAlert();
@@ -60,15 +60,15 @@ const AdminAuthorForm = ({
 		{ mode, triggerAlert, reset }
 	);
 	const formTitle = defineFormTitle({
-		onEdit: `Edit ${authorData?.title || null} author`,
+		onEdit: `Edit ${publisherData?.title || null} author`,
 		onAdd: "Add new author",
 	});
 
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
 
 	useEffect(() => {
-		onEditMode(authorId, getAuthorById, authorData);
-	}, [authorId, mode, authorData]);
+		onEditMode(publisherId, getPublisherById, publisherData);
+	}, [publisherId, mode, publisherData]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
@@ -77,9 +77,9 @@ const AdminAuthorForm = ({
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				addAuthor(data);
+				addPublisher(data);
 				triggerAlert({
-					title: `The author ${data?.title} was successfully added`,
+					title: `The publisher ${data?.title} was successfully added`,
 					color: "success",
 				});
 				break;
@@ -94,13 +94,13 @@ const AdminAuthorForm = ({
 
 	const handleEdit = (confirm: boolean) => {
 		if (confirm) {
-			updateAuthor({
-				id: authorId,
+			updatePublisher({
+				id: publisherId,
 				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
-				title: `The author ${authorData?.title} was successfully changed`,
+				title: `The publisher ${publisherData?.title} was successfully changed`,
 				color: "success",
 			});
 		}
@@ -108,7 +108,7 @@ const AdminAuthorForm = ({
 	};
 
 	const changedInfo = () => {
-		const differences = showTheDifference(authorData, dataToEdit);
+		const differences = showTheDifference(publisherData, dataToEdit);
 
 		// Handle case when there are no differences
 		if (!differences || differences.length === 0) {
@@ -130,7 +130,7 @@ const AdminAuthorForm = ({
 		return (
 			<ConfirmAction
 				title={`Are you confirm to change the ${
-					authorData.title || null
+					publisherData.title || null
 				} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
@@ -171,7 +171,7 @@ const AdminAuthorForm = ({
 				<Grid2 size={6}>
 					<FormField<FormFields>
 						name="title"
-						placeholder="Author's name"
+						placeholder="Publisher's name"
 						register={register}
 						validation={{
 							required: "Name is required",
@@ -183,16 +183,17 @@ const AdminAuthorForm = ({
 						error={errors.title?.message}
 					/>
 				</Grid2>
-				<Grid2 size={6}>
+				<Grid2 size={12}>
 					<FormField<FormFields>
-						name="about"
-						placeholder="About author"
+						name="publisher"
+						placeholder="About publisher"
 						register={register}
+						row={4}
 						validation={{
-							required: "Author's info is required",
+							required: "Publisher's info is required",
 							minLength: {
 								value: 3,
-								message: "Author's info must have at least 3 characters",
+								message: "Publisher's info must have at least 3 characters",
 							},
 						}}
 						error={errors.about?.message}
@@ -206,4 +207,4 @@ const AdminAuthorForm = ({
 	);
 };
 
-export default AdminAuthorForm;
+export default AdminPublisherForm;

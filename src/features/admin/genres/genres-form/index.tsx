@@ -3,11 +3,7 @@ import { useForm } from "react-hook-form";
 
 import { Grid2, CircularProgress } from "@mui/material";
 
-import {
-	useAddAuthorMutation,
-	useUpdateAuthorMutation,
-	useLazyGetAuthorByIdQuery,
-} from "@api/apiAuthorsSlice";
+import {useAddGenreMutation, useUpdateGenreMutation, useLazyGetGenreByIdQuery} from "@api/apiGenresSlice"
 
 // Custom hooks
 import useAlert from "@hooks/useAlert";
@@ -31,12 +27,12 @@ type FormFields = {
 	id?: string;
 };
 
-const AdminAuthorForm = ({
-	authorId,
+const AdminGenreForm = ({
+	genreId,
 	mode,
 	openModal,
 }: {
-	authorId: string | null;
+	genreId: string | null;
 	mode: "add" | "edit";
 	openModal: (arg0: boolean) => void;
 }) => {
@@ -48,11 +44,11 @@ const AdminAuthorForm = ({
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	const [addAuthor, { isLoading: isAdding, error: addError }] =
-		useAddAuthorMutation();
-	const [updateAuthor] = useUpdateAuthorMutation();
-	const [getAuthorById, { data: authorData, isLoading, error }] =
-		useLazyGetAuthorByIdQuery();
+	const [addGenre, { isLoading: isAdding, error: addError }] =
+		useAddGenreMutation();
+	const [updateGenre] = useUpdateGenreMutation();
+	const [getGenreById, { data: genreData, isLoading, error }] =
+		useLazyGetGenreByIdQuery();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
 	const triggerAlert = useAlert();
@@ -60,15 +56,15 @@ const AdminAuthorForm = ({
 		{ mode, triggerAlert, reset }
 	);
 	const formTitle = defineFormTitle({
-		onEdit: `Edit ${authorData?.title || null} author`,
-		onAdd: "Add new author",
+		onEdit: `Edit ${genreData?.title || null} genre`,
+		onAdd: "Add new genre",
 	});
 
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
 
 	useEffect(() => {
-		onEditMode(authorId, getAuthorById, authorData);
-	}, [authorId, mode, authorData]);
+		onEditMode(genreId, getGenreById, genreData);
+	}, [genreId, mode, genreData]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
@@ -77,9 +73,9 @@ const AdminAuthorForm = ({
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				addAuthor(data);
+				addGenre(data);
 				triggerAlert({
-					title: `The author ${data?.title} was successfully added`,
+					title: `The genre ${data?.title} was successfully added`,
 					color: "success",
 				});
 				break;
@@ -94,13 +90,13 @@ const AdminAuthorForm = ({
 
 	const handleEdit = (confirm: boolean) => {
 		if (confirm) {
-			updateAuthor({
-				id: authorId,
+			updateGenre({
+				id: genreId,
 				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
-				title: `The author ${authorData?.title} was successfully changed`,
+				title: `The genre ${genreData?.title} was successfully changed`,
 				color: "success",
 			});
 		}
@@ -108,7 +104,7 @@ const AdminAuthorForm = ({
 	};
 
 	const changedInfo = () => {
-		const differences = showTheDifference(authorData, dataToEdit);
+		const differences = showTheDifference(genreData, dataToEdit);
 
 		// Handle case when there are no differences
 		if (!differences || differences.length === 0) {
@@ -130,7 +126,7 @@ const AdminAuthorForm = ({
 		return (
 			<ConfirmAction
 				title={`Are you confirm to change the ${
-					authorData.title || null
+					genreData.title || null
 				} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
@@ -171,7 +167,7 @@ const AdminAuthorForm = ({
 				<Grid2 size={6}>
 					<FormField<FormFields>
 						name="title"
-						placeholder="Author's name"
+						placeholder="Genre's name"
 						register={register}
 						validation={{
 							required: "Name is required",
@@ -183,21 +179,6 @@ const AdminAuthorForm = ({
 						error={errors.title?.message}
 					/>
 				</Grid2>
-				<Grid2 size={6}>
-					<FormField<FormFields>
-						name="about"
-						placeholder="About author"
-						register={register}
-						validation={{
-							required: "Author's info is required",
-							minLength: {
-								value: 3,
-								message: "Author's info must have at least 3 characters",
-							},
-						}}
-						error={errors.about?.message}
-					/>
-				</Grid2>
 			</Grid2>
 			<Button size="big" submit={true}>
 				{mode === "edit" ? "Edit" : "Publish"}
@@ -206,4 +187,4 @@ const AdminAuthorForm = ({
 	);
 };
 
-export default AdminAuthorForm;
+export default AdminGenreForm;

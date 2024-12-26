@@ -10,32 +10,32 @@ import { GridColDef } from "@mui/x-data-grid";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import Alert from "@mui/material/Alert";
 
-import { useGetAuthorsQuery, useDeleteAuthorMutation } from "@api/apiAuthorsSlice";
+import {useGetGenresQuery, useDeleteGenreMutation} from "@api/apiGenresSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminAuthorForm from "@features/admin/authors/author-form";
+import AdminGenreForm from "./genres-form";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
-import { StyledAdminAuthors } from "./style";
+import { StyledAdminGenres } from "./style";
 
-const AdminAuthors = () => {
+const AdminGenres = () => {
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
-	const [authorToEditId, setAuthorToEditId] = useState<string | null>(null);
-	const { data, isLoading, error } = useGetAuthorsQuery(null);
-	const [deleteAuthor] = useDeleteAuthorMutation();
+	const [genreToEditId, setGenreToEditId] = useState<string | null>(null);
+	const { data, isLoading, error } = useGetGenresQuery(null);
+	const [deleteGenre] = useDeleteGenreMutation();
 	const { alert } = useSelector((state: RootState) => state.alert);
 
 	useEffect(() => {
-		console.log(data)
+		console.log(data);
 	}, []);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);
 		setFormMode(mode);
-		if (id) setAuthorToEditId(id);
+		if (id) setGenreToEditId(id);
 	};
 
 	const handleClose = () => setOpen(false);
@@ -60,7 +60,7 @@ const AdminAuthors = () => {
 	];
 
 	return (
-		<StyledAdminAuthors>
+		<StyledAdminGenres>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
 				<Stack
 					gap={1}
@@ -68,16 +68,16 @@ const AdminAuthors = () => {
 					sx={{ alignItems: "center" }}
 					className="active-tab-section">
 					<RecentActorsIcon fontSize="large" />
-					<p>Authors</p>
+					<p>Genres</p>
 				</Stack>
 				<Button size="small" onClick={() => handleOpen("add")}>
-					Add a new author
+					Add a new genre
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminAuthorForm
+						<AdminGenreForm
 							mode={formMode}
-							authorId={authorToEditId}
+							genreId={genreToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>
@@ -89,13 +89,13 @@ const AdminAuthors = () => {
 					data={data}
 					isLoading={isLoading}
 					error={error}
-					deleteMethod={deleteAuthor}
+					deleteMethod={deleteGenre}
 					columns={gridColumns}
 				/>
 			</ErrorBoundary>
 			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}
-		</StyledAdminAuthors>
+		</StyledAdminGenres>
 	);
 };
 
-export default AdminAuthors;
+export default AdminGenres;
