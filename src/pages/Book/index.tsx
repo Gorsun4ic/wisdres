@@ -25,11 +25,17 @@ const BookPage = () => {
 	useEffect(() => {
 		if (bookId) {
 			getBookById(bookId); // Trigger the query manually
-			getAuthorById(bookData?.author);
-			dispatch(showBook({
-				...bookData,
-				aboutAuthor: authorData?.about,
-			}))
+
+			if (bookData) {
+				getAuthorById(bookData?.info?.author);
+			}
+
+			dispatch(
+				showBook({
+					...bookData,
+					aboutAuthor: authorData?.about,
+				})
+			);
 		}
 	}, [bookId, getBookById, getAuthorById, bookData, authorData]);
 

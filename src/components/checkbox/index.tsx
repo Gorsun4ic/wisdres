@@ -4,14 +4,16 @@ const Checkbox = ({
 	label,
 	checked,
 	onChange,
+	disabled
 }: {
 	label: string;
 	checked: boolean;
 	onChange: () => void;
+	disabled?: boolean;
 }) => {
 	return (
 		<StyledFormControlLabel
-			control={<StyledCheckbox checked={checked} onChange={onChange} />}
+			control={<StyledCheckbox checked={checked} onChange={onChange} disabled={disabled}/>}
 			label={label}
 		/>
 	);

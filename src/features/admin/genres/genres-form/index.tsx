@@ -3,7 +3,11 @@ import { useForm } from "react-hook-form";
 
 import { Grid2, CircularProgress } from "@mui/material";
 
-import {useAddGenreMutation, useUpdateGenreMutation, useLazyGetGenreByIdQuery} from "@api/apiGenresSlice"
+import {
+	useAddGenreMutation,
+	useUpdateGenreMutation,
+	useLazyGetGenreByIdQuery,
+} from "@api/apiGenresSlice";
 
 // Custom hooks
 import useAlert from "@hooks/useAlert";
@@ -125,9 +129,7 @@ const AdminGenreForm = ({
 	if (openDialog) {
 		return (
 			<ConfirmAction
-				title={`Are you confirm to change the ${
-					genreData.title || null
-				} info?`}
+				title={`Are you confirm to change the ${genreData.title || null} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>

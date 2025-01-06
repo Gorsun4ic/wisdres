@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import {
-	Grid2,
-	CircularProgress,
-} from "@mui/material";
+import { Grid2, CircularProgress } from "@mui/material";
 
 import {
 	useAddBookMutation,
@@ -18,6 +15,7 @@ import { useGetGenresQuery } from "@api/apiGenresSlice";
 import useAlert from "@hooks/useAlert";
 import useWatchImg from "@hooks/useWatchImg";
 import useHandleAdminForm from "@hooks/useAdminForm";
+import useShowEntityNames from "@hooks/useShowEntityNames ";
 
 // Custom components
 import Button from "@components/button";
@@ -44,6 +42,11 @@ type FormFields = {
 	about_book: string;
 	about_auditory?: string;
 	id?: string;
+};
+
+type ExecutorsInfo = {
+	author: string;
+	publisher: string;
 };
 
 const AdminBookForm = ({
@@ -74,43 +77,50 @@ const AdminBookForm = ({
 	const { data: genresList } = useGetGenresQuery(null);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
+	const [executorsInfo, setExecutorsInfo] = useState<ExecutorsInfo | null>(
+		null
+	);
 	const triggerAlert = useAlert();
 	const { onEditMode, defineFormTitle, showTheDifference } = useHandleAdminForm(
-		{ mode, triggerAlert, reset }
+		{ mode, reset }
 	);
 	const formTitle = defineFormTitle({
 		onEdit: `Edit ${bookData?.title || null} book`,
 		onAdd: "Add new book",
 	});
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
-
-
+	const { getAuthorName, getPublisherName } = useShowEntityNames();
 
 	useEffect(() => {
-		onEditMode(bookId, getBookById, bookData);
-	}, [bookId, mode, bookData]);
+		if (bookId) {
+			onEditMode(bookId, getBookById, bookData);
+		}
+	}, [bookId, bookData]);
+
+	useEffect(() => {
+		if (bookData) {
+			const author = getAuthorName(bookData?.info?.author);
+			const publisher = getPublisherName(bookData?.info?.publisher);
+			setExecutorsInfo({
+				author,
+				publisher,
+			});
+		}
+	}, [bookData]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
 	}, [isSubmitSuccessful]);
 
 	const onSubmit = (data: IBookInfo) => {
-		const { details, ...info } = data;
-		console.log(info)
+		const { details, info } = data;
 		switch (mode) {
 			case "add":
 				addBook({
-					info: {
-						...info,
-					},
-					details: {
-						book: details.book,
-						auditory: details.auditory,
-					},
+					info,
+					details: { book: details.book, auditory: details.auditory },
 					reviews: [],
 				});
-				console.log(info)
-
 				triggerAlert({
 					title: `The book ${data?.title} was successfully added`,
 					color: "success",
@@ -133,7 +143,7 @@ const AdminBookForm = ({
 			});
 			openModal(false);
 			triggerAlert({
-				title: `The book ${bookData?.title} was successfully changed`,
+				title: `The book ${bookData?.info?.title} was successfully changed`,
 				color: "success",
 			});
 		}
@@ -163,7 +173,7 @@ const AdminBookForm = ({
 		return (
 			<ConfirmAction
 				title={`Are you confirm to change the ${
-					bookData?.title || null
+					bookData?.info?.title || null
 				} book info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
@@ -185,7 +195,7 @@ const AdminBookForm = ({
 			<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
 				<Grid2 size={6} className="img-input">
 					<FormField<FormFields>
-						name="img"
+						name="info.img"
 						placeholder="Image link"
 						register={register}
 						validation={{
@@ -197,13 +207,13 @@ const AdminBookForm = ({
 								return imgTypeError; // Validation failed
 							},
 						}}
-						error={errors.img?.message}
+						error={errors?.info?.img?.message}
 					/>
 					{img && <img src={img} width="256" height="256" />}
 				</Grid2>
 				<Grid2 size={6}>
 					<FormField<FormFields>
-						name="title"
+						name="info.title"
 						placeholder="Books title"
 						register={register}
 						validation={{
@@ -213,36 +223,43 @@ const AdminBookForm = ({
 								message: "Name must have at least 1 characters",
 							},
 						}}
-						error={errors.title?.message}
+						error={errors?.info?.title?.message}
 					/>
 				</Grid2>
 				<Grid2 size={6}>
 					<p className="input-label">Genres</p>
-					<SelectCheckboxes dataList={genresList} control={control} name="genre" label="Genres"/>
+					<SelectCheckboxes
+						dataList={genresList}
+						control={control}
+						name="info.genre"
+						label="Genres"
+					/>
 				</Grid2>
 				<Grid2 size={6}>
 					<AutoCompleteField
-						name="author"
+						name="info.author"
 						control={control}
 						rules={{ required: "Author is required" }}
 						options={authorsList || []}
 						placeholder="Authors name"
+						value={executorsInfo?.author || ""}
 						label="Author"
 					/>
 				</Grid2>
 				<Grid2 size={6}>
 					<AutoCompleteField
-						name="publisher"
+						name="info.publisher"
 						control={control}
 						rules={{ required: "Publisher is required" }}
 						options={publishersList || []}
+						value={executorsInfo?.publisher || ""}
 						placeholder="Publishers name"
 						label="Publisher"
 					/>
 				</Grid2>
 				<Grid2 size={6}>
 					<FormField<FormFields>
-						name="language"
+						name="info.language"
 						placeholder="Language"
 						register={register}
 						validation={{
@@ -252,12 +269,12 @@ const AdminBookForm = ({
 								message: "Language must have at least 2 characters",
 							},
 						}}
-						error={errors.language?.message}
+						error={errors?.info?.language?.message}
 					/>
 				</Grid2>
 				<Grid2 size={6}>
 					<FormField<FormFields>
-						name="year"
+						name="info.year"
 						placeholder="Year"
 						register={register}
 						type="number"
@@ -272,12 +289,12 @@ const AdminBookForm = ({
 								message: "Year must have 4 numbers",
 							},
 						}}
-						error={errors.year?.message}
+						error={errors?.info?.year?.message}
 					/>
 				</Grid2>
 				<Grid2 size={6}>
 					<FormField<FormFields>
-						name="pages"
+						name="info.pages"
 						placeholder="Pages number"
 						register={register}
 						type="number"
@@ -288,7 +305,7 @@ const AdminBookForm = ({
 								message: "Pages must have at least 1 characters",
 							},
 						}}
-						error={errors.pages?.message}
+						error={errors?.info?.pages?.message}
 					/>
 				</Grid2>
 				<Grid2 size={6}>
@@ -306,7 +323,7 @@ const AdminBookForm = ({
 									"Information about the book must have at least 30 characters",
 							},
 						}}
-						error={errors.about_book?.message}
+						error={errors?.details?.book?.message}
 					/>
 				</Grid2>
 				<Grid2 size={6}>
@@ -323,7 +340,7 @@ const AdminBookForm = ({
 									"Information about the auditory must have at least 30 characters",
 							},
 						}}
-						error={errors.about_auditory?.message}
+						error={errors?.details?.auditory?.message}
 					/>
 				</Grid2>
 			</Grid2>

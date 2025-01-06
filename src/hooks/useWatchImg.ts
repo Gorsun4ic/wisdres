@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 const useWatchImg = (watch: (arg0: string) => string) => {
 	const [img, setImg] = useState<string | null | undefined>(undefined);
-	const watchImg = watch("img");
+	const watchImg = watch("info.img");
 
 	const imageTypes: string[] = [
 		"jpeg",
@@ -19,7 +19,7 @@ const useWatchImg = (watch: (arg0: string) => string) => {
 		"jpg",
 	];
 
-	const styledImageTypes = imageTypes.map((item, index, arr) => {
+	const styledImageTypes = imageTypes.map((item) => {
 		return ` ${item}`;
 	})
 
@@ -27,8 +27,10 @@ const useWatchImg = (watch: (arg0: string) => string) => {
 
 	// Check if the image type is valid
 	const isValidImageType = (fileName: string): boolean => {
+		// if (!fileName) return
+
 		return imageTypes.some((type) =>
-			fileName?.trim().toLowerCase().endsWith(`.${type.toLowerCase()}`)
+			fileName?.trim().toLowerCase().endsWith(`.${type?.toLowerCase()}`)
 		);
 	};
 

@@ -5,7 +5,7 @@ import { Stack } from "@mui/material";
 
 import { IBook } from "@custom-types/book";
 
-import useShowAuthorsName from "@hooks/useShowAuthorsName";
+import useShowEntityNames from "@hooks/useShowEntityNames ";
 
 import Button from "@components/button";
 
@@ -15,18 +15,19 @@ import { StyledCard, StyledCardContent } from "./style";
 const BookCard: React.FC<{ data: IBook }> = ({ data }) => {
 	const { info, _id } = data;
 	const { img, rating, title, author } = info;
-	const { getAuthorsNameElem } = useShowAuthorsName();
-	const authorsName = getAuthorsNameElem(author);
+	const { getAuthorName } = useShowEntityNames();
+	const authorsName = getAuthorName(author);
+
 
 	return (
-		<Link to={`book/${_id}`}>
+		<Link to={`/book/${_id}`}>
 			<StyledCard
 				className="book-card"
 				sx={{
 					boxShadow: "none",
 					border: `1px solid ${theme?.colors?.darkGrey}`,
 				}}>
-				<img src={img} className="book-card__img" width="200" height="380" />
+				<img src={img} className="book-card__img" width="200" height="250" />
 				<StyledCardContent>
 					{rating && (
 						<Stack

@@ -31,6 +31,12 @@ type FormFields = {
 	id?: string;
 };
 
+type Difference = {
+	property: string;
+	oldVers: string;
+	newVers: string;
+};
+
 const AdminAuthorForm = ({
 	authorId,
 	mode,
@@ -55,9 +61,10 @@ const AdminAuthorForm = ({
 		useLazyGetAuthorByIdQuery();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
+	const [difference, setDifference] = useState<Difference[] | null>([]);
 	const triggerAlert = useAlert();
 	const { onEditMode, defineFormTitle, showTheDifference } = useHandleAdminForm(
-		{ mode, triggerAlert, reset }
+		{ mode, reset }
 	);
 	const formTitle = defineFormTitle({
 		onEdit: `Edit ${authorData?.title || null} author`,
@@ -67,7 +74,9 @@ const AdminAuthorForm = ({
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
 
 	useEffect(() => {
-		onEditMode(authorId, getAuthorById, authorData);
+		if (authorId) {
+			onEditMode(authorId, getAuthorById, authorData);
+		}
 	}, [authorId, mode, authorData]);
 
 	useEffect(() => {
@@ -86,6 +95,7 @@ const AdminAuthorForm = ({
 			case "edit":
 				setOpenDialog(true);
 				setDataToEdit(data);
+				changedInfo();
 				break;
 			default:
 				console.warn(`Unknown mode: ${mode}`);
@@ -109,21 +119,15 @@ const AdminAuthorForm = ({
 
 	const changedInfo = () => {
 		const differences = showTheDifference(authorData, dataToEdit);
+		console.log(differences);
 
 		// Handle case when there are no differences
 		if (!differences || differences.length === 0) {
 			return null;
 		}
 
-		const { propertyToChange, oldVersion, newVersion } = differences[0]; // Using the first difference for now
-
-		return (
-			<ChangedInfo
-				propertyToChange={propertyToChange}
-				oldVersion={oldVersion}
-				newVersion={newVersion}
-			/>
-		);
+		// const { propertyToChange, oldVersion, newVersion } = differences[0];
+		setDifference(differences);
 	};
 
 	if (openDialog) {
@@ -135,7 +139,7 @@ const AdminAuthorForm = ({
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>
-				{changedInfo()}
+				<ChangedInfo difference={difference} />
 			</ConfirmAction>
 		);
 	}

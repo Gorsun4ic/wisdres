@@ -19,6 +19,12 @@ export const apiBooksSlice = createApi({
 				providesTags: ["Books"],
 			}),
 		}),
+		getBooksByGenres: builder.query<IBook[], void>({
+			query: (genre) => ({
+				url: `/books/genre/${genre}`,
+				providedTags: ["Books"]
+			})
+		}),
 		getBookReviews: builder.query<IReview[], void>({
 			query: (id) => ({
 				url: `/books/${id}/reviews`,
@@ -63,4 +69,4 @@ export const apiBooksSlice = createApi({
 	}),
 });
 
-export const {useGetBooksQuery, useAddBookMutation, useDeleteBookMutation, useUpdateBookMutation, useLazyGetBookByIdQuery, useLazyGetBookReviewsQuery, useLazyGetBookDetailsQuery, useLazyGetBookInfoQuery} = apiBooksSlice;
+export const {useGetBooksQuery, useGetBooksByGenresQuery, useAddBookMutation, useDeleteBookMutation, useUpdateBookMutation, useLazyGetBookByIdQuery, useLazyGetBookReviewsQuery, useLazyGetBookDetailsQuery, useLazyGetBookInfoQuery} = apiBooksSlice;

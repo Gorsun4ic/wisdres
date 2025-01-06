@@ -4,9 +4,9 @@ import { IBook } from "@custom-types/book";
 
 import BookCard from "@features/books/book-card";
 
-const BookList = ({ arr }: { arr: IBook[] }) => {
+const BookList = ({ data }: { data: IBook[] }) => {
 
-	const list = arr.map((item) => {
+	const list = data?.map((item) => {
 		return (
 			<Grid2 size={2}>
 				<BookCard data={item} />

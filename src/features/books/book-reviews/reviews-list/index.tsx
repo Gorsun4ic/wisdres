@@ -44,11 +44,13 @@ const ReviewItem = (data: Review) => {
 const ReviewsList = () => {
 	const { activeBookPage } = useSelector((state: RootState) => state);
 	const bookId = activeBookPage?.activeBook?._id;
-	const [ getReviewsById, {data: reviews} ] = useLazyGetBookReviewsQuery();
+	const [getReviewsById, { data: reviews }] = useLazyGetBookReviewsQuery();
 	const reviewsAmount = getArrLength(reviews);
-	
+
 	useEffect(() => {
-		getReviewsById(bookId)
+		if (bookId) {
+			getReviewsById(bookId);
+		}
 	}, [getReviewsById, bookId, reviews]);
 
 	const list = reviews?.map((item) => {
@@ -66,9 +68,7 @@ const ReviewsList = () => {
 	return (
 		<StyledReviewsList>
 			<h3>Reviews ({reviewsAmount})</h3>
-			{reviews?.length === 0 && <p>
-					Write the first review
-				</p>}
+			{reviews?.length === 0 && <p>Write the first review</p>}
 			<List>{list}</List>
 		</StyledReviewsList>
 	);

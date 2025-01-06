@@ -34,7 +34,6 @@ const AdminGrid = ({
 		if (data) {
 			const correctData = handleId(data);
 			setInfo(correctData);
-			console.log(info)
 		}
 	}, [data, setInfo]);
 

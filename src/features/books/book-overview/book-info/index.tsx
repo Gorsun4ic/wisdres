@@ -6,7 +6,7 @@ import StarIcon from "@mui/icons-material/Star";
 
 import { useLazyGetBookInfoQuery } from "@api/apiBooksSlice";
 
-import useShowAuthorsName from "@hooks/useShowAuthorsName";
+import useShowEntityNames from "@hooks/useShowEntityNames ";
 
 import Button from "@components/button";
 
@@ -16,11 +16,15 @@ const BookInfo = () => {
 	const { activeBookPage } = useSelector((state: RootState) => state);
 	const bookId = activeBookPage?.activeBook?._id;
 	const [getInfoById, { data: info }] = useLazyGetBookInfoQuery();
-	const { getAuthorsNameElem } = useShowAuthorsName();
-	const authorsName = getAuthorsNameElem(info?.author);
+	const { getAuthorName, getPublisherName, getGenresName } = useShowEntityNames();
+	const publisherName = getPublisherName(info?.publisher);
+	const authorsName = getAuthorName(info?.author);
+	const genre = getGenresName(info?.genre);
 
 	useEffect(() => {
-		getInfoById(bookId);
+		if (bookId) {
+			getInfoById(bookId);
+		}
 	}, [getInfoById, bookId, info]);
 
 	return (
@@ -31,8 +35,8 @@ const BookInfo = () => {
 					<h1 className="book-title">{info?.title}</h1>
 					<List>
 						<ListItem>Author: {authorsName}</ListItem>
-						<ListItem>Publisher: {info?.publisher}</ListItem>
-						<ListItem>Genre: {info?.genre}</ListItem>
+						<ListItem>Publisher: {publisherName}</ListItem>
+						<ListItem>Genre: {genre}</ListItem>
 						<ListItem>Language: {info?.language}</ListItem>
 						<ListItem>The year of publishing: {info?.year}</ListItem>
 						<ListItem>Pages count: {info?.pages}</ListItem>

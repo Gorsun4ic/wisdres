@@ -1,11 +1,22 @@
+import { UseFormReset } from "react-hook-form";
+
 import findDifferenceObjs from "@utils/findDiffObjs";
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
-// Define the hook
-const useHandleAdminForm = ({ mode, triggerAlert, reset }) => {
+type UseHandleAdminForm<T> = {
+	mode: "add" | "edit";
+	reset: UseFormReset<T>;
+};
 
+
+// Define the hook
+const useHandleAdminForm = <T>({ mode, reset }: UseHandleAdminForm<T>) => {
 	// If form was called for edit some info
-	const onEditMode = (id: string | null, getDataById, data) => {
+	const onEditMode = (
+		id: string | null,
+		getDataById,
+		data: T
+	) => {
 		if (mode === "edit" && id) {
 			getDataById(id);
 			reset(data);

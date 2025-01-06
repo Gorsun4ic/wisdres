@@ -1,8 +1,19 @@
 import { Controller, FieldValues, Control } from "react-hook-form";
-import {
-	Autocomplete,
-	TextField,
-} from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
+
+type OptionType = {
+	title: string;
+};
+
+interface AutoCompleteFieldProps {
+	name: string;
+	control: Control<FieldValues>;
+	options: OptionType[];
+	label: string;
+	placeholder: string;
+	value?: OptionType | null; // Initial value for edit mode
+	rules?: object;
+}
 
 const AutoCompleteField = ({
 	name,
@@ -10,27 +21,26 @@ const AutoCompleteField = ({
 	options,
 	label,
 	placeholder,
-	rules,
-}: {
-	name: string;
-	control: Control<FieldValues>;
-	label: string;
-	placeholder: string;
-	options: unknown[];
-	rules?: object;
-}) => (
+	value = null,
+	rules = {},
+}: AutoCompleteFieldProps) => (
 	<Controller
 		name={name}
 		control={control}
 		rules={rules}
+		defaultValue={value} // Ensure default value is passed to the Controller
 		render={({ field }) => (
 			<>
 				<p className="input-label">{label}</p>
 				<Autocomplete
-					{...field}
-					options={options || []}
+					options={options}
 					getOptionLabel={(option) => option?.title || ""}
-					onChange={(event, value) => field.onChange(value)}
+					isOptionEqualToValue={(option, value) =>
+						option?.title === value?.title
+					}
+					value={value} // Sync with field value
+					inputValue={value} // Sync with field value
+					onChange={(_, newValue) => field.onChange(newValue)} // Update field value
 					renderInput={(params) => (
 						<TextField {...params} placeholder={placeholder} />
 					)}
@@ -40,4 +50,4 @@ const AutoCompleteField = ({
 	/>
 );
 
-export default AutoCompleteField
+export default AutoCompleteField;

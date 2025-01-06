@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@store/index";
 
@@ -27,10 +27,6 @@ const AdminGenres = () => {
 	const { data, isLoading, error } = useGetGenresQuery(null);
 	const [deleteGenre] = useDeleteGenreMutation();
 	const { alert } = useSelector((state: RootState) => state.alert);
-
-	useEffect(() => {
-		console.log(data);
-	}, []);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);

@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import { useLazyGetBookDetailsQuery } from "@api/apiBooksSlice";
+import { useLazyGetBookByIdQuery } from "@api/apiBooksSlice";
+import { useLazyGetAuthorByIdQuery } from "@api/apiAuthorsSlice";
 import { Grid2 } from "@mui/material";
 import { StyledBookDescription } from "./style";
 
@@ -9,11 +11,22 @@ const BookDescription = () => {
 	const { activeBookPage } = useSelector((state: RootState) => state);
 	const bookId = activeBookPage?.activeBook?._id;
 	const [getDetailsById, { data: details }] = useLazyGetBookDetailsQuery();
+	const [getAuthorById, {data: authorsInfo}] = useLazyGetAuthorByIdQuery();
+	const [getBookById, {data: bookInfo}] = useLazyGetBookByIdQuery();
 
 	useEffect(() => {
-		getDetailsById(bookId);
-		console.log(details)
+		if (bookId) {
+			getDetailsById(bookId);
+			getBookById(bookId);
+		}
 	}, [getDetailsById, bookId, details]);
+
+	useEffect(() => {
+		if (bookInfo) {
+			const authorId = bookInfo?.info?.author;
+			getAuthorById(authorId);
+		}
+	}, [bookInfo]);
 
 	return (
 		<StyledBookDescription className="book-details">
@@ -31,12 +44,12 @@ const BookDescription = () => {
 						<p>{details.auditory}</p>
 					</Grid2>
 				)}
-				{/* {aboutAuthor && (
+				{authorsInfo?.about && (
 					<Grid2 size={6}>
 						<h3>About author</h3>
-						<p>{aboutAuthor}</p>
+						<p>{authorsInfo.about}</p>
 					</Grid2>
-				)} */}
+				)}
 			</Grid2>
 		</StyledBookDescription>
 	);

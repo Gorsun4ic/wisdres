@@ -12,10 +12,11 @@ import Alert from "@mui/material/Alert";
 
 import { useGetBooksQuery, useDeleteBookMutation } from "@api/apiBooksSlice";
 import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
+import { useGetGenresQuery } from "@api/apiGenresSlice";
 
 import { IBook } from "@custom-types/book";
 
-import useShowAuthorsName from "@hooks/useShowAuthorsName";
+import useShowEntityNames from "@hooks/useShowEntityNames ";
 
 import AdminGrid from "../grid-data";
 import AdminBookForm from "./book-form";
@@ -24,27 +25,32 @@ import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
 import { StyledAdminBooks } from "./style";
+import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 
 const AdminBooks = () => {
 	const { data: booksData, isLoading, error } = useGetBooksQuery();
 	const [bookToEditId, setBookToEditId] = useState<string | null>(null);
 	const [deleteBook] = useDeleteBookMutation();
 	const { data: authorsData } = useGetAuthorsQuery(null);
+	const {data: publishersData} = useGetPublishersQuery(null);
+	const {data: genresData} = useGetGenresQuery(null);
 	const { alert } = useSelector((state: RootState) => state.alert);
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
 	const [data, setData] = useState<IBook[]>();
-	const { getAuthorsNameArr } = useShowAuthorsName();
+	const { getBooksWithEntityNames } = useShowEntityNames();
 
 	useEffect(() => {
 		if (booksData) {
-			const correctData = getAuthorsNameArr({
+			const correctData = getBooksWithEntityNames({
 				booksData,
 				authorsData,
+				publishersData,
+				genresData
 			});
 			setData(correctData);
 		}
-	}, [booksData, authorsData]);
+	}, [booksData, authorsData, publishersData, genresData]);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);

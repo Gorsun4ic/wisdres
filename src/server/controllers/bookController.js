@@ -1,4 +1,5 @@
 import Book from "../models/books.js";
+import Genre from "../models/genre.js";
 
 // Get all books
 export const getAllBooks = async (req, res) => {
@@ -21,6 +22,27 @@ export const getBookById = async (req, res) => {
 		res.json(book);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to fetch book" });
+	}
+};
+
+export const getBooksByGenre = async (req, res) => {
+	const genreInput = req.params.genre.trim(); // Trim the genre input to avoid issues with spaces
+
+	// Use case-insensitive search to ensure we handle different cases
+	try {
+		const foundGenre = await Genre.findOne({
+			title: { $regex: new RegExp(`^${genreInput}$`, "i") },
+		});
+
+		if (!foundGenre) {
+			return res.status(404).json({ message: "Genre not found" });
+		}
+
+		const books = await Book.find({ "info.genre": foundGenre._id });
+		res.status(200).json(books);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: "Server error" });
 	}
 };
 

@@ -65,6 +65,10 @@ const GlobalStyle = createGlobalStyle`
 			overflow: hidden;
   }
 
+  .error {
+    color: ${({theme}) => theme?.colors?.red};
+  }
+
 `;
 
 export default GlobalStyle;
