@@ -1,17 +1,24 @@
 import { useState } from "react";
 
+// Tab components
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
+
+// Icons
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
+import LanguageIcon from "@mui/icons-material/Language";
+
+// Tab content
 import AdminBooks from "@features/admin/books";
 import AdminAuthors from "@features/admin/authors";
 import AdminPublishers from "@features/admin/publishers";
 import AdminGenres from "@features/admin/genres";
+import AdminLanguages from "@features/admin/languages";
 
 import { StyledAdminPanel } from "./style";
 const Admin = () => {
@@ -49,6 +56,12 @@ const Admin = () => {
 						label="Genres"
 						value="4"
 					/>
+					<Tab
+						icon={<LanguageIcon />}
+						iconPosition="start"
+						label="Languages"
+						value="5"
+					/>
 				</Tabs>
 				<TabPanel value="1">
 					<AdminBooks />
@@ -61,6 +74,9 @@ const Admin = () => {
 				</TabPanel>
 				<TabPanel value="4">
 					<AdminGenres />
+				</TabPanel>
+				<TabPanel value="5">
+					<AdminLanguages />
 				</TabPanel>
 			</TabContext>
 		</StyledAdminPanel>

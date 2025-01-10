@@ -1,0 +1,50 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+export const apiLanguagesSlice = createApi({
+	reducerPath: "LanguagesApi",
+	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+	tagTypes: ["Languages"],
+	endpoints: (builder) => ({
+		getLanguages: builder.query({
+			query: () => "/languages",
+			providesTags: ["Languages"],
+		}),
+		getLanguageById: builder.query({
+			query: (id) => ({
+				url: `/languages/${id}`,
+				providesTags: ["Languages"],
+			}),
+		}),
+		addLanguage: builder.mutation({
+			query: (book) => ({
+				url: "/languages",
+				method: "POST",
+				body: book,
+			}),
+			invalidatesTags: ["Languages"],
+		}),
+		deleteLanguage: builder.mutation({
+			query: (id) => ({
+				url: `/languages/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: ["Languages"],
+		}),
+		updateLanguage: builder.mutation({
+			query: ({ id, updated }) => ({
+				url: `/languages/${id}`,
+				method: "PATCH",
+				body: updated,
+			}),
+			invalidatesTags: ["Languages"],
+		}),
+	}),
+});
+
+export const {
+	useGetLanguagesQuery,
+	useAddLanguageMutation,
+	useDeleteLanguageMutation,
+	useUpdateLanguageMutation,
+	useLazyGetLanguageByIdQuery,
+} = apiLanguagesSlice;

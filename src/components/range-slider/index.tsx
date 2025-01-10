@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setPageFilter } from "@reducers/filters";
+
 import { Slider, Stack, TextField } from "@mui/material";
 import { StyledSlider } from "./style";
 
@@ -8,6 +11,11 @@ function valuetext(value: number) {
 
 export default function RangeSlider() {
 	const [value, setValue] = useState<number[]>([0, 1144]);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(setPageFilter(value));
+	}, [value]);
 
 	const handleChange = (event: Event, newValue: number | number[]) => {
 		setValue(newValue as number[]);

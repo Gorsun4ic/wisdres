@@ -17,7 +17,7 @@ const SelectCheckboxes = ({
 	control,
 	label,
 }: {
-	dataList: { title: string }[];
+	dataList: { _id: string, title: string }[];
 	name: string;
 	control: Control<FieldValues>;
 	label: string;

@@ -1,36 +1,112 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
 import { Stack } from "@mui/material";
 
 import { useGetBooksByGenresQuery } from "@api/apiBooksSlice";
+
+import { IBook } from "@custom-types/book";
+
+import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
 import BookFilters from "@features/books/book-filters";
 import BookList from "@features/books/book-list";
 import BookSort from "@features/books/book-sort";
 
 import { StyledGenrePage } from "./style";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 
 const GenrePage = () => {
-	const {genre} = useParams();
+	const { genre } = useParams();
 	const { data, error } = useGetBooksByGenresQuery(genre);
-	console.log("Query URL:", `/books?genre=${genre}`);
+	const [filterData, setFilterData] = useState({
+		authors: [],
+		publishers: [],
+		languages: [],
+		pages: [],
+	});
+	const { sortBy, filters } = useSelector((state) => state.filters);
+	const genreTitle = upperCaseFirstLetter(genre);
 
+	const filterBooks = (data: IBook[] | undefined) => {
+		if (!data) return [];
+
+		const { authors, languages, publishers, pages } = filters;
+
+		return data
+			.filter((book: IBook) =>
+				authors.length ? authors.includes(book?.info?.author) : true
+			)
+			.filter((book: IBook) =>
+				publishers.length ? publishers.includes(book?.info?.publisher) : true
+			)
+			.filter((book: IBook) =>
+				languages.length ? languages.includes(book?.info?.language) : true
+			)
+			.filter((book: IBook) =>
+				pages.length
+					? book?.info?.pages >= pages[0] && book?.info?.pages <= pages[1]
+					: true
+			);
+	};
+
+	const sortBooks = (books: IBook[], sortBy: string) => {
+		if (!books) return [];
+
+		return books.sort((a, b) => {
+			if (sortBy === "reviews") {
+				return b.reviews.length - a.reviews.length;
+			}
+			if (sortBy === "ratings") {
+				return b.info.rating - a.info.rating;
+			}
+			// if (sortBy === "downloads") {
+			// 	return b.info.downloads - a.info.downloads;
+			// }
+			return 0;
+		});
+	};
+
+
+	const filteredBooks = filterBooks(data);
+	const sortedBooks = sortBooks(filteredBooks, sortBy);
+
+	const getBooksSpecificData = (data: IBook[], str: string) => {
+		if (!Array.isArray(data))
+			throw new Error("Invalid input: data should be an array");
+
+		const allowedKeys = ["author", "publisher", "language"];
+		if (!allowedKeys.includes(str)) throw new Error("Invalid key");
+
+		return data.map((item) => item?.info?.[str] || null);
+	};
+
+	const getAllFiltersData = () => {
+		if (Array.isArray(data)) {
+			return {
+				authors: getBooksSpecificData(data, "author"),
+				publishers: getBooksSpecificData(data, "publisher"),
+				languages: getBooksSpecificData(data, "language"),
+			};
+		}
+		return { authors: [], publishers: [], languages: [] };
+	};
 
 	useEffect(() => {
-		// Check the returned data
 		if (data) {
-			console.log(data); // Logs the array of books based on the genres
+			console.log("Books Data:", data);
+			setFilterData(getAllFiltersData());
 		} else if (error) {
-			console.log(error); // Logs any error that occurred during the query
+			console.error("Error fetching books:", error);
 		}
-	}, [data]);
+	}, [data, error]);
 
 	return (
 		<StyledGenrePage>
-			<h2 className="genre-name">Fantasy</h2>
+			<h2 className="genre-name">{genreTitle}</h2>
 			<Stack direction="row" gap={2} sx={{ alignItems: "flex-start" }}>
-				<BookFilters />
-				<Stack sx={{width: "100%"}}>
+				<BookFilters data={filterData} />
+				<Stack sx={{ width: "100%" }}>
 					<Stack
 						direction="row"
 						gap={2}
@@ -39,7 +115,7 @@ const GenrePage = () => {
 						<BookSort />
 					</Stack>
 					<Stack>
-						<BookList data={data}/>
+						<BookList data={sortedBooks} />
 					</Stack>
 				</Stack>
 			</Stack>

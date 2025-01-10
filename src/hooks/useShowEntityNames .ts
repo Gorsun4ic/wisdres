@@ -1,16 +1,20 @@
+// Types
 import { IBook } from "@custom-types/book";
 import { IAuthor } from "@custom-types/author";
 import { IPublisher } from "@custom-types/publisher";
 import { IGenre } from "@custom-types/genre";
 
+// API
 import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 import { useGetGenresQuery } from "@api/apiGenresSlice";
+import { useGetLanguagesQuery } from "@api/apiLanguagesSlice";
 
 const useShowEntityNames = () => {
 	const { data: authorsData } = useGetAuthorsQuery(null);
 	const { data: publishersData } = useGetPublishersQuery(null);
 	const { data: genresData } = useGetGenresQuery(null);
+	const {data: languagesData} = useGetLanguagesQuery(null);
 
 	// Generic function to get the name of an entity by ID
 	const getEntityName = ({
@@ -20,14 +24,23 @@ const useShowEntityNames = () => {
 	}: {
 		id: string;
 		entitiesData: IAuthor[] | IPublisher[] | IGenre[];
-		fallback?: string;  
+		fallback?: string;
 	}) => {
+		if (Array.isArray(id)) {
+			return id.map(
+				(singleId) =>
+					entitiesData?.find((entity) => entity._id === singleId)?.title ||
+					fallback
+			);
+		}
+
 		return entitiesData?.find((entity) => entity._id === id)?.title || fallback;
 	};
 
 	// Function to map an array of genre IDs to their names
 	const getGenresName = (genreIds: string[]) => {
-		if (!genresData) return ["Unknown Genre"];
+		if (!genresData || !genreIds) return ["Unknown Genre"];
+
 		return genreIds.map((id) =>
 			getEntityName({
 				id,
@@ -95,11 +108,19 @@ const useShowEntityNames = () => {
 			fallback: "Unknown Publisher",
 		});
 
+	const getLanguageName = (id: string) =>
+		getEntityName({
+			id,
+			entitiesData: languagesData,
+			fallback: "Unknown language"
+		})
+
 	return {
 		getBooksWithEntityNames,
 		getAuthorName,
 		getPublisherName,
-		getGenresName
+		getGenresName,
+		getLanguageName
 	};
 };
 

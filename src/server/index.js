@@ -4,6 +4,7 @@ import bookRoutes from "./routes/books.js";
 import authorRoutes from "./routes/authors.js";
 import publisherRoutes from "./routes/publishers.js";
 import genreRoute from "./routes/genres.js";
+import languageRoute from "./routes/languages.js";
 import connectDB from "./config/db.js";
 
 const app = express();
@@ -20,6 +21,7 @@ app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
 app.use("/publishers", publisherRoutes);
 app.use("/genres", genreRoute);
+app.use("/languages", languageRoute);
 
 // Start the server
 const PORT = 5000;

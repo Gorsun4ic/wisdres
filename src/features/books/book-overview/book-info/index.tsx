@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { List, ListItem, Stack } from "@mui/material";
@@ -16,10 +16,30 @@ const BookInfo = () => {
 	const { activeBookPage } = useSelector((state: RootState) => state);
 	const bookId = activeBookPage?.activeBook?._id;
 	const [getInfoById, { data: info }] = useLazyGetBookInfoQuery();
-	const { getAuthorName, getPublisherName, getGenresName } = useShowEntityNames();
-	const publisherName = getPublisherName(info?.publisher);
-	const authorsName = getAuthorName(info?.author);
-	const genre = getGenresName(info?.genre);
+	const { getAuthorName, getPublisherName, getGenresName, getLanguageName } =
+		useShowEntityNames();
+	const [bookInfo, setBookInfo] = useState({
+		author: "",
+		publisher: "",
+		genre: "",
+		language: ""
+	});
+
+	useEffect(() => {
+		if (info) {
+			const publisher = getPublisherName(info?.publisher);
+			const author = getAuthorName(info?.author);
+			const genre = getGenresName(info?.genre);
+			const language = getLanguageName(info?.language);
+
+			setBookInfo({
+				author,
+				publisher,
+				genre,
+				language
+			});
+		}
+	}, [info]);
 
 	useEffect(() => {
 		if (bookId) {
@@ -34,10 +54,12 @@ const BookInfo = () => {
 				<div>
 					<h1 className="book-title">{info?.title}</h1>
 					<List>
-						<ListItem>Author: {authorsName}</ListItem>
-						<ListItem>Publisher: {publisherName}</ListItem>
-						<ListItem>Genre: {genre}</ListItem>
-						<ListItem>Language: {info?.language}</ListItem>
+						<ListItem>Author: {bookInfo?.author || "Unknown author"}</ListItem>
+						<ListItem>
+							Publisher: {bookInfo?.publisher || "Unknown publisher"}
+						</ListItem>
+						<ListItem>Genre: {bookInfo?.genre || "Unknown genre"}</ListItem>
+						<ListItem>Language: {bookInfo?.language}</ListItem>
 						<ListItem>The year of publishing: {info?.year}</ListItem>
 						<ListItem>Pages count: {info?.pages}</ListItem>
 						{info?.rating && (

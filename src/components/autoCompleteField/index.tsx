@@ -38,9 +38,11 @@ const AutoCompleteField = ({
 					isOptionEqualToValue={(option, value) =>
 						option?.title === value?.title
 					}
-					value={value} // Sync with field value
-					inputValue={value} // Sync with field value
-					onChange={(_, newValue) => field.onChange(newValue)} // Update field value
+					value={field.value} // Sync with field value
+					inputValue={field?.value?.title} // Sync with field value
+					onChange={(_, newValue) => {
+						field.onChange(newValue);
+					}} // Update field value
 					renderInput={(params) => (
 						<TextField {...params} placeholder={placeholder} />
 					)}

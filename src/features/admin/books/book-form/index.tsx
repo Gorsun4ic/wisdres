@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 
 import { Grid2, CircularProgress } from "@mui/material";
 
+// API
 import {
 	useAddBookMutation,
 	useUpdateBookMutation,
@@ -11,6 +12,8 @@ import {
 import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 import { useGetGenresQuery } from "@api/apiGenresSlice";
+import { useGetLanguagesQuery } from "@api/apiLanguagesSlice";
+
 // Custom hooks
 import useAlert from "@hooks/useAlert";
 import useWatchImg from "@hooks/useWatchImg";
@@ -47,6 +50,7 @@ type FormFields = {
 type ExecutorsInfo = {
 	author: string;
 	publisher: string;
+	language: string;
 };
 
 const AdminBookForm = ({
@@ -75,6 +79,7 @@ const AdminBookForm = ({
 	const { data: authorsList } = useGetAuthorsQuery(null);
 	const { data: publishersList } = useGetPublishersQuery(null);
 	const { data: genresList } = useGetGenresQuery(null);
+	const {data: languagesList} = useGetLanguagesQuery(null);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
 	const [executorsInfo, setExecutorsInfo] = useState<ExecutorsInfo | null>(
@@ -89,7 +94,7 @@ const AdminBookForm = ({
 		onAdd: "Add new book",
 	});
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
-	const { getAuthorName, getPublisherName } = useShowEntityNames();
+	const { getAuthorName, getPublisherName, getLanguageName } = useShowEntityNames();
 
 	useEffect(() => {
 		if (bookId) {
@@ -101,9 +106,11 @@ const AdminBookForm = ({
 		if (bookData) {
 			const author = getAuthorName(bookData?.info?.author);
 			const publisher = getPublisherName(bookData?.info?.publisher);
+			const language = getLanguageName(bookData?.info?.language);
 			setExecutorsInfo({
 				author,
 				publisher,
+				language
 			});
 		}
 	}, [bookData]);
@@ -258,18 +265,14 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
-					<FormField<FormFields>
+					<AutoCompleteField
 						name="info.language"
-						placeholder="Language"
-						register={register}
-						validation={{
-							required: "Language is required",
-							minLength: {
-								value: 2,
-								message: "Language must have at least 2 characters",
-							},
-						}}
-						error={errors?.info?.language?.message}
+						control={control}
+						rules={{ required: "Language is required" }}
+						options={languagesList || []}
+						placeholder="Languages name"
+						value={executorsInfo?.language || ""}
+						label="Language"
 					/>
 				</Grid2>
 				<Grid2 size={6}>

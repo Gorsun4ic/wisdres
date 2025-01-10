@@ -28,7 +28,7 @@ export const apiBooksSlice = createApi({
 		getBookReviews: builder.query<IReview[], void>({
 			query: (id) => ({
 				url: `/books/${id}/reviews`,
-				providesTags: ["Books"],
+				providesTags: ["Reviews"],
 			}),
 		}),
 		getBookInfo: builder.query<IBookInfo, void>({
