@@ -201,6 +201,7 @@ const AdminBookForm = ({
 			<h3 className="form-title">{formTitle}</h3>
 			<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
 				<Grid2 size={6} className="img-input">
+					<p className="input-label">Image link</p>
 					<FormField<FormFields>
 						name="info.img"
 						placeholder="Image link"
@@ -219,6 +220,7 @@ const AdminBookForm = ({
 					{img && <img src={img} width="256" height="256" />}
 				</Grid2>
 				<Grid2 size={6}>
+					<p className="input-label">Books title</p>
 					<FormField<FormFields>
 						name="info.title"
 						placeholder="Books title"
@@ -276,6 +278,7 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
+					<p className="input-label">Year</p>
 					<FormField<FormFields>
 						name="info.year"
 						placeholder="Year"
@@ -296,6 +299,7 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
+					<p className="input-label">Pages number</p>
 					<FormField<FormFields>
 						name="info.pages"
 						placeholder="Pages number"
@@ -312,6 +316,7 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
+					<p className="input-label">About book</p>
 					<FormField<FormFields>
 						name="details.book"
 						placeholder="About the book"
@@ -330,6 +335,7 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={6}>
+					<p className="input-label">About auditory</p>
 					<FormField<FormFields>
 						name="details.auditory"
 						placeholder="About the auditory"

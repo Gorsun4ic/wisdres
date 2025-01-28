@@ -10,32 +10,28 @@ import { GridColDef } from "@mui/x-data-grid";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import Alert from "@mui/material/Alert";
 
-import {
-	useGetPublishersQuery,
-	useDeletePublisherMutation,
-} from "@api/apiPublishersSlice";
+import {useGetGenresQuery, useDeleteGenreMutation} from "@api/apiGenresSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminPublisherForm from "./publisher-form";
-
+import AdminGenreForm from "./genresForm/adminGenresForm";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
-import { StyledAdminPublishers } from "./style";
+import { StyledAdminGenresSheet } from "./style";
 
-const AdminPublishers = () => {
+const AdminGenresSheet = () => {
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
-	const [publisherToEditId, setPublisherToEditId] = useState<string | null>(null);
-	const { data, isLoading, error } = useGetPublishersQuery(null);
-	const [deletePublisher] = useDeletePublisherMutation();
+	const [genreToEditId, setGenreToEditId] = useState<string | null>(null);
+	const { data, isLoading, error } = useGetGenresQuery(null);
+	const [deleteGenre] = useDeleteGenreMutation();
 	const { alert } = useSelector((state: RootState) => state.alert);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);
 		setFormMode(mode);
-		if (id) setPublisherToEditId(id);
+		if (id) setGenreToEditId(id);
 	};
 
 	const handleClose = () => setOpen(false);
@@ -52,15 +48,10 @@ const AdminPublishers = () => {
 			headerName: "Title",
 			width: 150,
 		},
-		{
-			field: "about",
-			headerName: "About",
-			width: 150,
-		},
 	];
 
 	return (
-		<StyledAdminPublishers>
+		<StyledAdminGenresSheet>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
 				<Stack
 					gap={1}
@@ -68,16 +59,16 @@ const AdminPublishers = () => {
 					sx={{ alignItems: "center" }}
 					className="active-tab-section">
 					<RecentActorsIcon fontSize="large" />
-					<p>Publishers</p>
+					<p>Genres</p>
 				</Stack>
 				<Button size="small" onClick={() => handleOpen("add")}>
-					Add a new publisher
+					Add a new genre
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminPublisherForm
+						<AdminGenreForm
 							mode={formMode}
-							publisherId={publisherToEditId}
+							genreId={genreToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>
@@ -89,13 +80,13 @@ const AdminPublishers = () => {
 					data={data}
 					isLoading={isLoading}
 					error={error}
-					deleteMethod={deletePublisher}
+					deleteMethod={deleteGenre}
 					columns={gridColumns}
 				/>
 			</ErrorBoundary>
 			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}
-		</StyledAdminPublishers>
+		</StyledAdminGenresSheet>
 	);
 };
 
-export default AdminPublishers;
+export default AdminGenresSheet;

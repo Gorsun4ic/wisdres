@@ -27,19 +27,21 @@ const BookCard: React.FC<{ data: IBook }> = ({ data }) => {
 					boxShadow: "none",
 					border: `1px solid ${theme?.colors?.darkGrey}`,
 				}}>
-				<img src={img} className="book-card__img" width="200" height="250" />
+				<img src={img} className="book-card__img" width="200" height="300" />
 				<StyledCardContent>
-					{rating && (
-						<Stack
-							direction="row"
-							spacing={0.2}
-							sx={{ alignItems: "center", marginBottom: "4px" }}>
-							<StarIcon color="warning" />
-							<p>{rating}</p>
-						</Stack>
-					)}
-					<h3 className="book-card__name">{title}</h3>
-					<p className="book-card__author">{authorsName}</p>
+					<Stack>
+						{rating && (
+							<Stack
+								direction="row"
+								spacing={0.2}
+								sx={{ alignItems: "center", marginBottom: "4px" }}>
+								<StarIcon color="warning" />
+								<p>{rating}</p>
+							</Stack>
+						)}
+						<h3 className="book-card__name">{title}</h3>
+						<p className="book-card__author">{authorsName}</p>
+					</Stack>
 					<Button size="small">Read</Button>
 				</StyledCardContent>
 			</StyledCard>

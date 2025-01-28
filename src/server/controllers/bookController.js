@@ -1,4 +1,5 @@
 import Book from "../models/books.js";
+import Author from "../models/author.js";
 import Genre from "../models/genre.js";
 
 // Get all books
@@ -92,20 +93,31 @@ export const getBookInfo = async (req, res) => {
 
 // Create a new book
 export const createBook = async (req, res) => {
-	const {
-		info,
-		details,
-		reviews
-	} = req.body;
+	const { info, details, reviews } = req.body;
+
 	try {
+		// 1. Create the new book
 		const newBook = new Book({
 			info,
 			details,
-			reviews
+			reviews,
 		});
+
+		// Save the book to the database
 		await newBook.save();
+
+		// 2. Check if the author ID is provided in the book info
+		if (info.author) {
+			// Update the author's `bookIds` array
+			await Author.findByIdAndUpdate(info.author, {
+				$push: { bookIds: newBook._id },
+			});
+		}
+
+		// 3. Respond with the newly created book
 		res.status(201).json(newBook);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ error: "Failed to add book" });
 	}
 };

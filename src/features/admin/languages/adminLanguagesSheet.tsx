@@ -10,53 +10,45 @@ import { GridColDef } from "@mui/x-data-grid";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import Alert from "@mui/material/Alert";
 
-import {useGetGenresQuery, useDeleteGenreMutation} from "@api/apiGenresSlice";
+import {
+	useGetLanguagesQuery,
+	useDeleteLanguageMutation,
+} from "@api/apiLanguagesSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminGenreForm from "./genres-form";
+import AdminLanguageForm from "@features/admin/languages/languageForm/adminLanguageForm";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
-import { StyledAdminGenres } from "./style";
+import { StyledAdminLanguagesSheet } from "./style";
 
-const AdminGenres = () => {
+const AdminLanguagesSheet = () => {
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
-	const [genreToEditId, setGenreToEditId] = useState<string | null>(null);
-	const { data, isLoading, error } = useGetGenresQuery(null);
-	const [deleteGenre] = useDeleteGenreMutation();
+	const [languageToEditId, setLanguageToEditId] = useState<string | null>(null);
+	const { data, isLoading, error } = useGetLanguagesQuery(null);
+	const [deleteLanguage] = useDeleteLanguageMutation();
 	const { alert } = useSelector((state: RootState) => state.alert);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);
 		setFormMode(mode);
-		if (id) setGenreToEditId(id);
+		if (id) setLanguageToEditId(id);
 	};
 
 	const handleClose = () => setOpen(false);
 
 	const gridColumns: GridColDef[] = [
 		{
-			field: "img",
-			headerName: "Image",
-			width: 80,
-			renderCell: (params) => <img src={params.value} width="40" />,
-		},
-		{
 			field: "title",
 			headerName: "Title",
-			width: 150,
-		},
-		{
-			field: "about",
-			headerName: "About",
 			width: 150,
 		},
 	];
 
 	return (
-		<StyledAdminGenres>
+		<StyledAdminLanguagesSheet>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
 				<Stack
 					gap={1}
@@ -64,16 +56,16 @@ const AdminGenres = () => {
 					sx={{ alignItems: "center" }}
 					className="active-tab-section">
 					<RecentActorsIcon fontSize="large" />
-					<p>Genres</p>
+					<p>Languages</p>
 				</Stack>
 				<Button size="small" onClick={() => handleOpen("add")}>
-					Add a new genre
+					Add a new language
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminGenreForm
+						<AdminLanguageForm
 							mode={formMode}
-							genreId={genreToEditId}
+							languageId={languageToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>
@@ -85,13 +77,13 @@ const AdminGenres = () => {
 					data={data}
 					isLoading={isLoading}
 					error={error}
-					deleteMethod={deleteGenre}
+					deleteMethod={deleteLanguage}
 					columns={gridColumns}
 				/>
 			</ErrorBoundary>
 			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}
-		</StyledAdminGenres>
+		</StyledAdminLanguagesSheet>
 	);
 };
 
-export default AdminGenres;
+export default AdminLanguagesSheet;

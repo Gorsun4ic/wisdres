@@ -1,10 +1,22 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
+
+// React router DOM
 import { Link } from "react-router-dom";
+
+// MUI Components
 import { Stack } from "@mui/material";
+
+// MUI Icons
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+
+// Custom types
 import { ICategories } from "@custom-types/categories";
+
+// Custom components
 import Logo from "@components/logo";
 import SearchBar from "@components/search-bar";
+
+// Custom styles
 import { StyledHeader } from "./style";
 import HeaderCategories from "./header-categories";
 
@@ -124,7 +136,9 @@ const Header = () => {
 				</Stack>
 				<Stack direction="row" sx={{ alignItems: "center" }} gap={1}>
 					<SearchBar />
-					<PersonOutlineOutlinedIcon />
+					<Link to="/sign-in">
+						<PersonOutlineOutlinedIcon />
+					</Link>
 				</Stack>
 			</Stack>
 			{hoveredItem && (

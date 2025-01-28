@@ -60,8 +60,8 @@ const AdminPublisherForm = ({
 		{ mode, triggerAlert, reset }
 	);
 	const formTitle = defineFormTitle({
-		onEdit: `Edit ${publisherData?.title || null} author`,
-		onAdd: "Add new author",
+		onEdit: `Edit ${publisherData?.title || null} publisher`,
+		onAdd: "Add new publisher",
 	});
 
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
@@ -151,8 +151,9 @@ const AdminPublisherForm = ({
 			<h3 className="form-title">{formTitle}</h3>
 			<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
 				<Grid2 size={12} className="img-input">
+					<p className="input-label">Image link</p>
 					<FormField<FormFields>
-						name="img"
+						name="info.img"
 						placeholder="Image link"
 						register={register}
 						validation={{
@@ -168,7 +169,8 @@ const AdminPublisherForm = ({
 					/>
 					{img && <img src={img} width="256" height="256" />}
 				</Grid2>
-				<Grid2 size={6}>
+				<Grid2 size={12}>
+					<p className="input-label">Publisher's name</p>
 					<FormField<FormFields>
 						name="title"
 						placeholder="Publisher's name"
@@ -184,11 +186,13 @@ const AdminPublisherForm = ({
 					/>
 				</Grid2>
 				<Grid2 size={12}>
+					<p className="input-label">About publisher</p>
 					<FormField<FormFields>
 						name="publisher"
 						placeholder="About publisher"
 						register={register}
-						row={4}
+						multiline
+						rows={4}
 						validation={{
 							required: "Publisher's info is required",
 							minLength: {

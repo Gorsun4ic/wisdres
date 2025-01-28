@@ -5,6 +5,7 @@ import { apiAuthorsSlice } from "@api/apiAuthorsSlice";
 import { apiPublishersSlice } from "@api/apiPublishersSlice";
 import { apiGenresSlice } from "@api/apiGenresSlice";
 import { apiLanguagesSlice } from "@api/apiLanguagesSlice";
+import { apiUsersSlice } from "@api/apiUsersSlice";
 import alertReducer from "@reducers/alert";
 import activeBookPageReducer from "@reducers/activeBookPage";
 import filtersReducer from "@reducers/filters";
@@ -17,6 +18,7 @@ export const store = configureStore({
 		[apiPublishersSlice.reducerPath]: apiPublishersSlice.reducer,
 		[apiGenresSlice.reducerPath]: apiGenresSlice.reducer,
 		[apiLanguagesSlice.reducerPath]: apiLanguagesSlice.reducer,
+		[apiUsersSlice.reducerPath]: apiUsersSlice.reducer,
 		alert: alertReducer,
 		activeBookPage: activeBookPageReducer,
 		filters: filtersReducer,
@@ -27,7 +29,8 @@ export const store = configureStore({
 			apiAuthorsSlice.middleware,
 			apiPublishersSlice.middleware,
 			apiGenresSlice.middleware,
-			apiLanguagesSlice.middleware
+			apiLanguagesSlice.middleware,
+						apiUsersSlice.middleware
 		),
 });
 

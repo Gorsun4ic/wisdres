@@ -6,7 +6,7 @@
 			rating: Number,
 			title: String,
 			genre: [String],
-			author: String,
+			author: { type: mongoose.Schema.Types.ObjectId, ref: "Author" }, // Reference to the author
 			publisher: String,
 			language: String,
 			year: Number,
@@ -14,7 +14,7 @@
 		},
 		details: {
 			book: String,
-			auditory: String
+			auditory: String,
 		},
 		reviews: [
 			{
@@ -22,9 +22,9 @@
 				userEmail: String,
 				userRating: Number,
 				userText: String,
-				date: Date
-			}
-		]
+				date: Date,
+			},
+		],
 	});
 
 	const Book = mongoose.model("Book", BookSchema);

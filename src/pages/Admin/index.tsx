@@ -14,11 +14,12 @@ import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 import LanguageIcon from "@mui/icons-material/Language";
 
 // Tab content
-import AdminBooks from "@features/admin/books";
-import AdminAuthors from "@features/admin/authors";
-import AdminPublishers from "@features/admin/publishers";
-import AdminGenres from "@features/admin/genres";
-import AdminLanguages from "@features/admin/languages";
+import AdminBooksSheet from "@features/admin/books/adminBooksSheet";
+import AdminAuthorsSheet from "@features/admin/authors/adminAuthorsSheet";
+import AdminPublishersSheet from "@features/admin/publishers/adminPublishersSheet";
+import AdminGenresSheet from "@features/admin/genres/adminGenresSheet";
+import AdminLanguagesSheet from "@features/admin/languages/adminLanguagesSheet";
+import AdminUsersSheet from "@features/admin/users/adminUsersSheet";
 
 import { StyledAdminPanel } from "./style";
 const Admin = () => {
@@ -62,21 +63,30 @@ const Admin = () => {
 						label="Languages"
 						value="5"
 					/>
+					<Tab
+						icon={<RecentActorsIcon />}
+						iconPosition="start"
+						label="Users"
+						value="6"
+					/>
 				</Tabs>
 				<TabPanel value="1">
-					<AdminBooks />
+					<AdminBooksSheet />
 				</TabPanel>
 				<TabPanel value="2">
-					<AdminAuthors />
+					<AdminAuthorsSheet />
 				</TabPanel>
 				<TabPanel value="3">
-					<AdminPublishers />
+					<AdminPublishersSheet />
 				</TabPanel>
 				<TabPanel value="4">
-					<AdminGenres />
+					<AdminGenresSheet />
 				</TabPanel>
 				<TabPanel value="5">
-					<AdminLanguages />
+					<AdminLanguagesSheet />
+				</TabPanel>
+				<TabPanel value="6">
+					<AdminUsersSheet />
 				</TabPanel>
 			</TabContext>
 		</StyledAdminPanel>

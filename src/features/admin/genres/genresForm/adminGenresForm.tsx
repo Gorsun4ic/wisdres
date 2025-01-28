@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import { Grid2, CircularProgress } from "@mui/material";
 
 import {
-	useAddLanguageMutation,
-	useUpdateLanguageMutation,
-	useLazyGetLanguageByIdQuery,
-} from "@api/apiLanguagesSlice";
+	useAddGenreMutation,
+	useUpdateGenreMutation,
+	useLazyGetGenreByIdQuery,
+} from "@api/apiGenresSlice";
 
 // Custom hooks
 import useAlert from "@hooks/useAlert";
+import useWatchImg from "@hooks/useWatchImg";
 import useHandleAdminForm from "@hooks/useAdminForm";
 
 // Custom components
@@ -30,18 +31,12 @@ type FormFields = {
 	id?: string;
 };
 
-type Difference = {
-	property: string;
-	oldVers: string;
-	newVers: string;
-};
-
-const AdminLanguageForm = ({
-	languageId,
+const AdminGenreForm = ({
+	genreId,
 	mode,
 	openModal,
 }: {
-	languageId: string | null;
+	genreId: string | null;
 	mode: "add" | "edit";
 	openModal: (arg0: boolean) => void;
 }) => {
@@ -53,28 +48,27 @@ const AdminLanguageForm = ({
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	const [addLanguage, { isLoading: isAdding, error: addError }] =
-		useAddLanguageMutation();
-	const [updateLanguage] = useUpdateLanguageMutation();
-	const [getLanguageById, { data: languageData, isLoading, error }] =
-		useLazyGetLanguageByIdQuery();
+	const [addGenre, { isLoading: isAdding, error: addError }] =
+		useAddGenreMutation();
+	const [updateGenre] = useUpdateGenreMutation();
+	const [getGenreById, { data: genreData, isLoading, error }] =
+		useLazyGetGenreByIdQuery();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
-	const [difference, setDifference] = useState<Difference[] | null>([]);
 	const triggerAlert = useAlert();
 	const { onEditMode, defineFormTitle, showTheDifference } = useHandleAdminForm(
-		{ mode, reset }
+		{ mode, triggerAlert, reset }
 	);
 	const formTitle = defineFormTitle({
-		onEdit: `Edit ${languageData?.title || null} language`,
-		onAdd: "Add new language",
+		onEdit: `Edit ${genreData?.title || null} genre`,
+		onAdd: "Add new genre",
 	});
 
+	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
+
 	useEffect(() => {
-		if (languageId) {
-			onEditMode(languageId, getLanguageById, languageData);
-		}
-	}, [languageId, mode, languageData]);
+		onEditMode(genreId, getGenreById, genreData);
+	}, [genreId, mode, genreData]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
@@ -83,16 +77,15 @@ const AdminLanguageForm = ({
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				addLanguage(data);
+				addGenre(data);
 				triggerAlert({
-					title: `The language ${data?.title} was successfully added`,
+					title: `The genre ${data?.title} was successfully added`,
 					color: "success",
 				});
 				break;
 			case "edit":
 				setOpenDialog(true);
 				setDataToEdit(data);
-				changedInfo();
 				break;
 			default:
 				console.warn(`Unknown mode: ${mode}`);
@@ -101,13 +94,13 @@ const AdminLanguageForm = ({
 
 	const handleEdit = (confirm: boolean) => {
 		if (confirm) {
-			updateLanguage({
-				id: languageId,
+			updateGenre({
+				id: genreId,
 				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
-				title: `The language ${languageData?.title} was successfully changed`,
+				title: `The genre ${genreData?.title} was successfully changed`,
 				color: "success",
 			});
 		}
@@ -115,28 +108,32 @@ const AdminLanguageForm = ({
 	};
 
 	const changedInfo = () => {
-		const differences = showTheDifference(languageData, dataToEdit);
-		console.log(differences);
+		const differences = showTheDifference(genreData, dataToEdit);
 
 		// Handle case when there are no differences
 		if (!differences || differences.length === 0) {
 			return null;
 		}
 
-		// const { propertyToChange, oldVersion, newVersion } = differences[0];
-		setDifference(differences);
+		const { propertyToChange, oldVersion, newVersion } = differences[0]; // Using the first difference for now
+
+		return (
+			<ChangedInfo
+				propertyToChange={propertyToChange}
+				oldVersion={oldVersion}
+				newVersion={newVersion}
+			/>
+		);
 	};
 
 	if (openDialog) {
 		return (
 			<ConfirmAction
-				title={`Are you confirm to change the ${
-					languageData.title || null
-				} info?`}
+				title={`Are you confirm to change the ${genreData.title || null} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>
-				<ChangedInfo difference={difference} />
+				{changedInfo()}
 			</ConfirmAction>
 		);
 	}
@@ -150,11 +147,31 @@ const AdminLanguageForm = ({
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)}>
 			<h3 className="form-title">{formTitle}</h3>
-			<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
+			<Grid2 container spacing={6} rowSpacing={2} sx={{ marginBottom: 3 }}>
+				<Grid2 size={12} className="img-input">
+					<p className="input-label">Image link</p>
+					<FormField<FormFields>
+						name="info.img"
+						placeholder="Image link"
+						register={register}
+						validation={{
+							required: "Image is required",
+							validate: (value: string) => {
+								if (value && isValidImageType(value)) {
+									return true; // Validation passed
+								}
+								return imgTypeError; // Validation failed
+							},
+						}}
+						error={errors.img?.message}
+					/>
+					{img && <img src={img} width="256" height="256" />}
+				</Grid2>
 				<Grid2 size={12}>
+					<p className="input-label">Genre's name</p>
 					<FormField<FormFields>
 						name="title"
-						placeholder="Language name"
+						placeholder="Genre's name"
 						register={register}
 						validation={{
 							required: "Name is required",
@@ -174,4 +191,4 @@ const AdminLanguageForm = ({
 	);
 };
 
-export default AdminLanguageForm;
+export default AdminGenreForm;

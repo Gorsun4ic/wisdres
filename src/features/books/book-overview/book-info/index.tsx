@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { List, ListItem, Stack } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
@@ -54,7 +55,11 @@ const BookInfo = () => {
 				<div>
 					<h1 className="book-title">{info?.title}</h1>
 					<List>
-						<ListItem>Author: {bookInfo?.author || "Unknown author"}</ListItem>
+						<ListItem>
+							<Link to={`/author/${info?.author}`}>
+								Author: {bookInfo?.author || "Unknown author"}
+							</Link>
+						</ListItem>
 						<ListItem>
 							Publisher: {bookInfo?.publisher || "Unknown publisher"}
 						</ListItem>

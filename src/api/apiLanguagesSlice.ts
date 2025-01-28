@@ -16,10 +16,10 @@ export const apiLanguagesSlice = createApi({
 			}),
 		}),
 		addLanguage: builder.mutation({
-			query: (book) => ({
+			query: (language) => ({
 				url: "/languages",
 				method: "POST",
-				body: book,
+				body: language,
 			}),
 			invalidatesTags: ["Languages"],
 		}),

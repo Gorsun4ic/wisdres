@@ -10,31 +10,28 @@ import { GridColDef } from "@mui/x-data-grid";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import Alert from "@mui/material/Alert";
 
-import {
-	useGetLanguagesQuery,
-	useDeleteLanguageMutation,
-} from "@api/apiLanguagesSlice";
+import { useGetAuthorsQuery, useDeleteAuthorMutation } from "@api/apiAuthorsSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminLanguageForm from "@features/admin/languages/language-form";
+import AdminAuthorForm from "@features/admin/authors/authorForm/adminAuthorForm";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
-import { StyledAdminLanguages } from "./style";
+import { StyledAdminAuthorsSheet } from "./style";
 
-const AdminLanguages = () => {
+const AdminAuthorsSheet = () => {
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
-	const [languageToEditId, setLanguageToEditId] = useState<string | null>(null);
-	const { data, isLoading, error } = useGetLanguagesQuery(null);
-	const [deleteLanguage] = useDeleteLanguageMutation();
+	const [authorToEditId, setAuthorToEditId] = useState<string | null>(null);
+	const { data, isLoading, error } = useGetAuthorsQuery(null);
+	const [deleteAuthor] = useDeleteAuthorMutation();
 	const { alert } = useSelector((state: RootState) => state.alert);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);
 		setFormMode(mode);
-		if (id) setLanguageToEditId(id);
+		if (id) setAuthorToEditId(id);
 	};
 
 	const handleClose = () => setOpen(false);
@@ -59,7 +56,7 @@ const AdminLanguages = () => {
 	];
 
 	return (
-		<StyledAdminLanguages>
+		<StyledAdminAuthorsSheet>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
 				<Stack
 					gap={1}
@@ -67,16 +64,16 @@ const AdminLanguages = () => {
 					sx={{ alignItems: "center" }}
 					className="active-tab-section">
 					<RecentActorsIcon fontSize="large" />
-					<p>Languages</p>
+					<p>Authors</p>
 				</Stack>
 				<Button size="small" onClick={() => handleOpen("add")}>
-					Add a new language
+					Add a new author
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminLanguageForm
+						<AdminAuthorForm
 							mode={formMode}
-							languageId={languageToEditId}
+							authorId={authorToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>
@@ -88,13 +85,13 @@ const AdminLanguages = () => {
 					data={data}
 					isLoading={isLoading}
 					error={error}
-					deleteMethod={deleteLanguage}
+					deleteMethod={deleteAuthor}
 					columns={gridColumns}
 				/>
 			</ErrorBoundary>
 			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}
-		</StyledAdminLanguages>
+		</StyledAdminAuthorsSheet>
 	);
 };
 
-export default AdminLanguages;
+export default AdminAuthorsSheet;

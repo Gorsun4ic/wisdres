@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledAdminGenres = styled.div`
+export const StyledAdminGenresSheet = styled.div`
 	&& {
 		width: 100%;
 		button {

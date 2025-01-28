@@ -13,7 +13,7 @@ export const apiBooksSlice = createApi({
 			query: () => "/books",
 			providesTags: ["Books"],
 		}),
-		getBookById: builder.query<IBook, void>({
+		getBookById: builder.query<IBook, string>({
 			query: (id) => ({
 				url: `/books/${id}`,
 				providesTags: ["Books"],

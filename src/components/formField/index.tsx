@@ -1,8 +1,9 @@
 import { TextField } from "@mui/material";
-import { UseFormRegister } from "react-hook-form";
+import { ReactNode } from "react";
+import { UseFormRegister, Path, FieldValues } from "react-hook-form";
 
-interface FormFieldProps<T> {
-	name: keyof T;
+interface FormFieldProps<T extends FieldValues> {
+	name:  Path<T>;
 	placeholder: string;
 	register: UseFormRegister<T>;
 	validation?: Record<string, unknown>;
@@ -10,6 +11,8 @@ interface FormFieldProps<T> {
 	multiline?: boolean;
 	rows?: number;
 	type?: string;
+	icon?: ReactNode;
+	endIcon?: ReactNode;
 }
 
 const FormField = <T extends Record<string, unknown>>({
@@ -21,21 +24,26 @@ const FormField = <T extends Record<string, unknown>>({
 	multiline = false,
 	rows,
 	type = "string",
+	icon ,
+	endIcon
 }: FormFieldProps<T>) => {
 	return (
-		<>
-			<p className="input-label">{placeholder}</p>
-			<TextField
-				{...register(name, validation)} // Spread the register function's returned object
-				placeholder={placeholder}
-				error={!!error}
-				helperText={error}
-				multiline={multiline}
-				rows={rows}
-				type={type}
-				sx={{ width: "100%" }}
-			/>
-		</>
+		<TextField
+			{...register(name, validation)} // Spread the register function's returned object
+			placeholder={placeholder}
+			error={!!error}
+			helperText={error}
+			multiline={multiline}
+			slotProps={{
+				input: {
+					startAdornment: icon,
+					endAdornment: endIcon
+				},
+			}}
+			rows={rows}
+			type={type}
+			sx={{ width: "100%", borderColor: error ? "red" : null }}
+		/>
 	);
 };
 

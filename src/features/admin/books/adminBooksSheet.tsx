@@ -19,15 +19,15 @@ import { IBook } from "@custom-types/book";
 import useShowEntityNames from "@hooks/useShowEntityNames ";
 
 import AdminGrid from "../grid-data";
-import AdminBookForm from "./book-form";
+import AdminBookForm from "./bookForm/adminBookForm";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
-import { StyledAdminBooks } from "./style";
+import { StyledAdminBooksSheet } from "./style";
 import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 
-const AdminBooks = () => {
+const AdminBooksSheet = () => {
 	const { data: booksData, isLoading, error } = useGetBooksQuery();
 	const [bookToEditId, setBookToEditId] = useState<string | null>(null);
 	const [deleteBook] = useDeleteBookMutation();
@@ -113,7 +113,7 @@ const AdminBooks = () => {
 	];
 
 	return (
-		<StyledAdminBooks>
+		<StyledAdminBooksSheet>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
 				<Stack
 					gap={1}
@@ -147,8 +147,8 @@ const AdminBooks = () => {
 				/>
 			</ErrorBoundary>
 			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}
-		</StyledAdminBooks>
+		</StyledAdminBooksSheet>
 	);
 };
 
-export default AdminBooks;
+export default AdminBooksSheet;

@@ -14,6 +14,13 @@ import ErrorMessage from "@components/error";
 import { IBook } from "@custom-types/book";
 import { IBookInfo } from "@custom-types/bookInfo";
 
+interface AdminGridProps {
+	handleEdit?: (mode: "add" | "edit", id?: string) => void;
+	isLoading: boolean;
+	columns: GridColDef[];
+	data: unknown[];
+}
+
 const AdminGrid = ({
 	handleEdit,
 	data,
@@ -21,9 +28,7 @@ const AdminGrid = ({
 	error,
 	deleteMethod,
 	columns,
-}: {
-	handleEdit: (mode: "add" | "edit", id?: string) => void;
-}) => {
+}: AdminGridProps) => {
 	const [info, setInfo] = useState<IBook[] | []>([]);
 	const [selectedInfo, setSelectedInfo] = useState<null | IBook>(null); // Stores selected book for delete dialog
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -65,7 +70,7 @@ const AdminGrid = ({
 
 	const handleId = (data: IBook[]) => {
 		return data.map((item: IBook) => {
-			const {info, ...data} = item;
+			const { info, ...data } = item;
 			return {
 				id: item._id,
 				...data,

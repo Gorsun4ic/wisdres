@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledAdminLanguages = styled.div`
+export const StyledAdminLanguagesSheet = styled.div`
 	&& {
 		width: 100%;
 		button {

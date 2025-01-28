@@ -4,14 +4,13 @@ import { useForm } from "react-hook-form";
 import { Grid2, CircularProgress } from "@mui/material";
 
 import {
-	useAddAuthorMutation,
-	useUpdateAuthorMutation,
-	useLazyGetAuthorByIdQuery,
-} from "@api/apiAuthorsSlice";
+	useAddLanguageMutation,
+	useUpdateLanguageMutation,
+	useLazyGetLanguageByIdQuery,
+} from "@api/apiLanguagesSlice";
 
 // Custom hooks
 import useAlert from "@hooks/useAlert";
-import useWatchImg from "@hooks/useWatchImg";
 import useHandleAdminForm from "@hooks/useAdminForm";
 
 // Custom components
@@ -37,28 +36,27 @@ type Difference = {
 	newVers: string;
 };
 
-const AdminAuthorForm = ({
-	authorId,
+const AdminLanguageForm = ({
+	languageId,
 	mode,
 	openModal,
 }: {
-	authorId: string | null;
+	languageId: string | null;
 	mode: "add" | "edit";
 	openModal: (arg0: boolean) => void;
 }) => {
 	const {
 		register,
 		handleSubmit,
-		watch,
 		reset,
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	const [addAuthor, { isLoading: isAdding, error: addError }] =
-		useAddAuthorMutation();
-	const [updateAuthor] = useUpdateAuthorMutation();
-	const [getAuthorById, { data: authorData, isLoading, error }] =
-		useLazyGetAuthorByIdQuery();
+	const [addLanguage, { isLoading: isAdding, error: addError }] =
+		useAddLanguageMutation();
+	const [updateLanguage] = useUpdateLanguageMutation();
+	const [getLanguageById, { data: languageData, isLoading, error }] =
+		useLazyGetLanguageByIdQuery();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
 	const [difference, setDifference] = useState<Difference[] | null>([]);
@@ -67,17 +65,15 @@ const AdminAuthorForm = ({
 		{ mode, reset }
 	);
 	const formTitle = defineFormTitle({
-		onEdit: `Edit ${authorData?.title || null} author`,
-		onAdd: "Add new author",
+		onEdit: `Edit ${languageData?.title || null} language`,
+		onAdd: "Add new language",
 	});
 
-	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
-
 	useEffect(() => {
-		if (authorId) {
-			onEditMode(authorId, getAuthorById, authorData);
+		if (languageId) {
+			onEditMode(languageId, getLanguageById, languageData);
 		}
-	}, [authorId, mode, authorData]);
+	}, [languageId, mode, languageData]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
@@ -86,9 +82,9 @@ const AdminAuthorForm = ({
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				addAuthor(data);
+				addLanguage(data);
 				triggerAlert({
-					title: `The author ${data?.title} was successfully added`,
+					title: `The language ${data?.title} was successfully added`,
 					color: "success",
 				});
 				break;
@@ -104,13 +100,13 @@ const AdminAuthorForm = ({
 
 	const handleEdit = (confirm: boolean) => {
 		if (confirm) {
-			updateAuthor({
-				id: authorId,
+			updateLanguage({
+				id: languageId,
 				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
-				title: `The author ${authorData?.title} was successfully changed`,
+				title: `The language ${languageData?.title} was successfully changed`,
 				color: "success",
 			});
 		}
@@ -118,7 +114,7 @@ const AdminAuthorForm = ({
 	};
 
 	const changedInfo = () => {
-		const differences = showTheDifference(authorData, dataToEdit);
+		const differences = showTheDifference(languageData, dataToEdit);
 		console.log(differences);
 
 		// Handle case when there are no differences
@@ -134,7 +130,7 @@ const AdminAuthorForm = ({
 		return (
 			<ConfirmAction
 				title={`Are you confirm to change the ${
-					authorData.title || null
+					languageData.title || null
 				} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
@@ -154,28 +150,11 @@ const AdminAuthorForm = ({
 		<StyledForm onSubmit={handleSubmit(onSubmit)}>
 			<h3 className="form-title">{formTitle}</h3>
 			<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
-				<Grid2 size={12} className="img-input">
-					<FormField<FormFields>
-						name="img"
-						placeholder="Image link"
-						register={register}
-						validation={{
-							required: "Image is required",
-							validate: (value: string) => {
-								if (value && isValidImageType(value)) {
-									return true; // Validation passed
-								}
-								return imgTypeError; // Validation failed
-							},
-						}}
-						error={errors.img?.message}
-					/>
-					{img && <img src={img} width="256" height="256" />}
-				</Grid2>
-				<Grid2 size={6}>
+				<Grid2 size={12}>
+					<p className="input-label">Language name</p>
 					<FormField<FormFields>
 						name="title"
-						placeholder="Author's name"
+						placeholder="Language name"
 						register={register}
 						validation={{
 							required: "Name is required",
@@ -187,21 +166,6 @@ const AdminAuthorForm = ({
 						error={errors.title?.message}
 					/>
 				</Grid2>
-				<Grid2 size={6}>
-					<FormField<FormFields>
-						name="about"
-						placeholder="About author"
-						register={register}
-						validation={{
-							required: "Author's info is required",
-							minLength: {
-								value: 3,
-								message: "Author's info must have at least 3 characters",
-							},
-						}}
-						error={errors.about?.message}
-					/>
-				</Grid2>
 			</Grid2>
 			<Button size="big" submit={true}>
 				{mode === "edit" ? "Edit" : "Publish"}
@@ -210,4 +174,4 @@ const AdminAuthorForm = ({
 	);
 };
 
-export default AdminAuthorForm;
+export default AdminLanguageForm;

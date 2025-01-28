@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 
 import { Grid2, CircularProgress } from "@mui/material";
 
+// RTK Query slices  
 import {
-	useAddGenreMutation,
-	useUpdateGenreMutation,
-	useLazyGetGenreByIdQuery,
-} from "@api/apiGenresSlice";
+	useAddAuthorMutation,
+	useUpdateAuthorMutation,
+	useLazyGetAuthorByIdQuery,
+} from "@api/apiAuthorsSlice";
 
 // Custom hooks
 import useAlert from "@hooks/useAlert";
@@ -31,12 +32,18 @@ type FormFields = {
 	id?: string;
 };
 
-const AdminGenreForm = ({
-	genreId,
+type Difference = {
+	property: string;
+	oldVers: string;
+	newVers: string;
+};
+
+const AdminAuthorForm = ({
+	authorId,
 	mode,
 	openModal,
 }: {
-	genreId: string | null;
+	authorId: string | null;
 	mode: "add" | "edit";
 	openModal: (arg0: boolean) => void;
 }) => {
@@ -48,27 +55,30 @@ const AdminGenreForm = ({
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	const [addGenre, { isLoading: isAdding, error: addError }] =
-		useAddGenreMutation();
-	const [updateGenre] = useUpdateGenreMutation();
-	const [getGenreById, { data: genreData, isLoading, error }] =
-		useLazyGetGenreByIdQuery();
+	const [addAuthor, { isLoading: isAdding, error: addError }] =
+		useAddAuthorMutation();
+	const [updateAuthor] = useUpdateAuthorMutation();
+	const [getAuthorById, { data: authorData, isLoading, error }] =
+		useLazyGetAuthorByIdQuery();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
+	const [difference, setDifference] = useState<Difference[] | null>([]);
 	const triggerAlert = useAlert();
 	const { onEditMode, defineFormTitle, showTheDifference } = useHandleAdminForm(
-		{ mode, triggerAlert, reset }
+		{ mode, reset }
 	);
 	const formTitle = defineFormTitle({
-		onEdit: `Edit ${genreData?.title || null} genre`,
-		onAdd: "Add new genre",
+		onEdit: `Edit ${authorData?.title || null} author`,
+		onAdd: "Add new author",
 	});
 
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
 
 	useEffect(() => {
-		onEditMode(genreId, getGenreById, genreData);
-	}, [genreId, mode, genreData]);
+		if (authorId) {
+			onEditMode(authorId, getAuthorById, authorData);
+		}
+	}, [authorId, mode, authorData]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
@@ -77,15 +87,16 @@ const AdminGenreForm = ({
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				addGenre(data);
+				addAuthor(data);
 				triggerAlert({
-					title: `The genre ${data?.title} was successfully added`,
+					title: `The author ${data?.title} was successfully added`,
 					color: "success",
 				});
 				break;
 			case "edit":
 				setOpenDialog(true);
 				setDataToEdit(data);
+				changedInfo();
 				break;
 			default:
 				console.warn(`Unknown mode: ${mode}`);
@@ -94,13 +105,13 @@ const AdminGenreForm = ({
 
 	const handleEdit = (confirm: boolean) => {
 		if (confirm) {
-			updateGenre({
-				id: genreId,
+			updateAuthor({
+				id: authorId,
 				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
-				title: `The genre ${genreData?.title} was successfully changed`,
+				title: `The author ${authorData?.title} was successfully changed`,
 				color: "success",
 			});
 		}
@@ -108,32 +119,28 @@ const AdminGenreForm = ({
 	};
 
 	const changedInfo = () => {
-		const differences = showTheDifference(genreData, dataToEdit);
+		const differences = showTheDifference(authorData, dataToEdit);
+		console.log(differences);
 
 		// Handle case when there are no differences
 		if (!differences || differences.length === 0) {
 			return null;
 		}
 
-		const { propertyToChange, oldVersion, newVersion } = differences[0]; // Using the first difference for now
-
-		return (
-			<ChangedInfo
-				propertyToChange={propertyToChange}
-				oldVersion={oldVersion}
-				newVersion={newVersion}
-			/>
-		);
+		// const { propertyToChange, oldVersion, newVersion } = differences[0];
+		setDifference(differences);
 	};
 
 	if (openDialog) {
 		return (
 			<ConfirmAction
-				title={`Are you confirm to change the ${genreData.title || null} info?`}
+				title={`Are you confirm to change the ${
+					authorData.title || null
+				} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>
-				{changedInfo()}
+				<ChangedInfo difference={difference} />
 			</ConfirmAction>
 		);
 	}
@@ -149,8 +156,9 @@ const AdminGenreForm = ({
 			<h3 className="form-title">{formTitle}</h3>
 			<Grid2 container spacing={6} rowSpacing={3} sx={{ marginBottom: 3 }}>
 				<Grid2 size={12} className="img-input">
+					<p className="input-label">Image link</p>
 					<FormField<FormFields>
-						name="img"
+						name="info.img"
 						placeholder="Image link"
 						register={register}
 						validation={{
@@ -166,10 +174,11 @@ const AdminGenreForm = ({
 					/>
 					{img && <img src={img} width="256" height="256" />}
 				</Grid2>
-				<Grid2 size={6}>
+				<Grid2 size={12}>
+					<p className="input-label">Author's name</p>
 					<FormField<FormFields>
 						name="title"
-						placeholder="Genre's name"
+						placeholder="Author's name"
 						register={register}
 						validation={{
 							required: "Name is required",
@@ -181,6 +190,24 @@ const AdminGenreForm = ({
 						error={errors.title?.message}
 					/>
 				</Grid2>
+				<Grid2 size={12}>
+					<p className="input-label">About author</p>
+					<FormField<FormFields>
+						name="about"
+						placeholder="About author"
+						register={register}
+						multiline
+						rows={4}
+						validation={{
+							required: "Author's info is required",
+							minLength: {
+								value: 3,
+								message: "Author's info must have at least 3 characters",
+							},
+						}}
+						error={errors.about?.message}
+					/>
+				</Grid2>
 			</Grid2>
 			<Button size="big" submit={true}>
 				{mode === "edit" ? "Edit" : "Publish"}
@@ -189,4 +216,4 @@ const AdminGenreForm = ({
 	);
 };
 
-export default AdminGenreForm;
+export default AdminAuthorForm;

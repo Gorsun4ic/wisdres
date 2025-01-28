@@ -16,10 +16,10 @@ export const apiGenresSlice = createApi({
 			}),
 		}),
 		addGenre: builder.mutation({
-			query: (book) => ({
+			query: (genre) => ({
 				url: "/genres",
 				method: "POST",
-				body: book,
+				body: genre,
 			}),
 			invalidatesTags: ["Genres"],
 		}),

@@ -4,6 +4,10 @@ import styled from "styled-components";
 
 export const StyledCard = styled(Card)`
 	&& {
+		display: flex; 
+		flex-direction: column;
+		height: 100%;
+
 		img {
 			max-width: 100%;
 			width: 100%;
@@ -18,9 +22,23 @@ export const StyledCard = styled(Card)`
 
 export const StyledCardContent = styled(CardContent)`
 	&& {
-		padding: 6px 6px 12px !important;
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding:16px !important;
+
+		button {
+			margin-top: 12px;
+		}
+
 		h3 {
 			margin-bottom: 4px;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 2; /* number of lines to show */
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
 		}
 		> p {
 			margin-bottom: 8px;

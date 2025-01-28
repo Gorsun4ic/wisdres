@@ -16,10 +16,10 @@ export const apiPublishersSlice = createApi({
 			}),
 		}),
 		addPublisher: builder.mutation({
-			query: (book) => ({
+			query: (publisher) => ({
 				url: "/publishers",
 				method: "POST",
-				body: book,
+				body: publisher,
 			}),
 			invalidatesTags: ["Publishers"],
 		}),

@@ -15,7 +15,7 @@ const BookList = ({ data }: { data: IBook[] }) => {
 	});
 
 	return (
-		<Grid2 container spacing={1}>
+		<Grid2 container spacing={1} sx={{alignItems: "stretch"}}>
 			{list}
 		</Grid2>
 	);

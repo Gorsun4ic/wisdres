@@ -50,7 +50,13 @@ const GlobalStyle = createGlobalStyle`
         border-width: 1px !important;
 			}
     }
-
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  appearance: none;
+  background-color: white !important;
+  box-shadow: 0 0 0px 1000px white inset !important; /* Force override */
+}
   .visually-hidden {
     			position: absolute;
 			width: 1px;
@@ -66,7 +72,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .error {
-    color: ${({theme}) => theme?.colors?.red};
+    color: ${({ theme }) => theme?.colors?.red};
   }
 
 `;
