@@ -6,17 +6,29 @@ import {
 	deleteUser,
 	updateUser,
 	authorizeUser,
-	checkAuth
+	checkAuth,
+	verifyEmail,
+	logout,
+	forgotPassword,
+	resetPassword
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
 router.get("/check-auth", verifyToken, checkAuth);
+
+router.post("/sign-up", createUser);
+router.post("/sign-in", authorizeUser)
+router.post("/logout", logout);
+
+router.post("/email-verification/:token", verifyEmail);
+
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
+
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
-router.post("/", createUser);
-router.post("/sign-in", authorizeUser)
 router.delete("/:id", deleteUser);
 router.patch("/:id", updateUser);
 

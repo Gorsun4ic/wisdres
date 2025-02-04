@@ -1,18 +1,11 @@
 import { useState, useEffect } from "react";
 
 // Custom utils
-import { getRecentViewedBook } from "@utils/handleLocalStorage";
 import sortNumbers from "@utils/sortNumbers";
 
-type Item = {
-	[key: string]: number | null | undefined; // Dynamic keys like "rating", "popularity"
-};
+import { IBook } from "@custom-types/book";
 
-export default function useFilterArr(
-	arr: Item[],
-	filter: string,
-	number: number
-) {
+export default function useFilterArr(arr: IBook[], filter: string, number: number) {
 	const [option, setOption] = useState("");
 
 	useEffect(() => {

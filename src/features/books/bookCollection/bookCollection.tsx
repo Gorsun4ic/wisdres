@@ -36,13 +36,13 @@ const BookCollection = ({
 	number,
 	booksArr,
 }: {
-	title: string;
+	title: string; 
 	filterBy: collectionFilters;
 	number: number;
 	booksArr?: IBook[];
 }) => {
 	const { data, isLoading, error } = useGetBooksQuery();
-	const [getBookById, { data: info }] = useLazyGetBookByIdQuery();
+	const [getBookById] = useLazyGetBookByIdQuery();
 	const [books, setBooks] = useState<IBook[] | []>([]);
 
 	useEffect(() => {

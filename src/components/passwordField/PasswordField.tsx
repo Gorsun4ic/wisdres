@@ -24,29 +24,40 @@ const PasswordField = <T extends FieldValues> ({ register, error, validation, na
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
-		<StyledField
-			type={showPassword ? "string" : "password"}
-			placeholder="Password"
-			{...register(name, validation)}
-			slotProps={{
-				input: {
-					startAdornment: <LockIcon />,
-					endAdornment: (
-						<Tooltip title="Show password">
-							<IconButton
-								className={`show-password ${showPassword ? "active" : null}`}>
-								<VisibilityIcon
-									onClick={() => {
-										setShowPassword(!showPassword);
-									}}
-								/>
-							</IconButton>
-						</Tooltip>
-					),
-				},
-			}}
-			error={!!error}
-		/>
+		<>
+			<StyledField
+				type={showPassword ? "string" : "password"}
+				placeholder="Password"
+				{...register(name, {
+					...validation,
+					pattern: {
+						value:
+							/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/,
+						message:
+							"Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&).",
+					},
+				})}
+				error={!!error}
+				helperText={error}
+				slotProps={{
+					input: {
+						startAdornment: <LockIcon />,
+						endAdornment: (
+							<Tooltip title="Show password">
+								<IconButton
+									className={`show-password ${showPassword ? "active" : null}`}>
+									<VisibilityIcon
+										onClick={() => {
+											setShowPassword(!showPassword);
+										}}
+									/>
+								</IconButton>
+							</Tooltip>
+						),
+					},
+				}}
+			/>
+		</>
 	);
 };
 

@@ -46,9 +46,13 @@ const GlobalStyle = createGlobalStyle`
   /* For inputs make */
   .MuiOutlinedInput-root {
 			fieldset {
-				border-color: ${theme?.colors?.grey} !important;
+				border-color: ${theme.colors.grey} !important;
         border-width: 1px !important;
 			}
+    }
+
+    .MuiCircularProgress-root {
+      color: ${({theme}) => theme.colors.white} !important;
     }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -75,6 +79,9 @@ input:-webkit-autofill:focus {
     color: ${({ theme }) => theme?.colors?.red};
   }
 
+  .success {
+    color: ${({ theme }) => theme?.colors?.green};
+  }
 `;
 
 export default GlobalStyle;

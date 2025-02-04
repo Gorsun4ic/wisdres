@@ -1,8 +1,15 @@
+import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 
 import { generateTokenAndSetCookie } from "../utils/generateVerificationCode.js";
 
 import User from "../models/user.js";
+import {
+	sendVerificationEmail,
+	sendWelcomeEmail,
+	sendPasswordResetEmail,
+	sendResetSuccessEmail,
+} from "../mailtrap/sendEmails.js";
 
 // Get all users
 export const getAllUsers = async (req, res) => {
@@ -38,7 +45,6 @@ export const createUser = async (req, res) => {
 		}
 
 		const userAlreadyExists = await User.findOne({ email });
-		console.log("userAlreadyExists", userAlreadyExists);
 
 		if (userAlreadyExists) {
 			return res.status(400).json({
@@ -52,24 +58,41 @@ export const createUser = async (req, res) => {
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10);
-		const newUser = new User({
+
+		const emailVerificationCode = uuidv4();
+		
+		const nextDay = Date.now() + 24 * 60 * 60 * 60 * 1000;
+
+		const user = new User({
 			username,
 			email,
 			password: hashedPassword,
+			emailVerificationCode,
+			emailVerificationCodeExpiresAt: nextDay,
 		});
-		await newUser.save();
+		await user.save();
 
-		generateTokenAndSetCookie(res, newUser._id);
-		res.status(201).json(newUser);
+		// JWT
+		generateTokenAndSetCookie(res, user._id);
+
+		await sendVerificationEmail(
+			user.email,
+			`${process.env.CLIENT_URL}/email-verification/${user.emailVerificationCode}`
+		);
+
+		res.status(201).json(user);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to add user" });
 	}
 };
 
+// Login function
 export const authorizeUser = async (req, res) => {
 	const { email, password } = req.body;
+
 	try {
 		const user = await User.findOne({ email });
+
 		if (!user) {
 			return res.status(400).json({
 				success: false,
@@ -77,6 +100,17 @@ export const authorizeUser = async (req, res) => {
 					field: "email",
 					message:
 						"No account found with this email address. Please check your email or sign up for a new account.",
+				},
+			});
+		}
+
+		if (user.emailVerificationCode) {
+			return res.status(400).json({
+				success: false,
+				error: {
+					field: "email",
+					message:
+						"Please, check your email for letter, and follow the instructions.",
 				},
 			});
 		}
@@ -112,6 +146,53 @@ export const authorizeUser = async (req, res) => {
 	}
 };
 
+// Verify user's email code
+export const verifyEmail = async (req, res) => {
+	const { code } = req.params;
+	try {
+		const user = await User.findOne({
+			emailVerificationCode: code,
+			emailVerificationCodeExpiresAt: { $gt: Date.now() },
+		});
+
+		if (!user) {
+			return res.status(400).json({
+				success: false,
+				error: {
+					message: "Invalid or expired verification code",
+				},
+			});
+		}
+
+		user.isVerified = true;
+		user.emailVerificationCode = undefined;
+		user.emailVerificationCodeExpiresAt = undefined;
+		await user.save();
+
+		await sendWelcomeEmail(user.email, user.username);
+		
+
+		res.status(200).json({
+			success: true,
+			message: "Email verified successfully",
+			user: {
+				...user._doc,
+				password: undefined,
+			},
+		});
+	} catch (error) {
+		console.log("error in verifyEmail ", error);
+		res.status(500).json({ success: false, message: "Server error" });
+	}
+};
+
+// Logout user
+export const logout = async (req, res) => {
+	res.clearCookie("token");
+	res.status(200).json({ success: true, message: "Logged out successfully" });
+};
+
+// Check if user authorized in the system
 export const checkAuth = async (req, res) => {
 	try {
 		const user = await User.findById(req.userId).select("-password");
@@ -125,6 +206,90 @@ export const checkAuth = async (req, res) => {
 	} catch (error) {
 		console.log("Error in checkAuth ", error);
 		res.status(400).json({ success: false, message: error.message });
+	}
+};
+
+// Send to user email with password reset link
+export const forgotPassword = async (req, res) => {
+	const { email } = req.body;
+
+	try {
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(400).json({
+				success: false,
+				error: { message: "No account associated with this email address." },
+			});
+		}
+
+		const resetToken = uuidv4();
+		const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+		user.resetPasswordToken = resetToken;
+		user.resetPasswordTokenExpiresAt = resetTokenExpiresAt;
+
+		await user.save();
+
+		await sendPasswordResetEmail(
+			user.email,
+			`${process.env.CLIENT_URL}/reset-password/${user.resetPasswordToken}`
+		);
+		res.status(200).json({
+			success: true,
+			message: "A password reset link has been sent to your email address.",
+		});
+	} catch (error) {
+		console.error("Server Error:", error);
+
+		res.status(500).json({
+			status: "error",
+			code: 500,
+			message: "An unexpected error occurred. Please try again later.",
+			error: "INTERNAL_SERVER_ERROR",
+		});
+	}
+};
+
+export const resetPassword = async (req, res) => {
+	try {
+		const { token } = req.params;
+		const { password } = req.body;
+
+		const user = await User.findOne({
+			resetPasswordToken: token,
+			resetPasswordTokenExpiresAt: { $gt: Date.now() },
+		});
+
+		if (!user) {
+			return res.status(400).json({
+				success: false,
+				error: {
+					message: "Invalid or expired reset link",
+				},
+			});
+		}
+
+		const hashedPassword = await bcrypt.hash(password, 10);
+
+		user.password = hashedPassword;
+		user.resetPasswordToken = undefined;
+		user.resetPasswordTokenExpiresAt = undefined;
+		await user.save();
+
+		await sendResetSuccessEmail(user.email);
+
+		res
+			.status(200)
+			.json({ success: true, message: "Password reset successful" });
+	} catch (error) {
+		console.error("Server Error:", error);
+
+		res.status(500).json({
+			status: "error",
+			code: 500,
+			message: "An unexpected error occurred. Please try again later.",
+			error: "INTERNAL_SERVER_ERROR",
+		});
 	}
 };
 

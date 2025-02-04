@@ -18,9 +18,10 @@ import ErrorMessage from "@components/error";
 
 import { StyledAdminUsersSheet } from "./style";
 
+
 const AdminUsersSheet = () => {
 	const { data, isLoading, error } = useGetUsersQuery(null);
-	const [deletePublisher] = useDeleteUserMutation();
+	const [deleteUser] = useDeleteUserMutation();
 	const { alert } = useSelector((state: RootState) => state.alert);
 
 	const gridColumns: GridColDef[] = [
@@ -50,7 +51,7 @@ const AdminUsersSheet = () => {
 					sx={{ alignItems: "center" }}
 					className="active-tab-section">
 					<RecentActorsIcon fontSize="large" />
-					<p>Publishers</p>
+					<p>Users</p>
 				</Stack>
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
@@ -58,7 +59,7 @@ const AdminUsersSheet = () => {
 					data={data}
 					isLoading={isLoading}
 					error={error}
-					deleteMethod={deletePublisher}
+					deleteMethod={deleteUser}
 					columns={gridColumns}
 				/>
 			</ErrorBoundary>

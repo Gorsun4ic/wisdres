@@ -4,7 +4,7 @@ import { Suspense, lazy } from "react";
 // React Router DOM routes
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-// Styled components theme 
+// Styled components theme
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 // MUI components
@@ -16,10 +16,13 @@ import theme from "@styles/theme";
 
 // Custom components
 import Header from "@components/header";
+import AuthenticateRoute from "@components/authenticateRoute/authenticateRoute";
+import NotAuthenticateRoute from "@components/notAunthenticatedRoute.tsx/notAuthenticatedRoute";
+import VerifyingRoute from "@components/verifyingRoute/verifyingRoute";
 
 // Pages
 const MainPage = lazy(() => import("@pages/Main"));
-const Admin = lazy(() => import( "@pages/Admin"));
+const Admin = lazy(() => import("@pages/Admin"));
 
 // Pages with info for specific item
 const BookPage = lazy(() => import("@pages/Book"));
@@ -32,10 +35,21 @@ const AuthorsPage = lazy(() => import("@pages/Authors"));
 const PublishersPage = lazy(() => import("@pages/Publishers"));
 
 // User
-const UserSignInPage = lazy(() => import("@pages/User/userSignIn"));
-const UserSignUpPage = lazy(() => import("@pages/User/userSignUp"));
-const UserProfilePage = lazy(() => import("@pages/User/userProfile/userProfile"));
-
+const UserSignUpPage = lazy(() => import("@pages/User/userSignUp/userSignUp"));
+const UserVerificationPage = lazy(
+	() => import("@pages/User/userVerification/userVerification")
+);
+const UserSignInPage = lazy(() => import("@pages/User/userSignIn/userSignIn"));
+const UserProfilePage = lazy(
+	() => import("@pages/User/userProfile/userProfile")
+);
+const UserLogoutPage = lazy(() => import("@pages/User/userLogout/userLogout"));
+const UserForgotPasswordPage = lazy(
+	() => import("@pages/User/userForgotPassword/userForgotPassword")
+);
+const UserResetPasswordPage = lazy(
+	() => import("@pages/User/userResetPassword/userResetPassword")
+);
 
 function App() {
 	return (
@@ -60,9 +74,47 @@ function App() {
 							<Route path="/author/:authorId" element={<AuthorPage />} />
 							<Route path="/publishers" element={<PublishersPage />} />
 							<Route path="/admin" element={<Admin />} />
-							<Route path="/sign-in" element={<UserSignInPage />} />
-							<Route path="/sign-up" element={<UserSignUpPage />} />
-							<Route path="/check-auth" element={<UserProfilePage />} />
+
+							{/* Only for users who are on email verification stage */}
+							<Route element={<VerifyingRoute />}>
+								<Route
+									path="/email-verification/:verificationToken"
+									element={<UserVerificationPage />}
+								/>
+							</Route>
+
+							{/* Only for authorized users */}
+							<Route element={<AuthenticateRoute />}>
+								<Route path="/logout" element={<UserLogoutPage />} />
+							</Route>
+
+							<Route element={<AuthenticateRoute />}>
+								<Route path="/check-auth" element={<UserProfilePage />} />
+							</Route>
+
+							{/* Only for unauthorized users  */}
+
+							<Route element={<NotAuthenticateRoute />}>
+								<Route path="/sign-up" element={<UserSignUpPage />} />
+							</Route>
+
+							<Route element={<NotAuthenticateRoute />}>
+								<Route path="/sign-in" element={<UserSignInPage />} />
+							</Route>
+
+							<Route element={<NotAuthenticateRoute />}>
+								<Route
+									path="/forgot-password"
+									element={<UserForgotPasswordPage />}
+								/>
+							</Route>
+
+							<Route element={<NotAuthenticateRoute />}>
+								<Route
+									path="/reset-password/:token"
+									element={<UserResetPasswordPage />}
+								/>
+							</Route>
 						</Routes>
 					</Container>
 				</Router>

@@ -14,6 +14,8 @@ const UserProfile = () => {
 	return (
 		<div>
 			<h1>Welcome, {data?.user?.username}</h1>
+			<p>{data?.user?.username}</p>
+			<p>{data?.user?.email}</p>
 		</div>
 	)
 };

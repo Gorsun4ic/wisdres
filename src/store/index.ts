@@ -1,14 +1,20 @@
+// Redux
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
+
+// Custom APIs
 import { apiBooksSlice } from "@api/apiBooksSlice";
 import { apiAuthorsSlice } from "@api/apiAuthorsSlice";
 import { apiPublishersSlice } from "@api/apiPublishersSlice";
 import { apiGenresSlice } from "@api/apiGenresSlice";
 import { apiLanguagesSlice } from "@api/apiLanguagesSlice";
 import { apiUsersSlice } from "@api/apiUsersSlice";
+
+// Custom reducers
 import alertReducer from "@reducers/alert";
 import activeBookPageReducer from "@reducers/activeBookPage";
 import filtersReducer from "@reducers/filters";
+import authReducer from "@reducers/auth";
 
 // Define the store type
 export const store = configureStore({
@@ -22,6 +28,7 @@ export const store = configureStore({
 		alert: alertReducer,
 		activeBookPage: activeBookPageReducer,
 		filters: filtersReducer,
+		auth: authReducer
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
@@ -30,7 +37,7 @@ export const store = configureStore({
 			apiPublishersSlice.middleware,
 			apiGenresSlice.middleware,
 			apiLanguagesSlice.middleware,
-						apiUsersSlice.middleware
+			apiUsersSlice.middleware
 		),
 });
 

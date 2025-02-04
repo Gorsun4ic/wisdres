@@ -4,7 +4,7 @@ import { UseFormRegister, Path, FieldValues } from "react-hook-form";
 
 interface FormFieldProps<T extends FieldValues> {
 	name:  Path<T>;
-	placeholder: string;
+	placeholder?: string;
 	register: UseFormRegister<T>;
 	validation?: Record<string, unknown>;
 	error?: string;
@@ -13,6 +13,7 @@ interface FormFieldProps<T extends FieldValues> {
 	type?: string;
 	icon?: ReactNode;
 	endIcon?: ReactNode;
+	key?: number;
 }
 
 const FormField = <T extends Record<string, unknown>>({

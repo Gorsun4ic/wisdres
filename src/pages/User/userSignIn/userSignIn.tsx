@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
 
 // React Hook Form
 import { useForm } from "react-hook-form";
@@ -12,7 +14,11 @@ import { Stack, Box } from "@mui/material";
 // MUI Icons
 import EmailIcon from "@mui/icons-material/Email";
 
+// Custom API
 import { useAuthorizeUserMutation } from "@api/apiUsersSlice";
+
+// Custom types
+import { IError } from "@custom-types/apiError";
 
 // Custom components
 import FormField from "@components/formField";
@@ -27,29 +33,66 @@ type FormFields = {
 	password: string;
 };
 
-const UserSignIn = () => {
+const UserSignInPage = () => {
 	// RTK Query Add function, error
-	const [authorizeUser, { error: authorizationError, data }] = useAuthorizeUserMutation();
+	const [authorizeUser, { error: authorizationError }] =
+		useAuthorizeUserMutation();
+
+	const navigate = useNavigate();
+	const [invalidFieldValue, setInvalidFieldValue] = useState<string>("");
+	const [disabledSubmit, setDisabledSubmit] = useState<boolean>(false);
 
 	// RHF functions / data
 	const {
 		register,
 		handleSubmit,
+		formState: { errors },
+		setError,
 		watch,
-		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
+
+	const currentFieldsValue = watch();
 
 	useEffect(() => {
 		if (authorizationError) {
-			console.log(authorizationError);
+			const field = (authorizationError as IError)?.data?.error?.field;
+
+			if (field) {
+				const fieldKey = field as keyof FormFields;
+				const currentValue = currentFieldsValue[fieldKey] as string;
+				setInvalidFieldValue(currentValue);
+			}
 		}
-		if (data) {
-			console.log(data)
+	}, [authorizationError]);
+
+	useEffect(() => {
+		if (authorizationError) {
+			const field = (authorizationError as IError)?.data?.error?.field;
+			const message = (authorizationError as IError)?.data?.error?.message;
+
+			if (field) {
+				const fieldKey = field as keyof FormFields;
+				const currentValue = currentFieldsValue[fieldKey] as string;
+
+				if (currentValue !== invalidFieldValue) {
+					setDisabledSubmit(false);
+					setInvalidFieldValue("");
+					return;
+				}
+
+				setDisabledSubmit(true);
+				setError(field as keyof FormFields, {
+					type: "server",
+					message,
+				});
+			}
 		}
-	}, [authorizationError, data]);
+	}, [currentFieldsValue, invalidFieldValue]);
 
 	const onSubmit = (data: FormFields) => {
-		authorizeUser(data)
+		if (disabledSubmit) return;
+		authorizeUser(data);
+		navigate(-1);
 	};
 
 	return (
@@ -76,10 +119,11 @@ const UserSignIn = () => {
 				<PasswordField<FormFields>
 					name="password"
 					register={register}
+					validation={{ required: "The password is required" }}
 					error={errors.password?.message}
 				/>
 				<Link to="/forgot-password">Forgot password?</Link>
-				<Button size="big" type="submit">
+				<Button size="big" type="submit" disabled={disabledSubmit}>
 					Login
 				</Button>
 			</Stack>
@@ -92,4 +136,4 @@ const UserSignIn = () => {
 	);
 };
 
-export default UserSignIn;
+export default UserSignInPage;

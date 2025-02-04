@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { useDispatch } from "react-redux";
+
 // React Router DOM
 import { useNavigate } from "react-router-dom";
 
@@ -12,12 +14,18 @@ import { Link } from "react-router-dom";
 // RTK Query API
 import { useAddUserMutation } from "@api/apiUsersSlice";
 
+// Redux actions
+import { processVerification } from "@reducers/auth";
+
 // MUI Components
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, CircularProgress } from "@mui/material";
 
 // MUI Icons
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
+
+// Custom types
+import { IError } from "@custom-types/apiError";
 
 // Custom components
 import FormField from "@components/formField";
@@ -33,22 +41,11 @@ type FormFields = {
 	password: string;
 	passwordConfirm: string;
 };
-// Error type for backend's answer
-type Error = {
-	data: {
-		success: boolean;
-		error: {
-			field: string;
-			message: string;
-		};
-	};
-};
-
-const UserSignUp = () => {
-	const [successfulReg, setSuccessfulReg] = useState(false);
+const UserSignUpPage = () => {
+	const [isLoading, setIsLoading] = useState(false);
 
 	// RTK Query Add function, error
-	const [addUser, { error: addError }] = useAddUserMutation();
+	const [addUser, { error: registrationError }] = useAddUserMutation();
 
 	// React Router DOM navigate hook
 	const navigate = useNavigate();
@@ -62,36 +59,43 @@ const UserSignUp = () => {
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
+	// Redux dispatch
+	const dispatch = useDispatch();
+
 	// Custom error for fields
-	const emailError = (addError as Error)?.data?.error?.field === "email";
-	const backendErrorText = (addError as Error)?.data?.error?.message;
+	const emailError =
+		(registrationError as IError)?.data?.error?.field === "email";
+	const backendErrorText = (registrationError as IError)?.data?.error?.message;
 
 	// If registration was successful - clear form and navigate to Sign In form
 	useEffect(() => {
-		if (isSubmitSuccessful && !addError) {
-			// Delay one second before show congratulations with successful registration for avoid miss show
-			const congratsTimer = setTimeout(() => {
-				setSuccessfulReg(true);
-			}, 1000);
-
+		if (isSubmitSuccessful && !registrationError) {
 			const resetTimer = setTimeout(() => {
 				reset();
-				navigate("/sign-in");
-			}, 3000);
+				dispatch(processVerification(true));
+				// navigate("/email-verification");
+			}, 1500);
 
 			return () => {
 				clearTimeout(resetTimer);
-				clearTimeout(congratsTimer);
 			};
-		} else {
-			console.log(addError)
-			setSuccessfulReg(false);
 		}
-	}, [isSubmitSuccessful, addError, reset]);
+	}, [isSubmitSuccessful, registrationError, reset]);
 
 	const onSubmit = (data: FormFields) => {
 		addUser(data);
+		setIsLoading(true);
 	};
+
+	if (isSubmitSuccessful && !registrationError) {
+		return (
+			<div>
+				<h2>Registration Successful!</h2>
+				<p>Please check your email for a verification link.</p>
+				<p>If you don't see the email, check your spam folder.</p>
+			</div>
+		);
+	}
 
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)}>
@@ -148,9 +152,8 @@ const UserSignUp = () => {
 					}}
 					error={errors.passwordConfirm?.message}
 				/>
-				{successfulReg && <p>You successfully created new account!</p>}
 				<Button size="big" type="submit">
-					Sign Up
+					{isLoading && !registrationError ? <CircularProgress /> : "Sign Up"}
 				</Button>
 			</Stack>
 			<Box>
@@ -162,4 +165,4 @@ const UserSignUp = () => {
 	);
 };
 
-export default UserSignUp;
+export default UserSignUpPage;
