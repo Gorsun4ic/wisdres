@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import { Rating, Grid2 } from "@mui/material";
 
-import { useUpdateBookMutation } from "@api/apiBooksSlice";
+import { useAddNewReviewMutation } from "@api/apiBooksSlice";
 
 // @ts-expect-error Cuz it's old library and it's have type any, but it's strings array
 import badwordsArray from "badwords/array";
@@ -32,9 +32,9 @@ const ReviewForm = () => {
 		handleSubmit,
 		control,
 		formState: { errors },
-		reset
+		reset,
 	} = useForm<FormFields>();
-	const [updateBook] = useUpdateBookMutation();
+	const [addNewReview] = useAddNewReviewMutation();
 	const { activeBookPage } = useSelector((state: RootState) => state);
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
 		const date = new Date();
@@ -47,12 +47,12 @@ const ReviewForm = () => {
 		};
 
 		// Make an API call to PATCH the book and update the reviews array
-		updateBook({
+		addNewReview({
 			id: activeBookPage.activeBook._id, // Pass the current book ID
-			updates: { reviews: review },
+			updates: review,
 		});
 
-		reset()
+		reset();
 	};
 
 	return (

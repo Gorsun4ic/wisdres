@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { List, Stack } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
-import { useLazyGetBookReviewsQuery } from "@api/apiBooksSlice";
+import { useGetBookReviewsQuery } from "@api/apiBooksSlice";
 
 import getArrLength from "@utils/getArrLength";
 
@@ -44,19 +44,16 @@ const ReviewItem = (data: Review) => {
 const ReviewsList = () => {
 	const { activeBookPage } = useSelector((state: RootState) => state);
 	const bookId = activeBookPage?.activeBook?._id;
-	const [getReviewsById, { data: reviews }] = useLazyGetBookReviewsQuery();
+	const { data: reviews } = useGetBookReviewsQuery(bookId, {
+		skip: !bookId,
+	});
 	const reviewsAmount = getArrLength(reviews);
 
-	useEffect(() => {
-		if (bookId) {
-			getReviewsById(bookId);
-		}
-	}, [getReviewsById, bookId, reviews]);
-
 	const list = reviews?.map((item) => {
-		const { userName, date, userRating, userText } = item;
+		const { userName, date, userRating, userText, _id } = item;
 		return (
 			<ReviewItem
+				key={_id || `${userName}-${date}`}
 				author={userName}
 				date={date}
 				rating={userRating}

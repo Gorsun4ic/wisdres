@@ -49,47 +49,45 @@ export const getBooksByGenre = async (req, res) => {
 
 // Get book's reviews by ID
 export const getBookReviews = async (req, res) => {
-		const { id } = req.params;
-		try {
-			const book = await Book.findById(id);
-			if (!book) {
-				return res.status(404).json({ error: "Book not found" });
-			}
-			res.json(book.reviews);
-		} catch (error) {
-			res.status(500).json({ error: "Failed to fetch book" });
+	const { id } = req.params;
+	try {
+		const book = await Book.findById(id);
+		if (!book) {
+			return res.status(404).json({ error: "Book not found" });
 		}
+		res.json(book.reviews);
+	} catch (error) {
+		res.status(500).json({ error: "Failed to fetch book" });
+	}
 };
 
 // Get book's details by ID
 export const getBookDetails = async (req, res) => {
-		const { id } = req.params;
-		try {
-			const book = await Book.findById(id);
-			if (!book) {
-				return res.status(404).json({ error: "Book not found" });
-			}
-			res.json(book.details);
-		} catch (error) {
-			res.status(500).json({ error: "Failed to fetch book" });
+	const { id } = req.params;
+	try {
+		const book = await Book.findById(id);
+		if (!book) {
+			return res.status(404).json({ error: "Book not found" });
 		}
+		res.json(book.details);
+	} catch (error) {
+		res.status(500).json({ error: "Failed to fetch book" });
+	}
 };
-
 
 // Get book's info by ID
 export const getBookInfo = async (req, res) => {
-		const { id } = req.params;
-		try {
-			const book = await Book.findById(id);
-			if (!book) {
-				return res.status(404).json({ error: "Book not found" });
-			}
-			res.json(book.info);
-		} catch (error) {
-			res.status(500).json({ error: "Failed to fetch book" });
+	const { id } = req.params;
+	try {
+		const book = await Book.findById(id);
+		if (!book) {
+			return res.status(404).json({ error: "Book not found" });
 		}
+		res.json(book.info);
+	} catch (error) {
+		res.status(500).json({ error: "Failed to fetch book" });
+	}
 };
-
 
 // Create a new book
 export const createBook = async (req, res) => {
@@ -166,5 +164,36 @@ export const updateBook = async (req, res) => {
 		return res
 			.status(400)
 			.json({ error: "'reviews' is missing in the request body" });
+	}
+};
+
+export const addNewReview = async (req, res) => {
+	const { id } = req.params;
+	const review = req.body;
+
+	try {
+		if (!review) {s
+			return res.status(400).json({
+				success: false,
+				error: {
+					message: "Review is required!",
+				},
+			});
+		}
+
+		console.log("Received review: ", review);
+
+		const book = await Book.findById(id);
+		if (!book) {
+			console.warn(`[updateBook] Book with ID ${id} not found.`);
+			return res.status(404).json({ error: "Book not found" });
+		}
+
+		book.reviews.push(review);
+		await book.save();
+		return res.json(book);
+	} catch (error) {
+		console.error(`[updateBook] Error updating book ${req.params.id}:`, error);
+		return res.status(500).json({ error: "Internal Server Error" });
 	}
 };
