@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Tab components
 import Tabs from "@mui/material/Tabs";
@@ -23,7 +23,16 @@ import AdminUsersSheet from "@features/admin/users/adminUsersSheet";
 
 import { StyledAdminPanel } from "./style";
 const Admin = () => {
-	const [value, setValue] = useState("1");
+	// Get activeTab from localStorage or default to "1"
+	const [value, setValue] = useState(() => {
+		const savedTab = localStorage.getItem("adminPanelActiveTab");
+		return savedTab || "1";
+	});
+
+	// Update localStorage when tab changes
+	useEffect(() => {
+		localStorage.setItem("adminPanelActiveTab", value);
+	}, [value]);
 
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
 		setValue(newValue);

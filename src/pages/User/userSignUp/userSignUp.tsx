@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 
-// React Router DOM
-import { useNavigate } from "react-router-dom";
-
 // React Hook Form
 import { useForm } from "react-hook-form";
 
@@ -82,9 +79,11 @@ const UserSignUpPage = () => {
 				localStorage.setItem("isAuthenticated", "false");
 			}, 2000);
 		} catch (error) {
+			console.log("error", error);
 			setIsLoading(false);
 		}
 	};
+
 
 	if (isSubmitSuccessful && !registrationError) {
 		return (

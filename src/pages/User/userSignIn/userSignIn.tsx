@@ -34,8 +34,8 @@ type FormFields = {
 };
 
 const UserSignInPage = () => {
-	// RTK Query Add function, error
-	const [authorizeUser, { error: authorizationError }] =
+	// RTK Query Add function, error, and isSuccess status
+	const [authorizeUser, { error: authorizationError, isSuccess }] =
 		useAuthorizeUserMutation();
 
 	const navigate = useNavigate();
@@ -53,11 +53,11 @@ const UserSignInPage = () => {
 
 	const currentFieldsValue = watch();
 	useEffect(() => {
-		if (isSubmitSuccessful) {
-			console.log("Success");
+		if (isSuccess) {
 			localStorage.setItem("isAuthenticated", "true");
+			navigate("/"); // Navigate after successful authentication
 		}
-	}, [isSubmitSuccessful, navigate]);
+	}, [isSuccess, navigate]);
 
 	// Handle server errors
 

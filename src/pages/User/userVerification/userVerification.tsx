@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 // MUI Components
-import { Stack, Box } from "@mui/material";
+import { Stack } from "@mui/material";
 
 // MUI Icons
 import EmailIcon from "@mui/icons-material/Email";
@@ -31,8 +31,7 @@ const UserVerifyEmail = () => {
 	const { verificationToken } = useParams();
 	const navigate = useNavigate();
 	const [verifyEmail, { error: verificationError }] = useVerifyEmailMutation();
-	const [resendVerification, { error: resendError }] =
-		useResendVerificationMutation();
+	const [resendVerification] = useResendVerificationMutation();
 	const [error, setError] = useState<string | null>(null);
 	const [verificationSuccess, setVerificationSuccess] =
 		useState<boolean>(false);
@@ -117,7 +116,7 @@ const UserVerifyEmail = () => {
 									message: "Email address is not correct",
 								},
 							}}
-							error={errors.email?.message || error}
+							error={errors.email?.message || error || undefined}
 						/>
 						<Button size="big" type="submit" disabled={isResending}>
 							{isResending ? "Sending..." : "Resend Verification Email"}

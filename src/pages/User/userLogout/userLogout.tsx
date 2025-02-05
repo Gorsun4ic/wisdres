@@ -5,16 +5,16 @@ const UserLogout = () => {
 	const [logout] = useLogoutUserMutation();
 
 	useEffect(() => {
-		logout()
-	}, [logout])
+		logout(null);
+		localStorage.setItem("isAuthenticated", "false");
+	}, [logout]);
 
 	return (
 		<div>
 			<h1>You successfully logged out from your account!</h1>
 			<p>To ensure it, here is your token: {localStorage.getItem("token")}</p>
 		</div>
-	)
-
+	);
 };
 
 export default UserLogout;

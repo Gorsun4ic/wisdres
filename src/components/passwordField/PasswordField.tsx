@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTheme } from "styled-components";
 
 // RHF Type for register
 import { UseFormRegister, FieldValues, Path } from "react-hook-form";
@@ -9,6 +10,7 @@ import { Tooltip, IconButton } from "@mui/material";
 // Icons
 import LockIcon from "@mui/icons-material/Lock";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 // Custom components
 import {StyledField} from "./style";
@@ -18,16 +20,19 @@ interface PasswordFieldProps<T extends FieldValues> {
 	validation?: Record<string, unknown>;
 	error?: string;
 	name: Path<T>;
+	placeholder?: string;
 }
 
-const PasswordField = <T extends FieldValues> ({ register, error, validation, name }: PasswordFieldProps<T>) => {
+
+const PasswordField = <T extends FieldValues> ({ register, error, validation, name, placeholder }: PasswordFieldProps<T>) => {
 	const [showPassword, setShowPassword] = useState(false);
+	const theme = useTheme();
 
 	return (
 		<>
 			<StyledField
-				type={showPassword ? "string" : "password"}
-				placeholder="Password"
+				type={showPassword ? "text" : "password"}
+				placeholder={placeholder || "Password"}
 				{...register(name, {
 					...validation,
 					pattern: {
@@ -41,16 +46,15 @@ const PasswordField = <T extends FieldValues> ({ register, error, validation, na
 				helperText={error}
 				slotProps={{
 					input: {
-						startAdornment: <LockIcon />,
+						startAdornment: <LockIcon sx={{ color: theme.colors.green }} />,
 						endAdornment: (
 							<Tooltip title="Show password">
 								<IconButton
-									className={`show-password ${showPassword ? "active" : null}`}>
-									<VisibilityIcon
-										onClick={() => {
-											setShowPassword(!showPassword);
-										}}
-									/>
+									className={`show-password ${showPassword ? "active" : null}`}
+									onClick={() => {
+										setShowPassword(!showPassword);
+									}}>
+									{showPassword ? <VisibilityOff /> : <VisibilityIcon />}
 								</IconButton>
 							</Tooltip>
 						),

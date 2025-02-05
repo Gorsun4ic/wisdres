@@ -1,26 +1,53 @@
+import { CircularProgress } from "@mui/material";
 import { StyledButton } from "./style";
 
-type ButtonProps = {
+type ButtonSize = "small" | "big";
+type ButtonVariant = "primary" | "secondary" | "outlined";
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
-	size: "small" | "big";
-	submit?: boolean;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>; // Extend with button attributes
+	size?: ButtonSize;
+	variant?: ButtonVariant;
+	isLoading?: boolean;
+	startIcon?: React.ReactNode;
+	endIcon?: React.ReactNode;
+	fullWidth?: boolean;
+	type?: "button" | "submit" | "reset";
+}
 
 const Button = ({
 	children,
 	size = "small",
-	submit = false,
-	...rest // Capture additional props like onClick
+	variant = "primary",
+	isLoading = false,
+	startIcon,
+	endIcon,
+	fullWidth = false,
+	type = "button",
+	disabled,
+	className,
+	...rest
 }: ButtonProps) => {
 	return (
 		<StyledButton
-			className={`button ${rest.className || ""}`} // Dynamically add className
+			className={`button ${className || ""}`}
 			size={size}
-			variant="contained"
-			type={submit ? "submit" : "button"}
-			{...rest} // Forward additional props
-		>
-			{children}
+			$variant={variant}
+			$fullWidth={fullWidth}
+			type={type}
+			disabled={disabled || isLoading}
+			{...rest}>
+			{isLoading ? (
+				<CircularProgress size={24} color="inherit" />
+			) : (
+				<>
+					{startIcon && (
+						<span className="button-icon start-icon">{startIcon}</span>
+					)}
+					{children}
+					{endIcon && <span className="button-icon end-icon">{endIcon}</span>}
+				</>
+			)}
 		</StyledButton>
 	);
 };
