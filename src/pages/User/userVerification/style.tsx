@@ -17,7 +17,7 @@ export const StyledForm = styled.form`
 		}
 		.form-title {
 			text-align: center;
-			margin-bottom: 32px;
+			margin-bottom: 8px;
 			font-weight: ${({ theme }) => theme?.fontWeights?.medium};
 		}
 		.input-label {

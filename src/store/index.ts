@@ -14,7 +14,6 @@ import { apiUsersSlice } from "@api/apiUsersSlice";
 import alertReducer from "@reducers/alert";
 import activeBookPageReducer from "@reducers/activeBookPage";
 import filtersReducer from "@reducers/filters";
-import authReducer from "@reducers/auth";
 
 // Define the store type
 export const store = configureStore({
@@ -28,7 +27,6 @@ export const store = configureStore({
 		alert: alertReducer,
 		activeBookPage: activeBookPageReducer,
 		filters: filtersReducer,
-		auth: authReducer
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(

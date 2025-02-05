@@ -1,59 +1,70 @@
 import { useEffect, useState } from "react";
-
-// Redux
-import { useDispatch } from "react-redux";
-
-// React Router DOM
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 // MUI Components
-import { Stack, TextField } from "@mui/material";
+import { Stack, Box } from "@mui/material";
+
+// MUI Icons
+import EmailIcon from "@mui/icons-material/Email";
 
 // Custom API
-import { useVerifyEmailMutation } from "@api/apiUsersSlice";
-import { processVerification, authenticate } from "@reducers/auth";
+import {
+	useVerifyEmailMutation,
+	useResendVerificationMutation,
+} from "@api/apiUsersSlice";
 
 // Custom types
 import { IError } from "@custom-types/apiError";
 
 // Custom components
 import Button from "@components/button";
+import FormField from "@components/formField";
 
 import { StyledForm } from "./style";
 
+type ResendVerificationForm = {
+	email: string;
+};
+
 const UserVerifyEmail = () => {
-	// Navigate to some page
+	const { verificationToken } = useParams();
 	const navigate = useNavigate();
-
-	// RTK Query verifying function
 	const [verifyEmail, { error: verificationError }] = useVerifyEmailMutation();
-
-	// Redux dispatch
-	const dispatch = useDispatch();
-
+	const [resendVerification, { error: resendError }] =
+		useResendVerificationMutation();
 	const [error, setError] = useState<string | null>(null);
 	const [verificationSuccess, setVerificationSuccess] =
 		useState<boolean>(false);
+	const [isResending, setIsResending] = useState(false);
+	const [resendSuccess, setResendSuccess] = useState(false);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<ResendVerificationForm>();
 
 	useEffect(() => {
-		verifyEmail(null);
-	}, [verifyEmail]);
+		if (verificationToken) {
+			verifyEmail(verificationToken);
+			console.log("verificationToken", verificationToken);
+		}
+	}, [verifyEmail, verificationToken]);
 
 	useEffect(() => {
 		if (verificationError) {
 			const errorMessage = (verificationError as IError)?.data?.error?.message;
 			setError(errorMessage);
+			console.log("verificationError", verificationError);
 		}
-	}, [verificationError, setError]);
+	}, [verificationError]);
 
-	// If registration was successful - clear form and navigate to Sign In form
 	useEffect(() => {
 		if (!verificationError) {
 			const resetTimer = setTimeout(() => {
-				dispatch(processVerification(false));
-				dispatch(authenticate(true));
+				localStorage.setItem("isVerifying", "false");
 				setVerificationSuccess(true);
-				// navigate(-3);
 			}, 3000);
 
 			return () => {
@@ -62,25 +73,90 @@ const UserVerifyEmail = () => {
 		}
 	}, [verificationError]);
 
+	const onResendSubmit = async (data: ResendVerificationForm) => {
+		setIsResending(true);
+		try {
+			await resendVerification(data.email).unwrap();
+			setResendSuccess(true);
+			setError(null);
+		} catch (error) {
+			const errorMessage = (error as IError)?.data?.error?.message;
+			setError(errorMessage || "Failed to resend verification email");
+		} finally {
+			setIsResending(false);
+		}
+	};
+
 	if (verificationError) {
 		return (
-			<div>
-				<p className="error">{error}</p>
-			</div>
+			<StyledForm onSubmit={handleSubmit(onResendSubmit)}>
+				{resendSuccess ? (
+					<Stack
+						direction="column"
+						spacing={2}
+						sx={{ padding: "0 32px 32px 32px", textAlign: "center" }}>
+						<p>A new verification link has been sent to your email.</p>
+						<p>Please check your inbox and spam folder.</p>
+					</Stack>
+				) : (
+					<Stack
+						direction="column"
+						spacing={2}
+						sx={{ padding: "0 32px 32px 32px" }}>
+						<h2 className="form-title">Verification Link is Expired</h2>
+						<p>Please enter your email to receive a new verification link.</p>
+						<FormField<ResendVerificationForm>
+							name="email"
+							placeholder="Email Address"
+							register={register}
+							icon={<EmailIcon />}
+							validation={{
+								required: "Email address is required",
+								pattern: {
+									value: /\S+@\S+\.\S+/,
+									message: "Email address is not correct",
+								},
+							}}
+							error={errors.email?.message || error}
+						/>
+						<Button size="big" type="submit" disabled={isResending}>
+							{isResending ? "Sending..." : "Resend Verification Email"}
+						</Button>
+					</Stack>
+				)}
+			</StyledForm>
 		);
 	}
 
 	if (verificationSuccess) {
 		return (
-			<div>
-				<h2>Your email has been verified!</h2>
-				<p>Now you can log in to your account.</p>
-				<Button onClick={() => navigate("/sign-in")} size="big">
-					Proceed to Login
-				</Button>
-			</div>
+			<StyledForm>
+				<h2 className="form-title">Email Verified!</h2>
+				<Stack
+					direction="column"
+					spacing={2}
+					sx={{ padding: "0 32px 32px 32px", textAlign: "center" }}>
+					<p>Your email has been successfully verified.</p>
+					<p>Now you can log in to your account.</p>
+					<Button onClick={() => navigate("/sign-in")} size="big">
+						Proceed to Login
+					</Button>
+				</Stack>
+			</StyledForm>
 		);
 	}
+
+	return (
+		<StyledForm>
+			<h2 className="form-title">Verifying Email</h2>
+			<Stack
+				direction="column"
+				spacing={2}
+				sx={{ padding: "0 32px 32px 32px", textAlign: "center" }}>
+				<p>Please wait while we verify your email address.</p>
+			</Stack>
+		</StyledForm>
+	);
 };
 
 export default UserVerifyEmail;

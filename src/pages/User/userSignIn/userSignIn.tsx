@@ -40,59 +40,59 @@ const UserSignInPage = () => {
 
 	const navigate = useNavigate();
 	const [invalidFieldValue, setInvalidFieldValue] = useState<string>("");
-	const [disabledSubmit, setDisabledSubmit] = useState<boolean>(false);
+	const [errorField, setErrorField] = useState<keyof FormFields | null>(null);
 
 	// RHF functions / data
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitSuccessful },
 		setError,
 		watch,
 	} = useForm<FormFields>();
 
 	const currentFieldsValue = watch();
-
 	useEffect(() => {
-		if (authorizationError) {
-			const field = (authorizationError as IError)?.data?.error?.field;
-
-			if (field) {
-				const fieldKey = field as keyof FormFields;
-				const currentValue = currentFieldsValue[fieldKey] as string;
-				setInvalidFieldValue(currentValue);
-			}
+		if (isSubmitSuccessful) {
+			console.log("Success");
+			localStorage.setItem("isAuthenticated", "true");
 		}
-	}, [authorizationError]);
+	}, [isSubmitSuccessful, navigate]);
+
+	// Handle server errors
 
 	useEffect(() => {
 		if (authorizationError) {
 			const field = (authorizationError as IError)?.data?.error?.field;
-			const message = (authorizationError as IError)?.data?.error?.message;
-
 			if (field) {
 				const fieldKey = field as keyof FormFields;
 				const currentValue = currentFieldsValue[fieldKey] as string;
-
-				if (currentValue !== invalidFieldValue) {
-					setDisabledSubmit(false);
-					setInvalidFieldValue("");
-					return;
-				}
-
-				setDisabledSubmit(true);
-				setError(field as keyof FormFields, {
+				const message = (authorizationError as IError)?.data?.error?.message;
+				setInvalidFieldValue(currentValue);
+				setErrorField(fieldKey);
+				setError(fieldKey, {
 					type: "server",
 					message,
 				});
 			}
 		}
-	}, [currentFieldsValue, invalidFieldValue]);
+	}, [authorizationError]);
 
 	const onSubmit = (data: FormFields) => {
-		if (disabledSubmit) return;
+		// Check if the field with error has been modified
+		if (errorField && currentFieldsValue[errorField] === invalidFieldValue) {
+			// Re-set the error to maintain it
+			setError(errorField, {
+				type: "server",
+				message: (authorizationError as IError)?.data?.error?.message,
+			});
+			return; // Don't submit if the error field hasn't changed
+		}
+
+		// Reset error tracking when submitting with changed values
+		setErrorField(null);
+		setInvalidFieldValue("");
 		authorizeUser(data);
-		navigate(-1);
 	};
 
 	return (
@@ -123,7 +123,7 @@ const UserSignInPage = () => {
 					error={errors.password?.message}
 				/>
 				<Link to="/forgot-password">Forgot password?</Link>
-				<Button size="big" type="submit" disabled={disabledSubmit}>
+				<Button size="big" type="submit">
 					Login
 				</Button>
 			</Stack>

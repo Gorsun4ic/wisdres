@@ -37,10 +37,10 @@ export const apiUsersSlice = createApi({
 			}),
 		}),
 		verifyEmail: builder.mutation({
-			query: (code) => ({
-				url: "users/email-verification",
+			query: (token: string) => ({
+				url: `/users/email-verification/${token}`,
 				method: "POST",
-				body: code,
+				body: token,
 			}),
 		}),
 		forgotPassword: builder.mutation({
@@ -80,6 +80,13 @@ export const apiUsersSlice = createApi({
 			}),
 			invalidatesTags: ["Users"],
 		}),
+		resendVerification: builder.mutation({
+			query: (email: string) => ({
+				url: "/users/resend-verification",
+				method: "POST",
+				body: { email },
+			}),
+		}),
 	}),
 });
 
@@ -94,5 +101,6 @@ export const {
 	useLogoutUserMutation,
 	useVerifyEmailMutation,
 	useForgotPasswordMutation,
-	useResetPasswordMutation
+	useResetPasswordMutation,
+	useResendVerificationMutation,
 } = apiUsersSlice;

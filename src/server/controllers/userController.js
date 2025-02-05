@@ -60,7 +60,7 @@ export const createUser = async (req, res) => {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const emailVerificationCode = uuidv4();
-		
+
 		const nextDay = Date.now() + 24 * 60 * 60 * 60 * 1000;
 
 		const user = new User({
@@ -110,7 +110,7 @@ export const authorizeUser = async (req, res) => {
 				error: {
 					field: "email",
 					message:
-						"Please, check your email for letter, and follow the instructions.",
+						"First, you have to verify your email. Please, check your email for letter, and follow the instructions.",
 				},
 			});
 		}
@@ -146,12 +146,13 @@ export const authorizeUser = async (req, res) => {
 	}
 };
 
-// Verify user's email code
+// Verify user's email token
 export const verifyEmail = async (req, res) => {
-	const { code } = req.params;
+	const { token } = req.params;
 	try {
 		const user = await User.findOne({
-			emailVerificationCode: code,
+
+			emailVerificationCode: token,
 			emailVerificationCodeExpiresAt: { $gt: Date.now() },
 		});
 
@@ -159,18 +160,16 @@ export const verifyEmail = async (req, res) => {
 			return res.status(400).json({
 				success: false,
 				error: {
-					message: "Invalid or expired verification code",
+					message: "Invalid or expired verification token",
 				},
 			});
 		}
 
-		user.isVerified = true;
 		user.emailVerificationCode = undefined;
 		user.emailVerificationCodeExpiresAt = undefined;
 		await user.save();
 
 		await sendWelcomeEmail(user.email, user.username);
-		
 
 		res.status(200).json({
 			success: true,
@@ -321,5 +320,58 @@ export const updateUser = async (req, res) => {
 		res.json(updatedUser);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to update user" });
+	}
+};
+
+export const resendVerification = async (req, res) => {
+	const { email } = req.body;
+
+	try {
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(400).json({
+				success: false,
+				error: {
+					message: "No account found with this email address.",
+				},
+			});
+		}
+
+		if (!user.emailVerificationCode) {
+			return res.status(400).json({
+				success: false,
+				error: {
+					message: "This email is already verified.",
+				},
+			});
+		}
+
+		// Generate new verification code and expiration
+		const emailVerificationCode = uuidv4();
+		const nextDay = Date.now() + 24 * 60 * 60 * 1000;
+
+		user.emailVerificationCode = emailVerificationCode;
+		user.emailVerificationCodeExpiresAt = nextDay;
+		await user.save();
+
+		// Send new verification email
+		await sendVerificationEmail(
+			user.email,
+			`${process.env.CLIENT_URL}/email-verification/${user.emailVerificationCode}`
+		);
+
+		res.status(200).json({
+			success: true,
+			message: "A new verification email has been sent.",
+		});
+	} catch (error) {
+		console.error("Error in resendVerification:", error);
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to resend verification email. Please try again later.",
+			},
+		});
 	}
 };

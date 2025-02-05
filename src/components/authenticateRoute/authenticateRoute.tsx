@@ -1,20 +1,13 @@
-// Component to redirect authenticated users 
-
-// Redux
-import { useSelector } from "react-redux";
+// Component to redirect authenticated users
 
 // React Router DOM
-import {Navigate, Outlet} from "react-router-dom";
-
-// Store type
-import { RootState } from "@store/index";
-
+import { Navigate, Outlet } from "react-router-dom";
 
 const AuthenticateRoute = () => {
-	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+	const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
 
 	if (!isAuthenticated) {
-	 return	<Navigate to="/sign-in" replace />;
+		return <Navigate to="/sign-in" replace />;
 	}
 
 	return <Outlet />;

@@ -76,12 +76,10 @@ function App() {
 							<Route path="/admin" element={<Admin />} />
 
 							{/* Only for users who are on email verification stage */}
-							<Route element={<VerifyingRoute />}>
-								<Route
-									path="/email-verification/:verificationToken"
-									element={<UserVerificationPage />}
-								/>
-							</Route>
+							<Route
+								path="/email-verification/:verificationToken"
+								element={<UserVerificationPage />}
+							/>
 
 							{/* Only for authorized users */}
 							<Route element={<AuthenticateRoute />}>

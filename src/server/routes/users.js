@@ -10,7 +10,8 @@ import {
 	verifyEmail,
 	logout,
 	forgotPassword,
-	resetPassword
+	resetPassword,
+	resendVerification
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
@@ -23,6 +24,7 @@ router.post("/sign-in", authorizeUser)
 router.post("/logout", logout);
 
 router.post("/email-verification/:token", verifyEmail);
+router.post("/resend-verification", resendVerification);
 
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);

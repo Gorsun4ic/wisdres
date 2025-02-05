@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { useDispatch } from "react-redux";
-
 // React Router DOM
 import { useNavigate } from "react-router-dom";
 
@@ -14,11 +12,12 @@ import { Link } from "react-router-dom";
 // RTK Query API
 import { useAddUserMutation } from "@api/apiUsersSlice";
 
-// Redux actions
-import { processVerification } from "@reducers/auth";
-
 // MUI Components
-import { Stack, Box, CircularProgress } from "@mui/material";
+import {
+	Stack,
+	Box,
+	CircularProgress,
+} from "@mui/material";
 
 // MUI Icons
 import EmailIcon from "@mui/icons-material/Email";
@@ -40,15 +39,14 @@ type FormFields = {
 	email: string;
 	password: string;
 	passwordConfirm: string;
+	acceptTerms: boolean;
 };
+
 const UserSignUpPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	// RTK Query Add function, error
 	const [addUser, { error: registrationError }] = useAddUserMutation();
-
-	// React Router DOM navigate hook
-	const navigate = useNavigate();
 
 	// RHF functions / data
 	const {
@@ -59,21 +57,13 @@ const UserSignUpPage = () => {
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	// Redux dispatch
-	const dispatch = useDispatch();
-
-	// Custom error for fields
-	const emailError =
-		(registrationError as IError)?.data?.error?.field === "email";
-	const backendErrorText = (registrationError as IError)?.data?.error?.message;
-
 	// If registration was successful - clear form and navigate to Sign In form
 	useEffect(() => {
 		if (isSubmitSuccessful && !registrationError) {
 			const resetTimer = setTimeout(() => {
-				reset();
-				dispatch(processVerification(true));
-				// navigate("/email-verification");
+				// Store both states in localStorage
+				localStorage.setItem("isVerifying", "true");
+				localStorage.setItem("isAuthenticated", "false"); // Initially false until email is verified
 			}, 1500);
 
 			return () => {
@@ -82,24 +72,38 @@ const UserSignUpPage = () => {
 		}
 	}, [isSubmitSuccessful, registrationError, reset]);
 
-	const onSubmit = (data: FormFields) => {
-		addUser(data);
+	const onSubmit = async (data: FormFields) => {
 		setIsLoading(true);
+		try {
+			await addUser(data).unwrap();
+			// Show success state before redirect
+			setTimeout(() => {
+				localStorage.setItem("isVerifying", "true");
+				localStorage.setItem("isAuthenticated", "false");
+			}, 2000);
+		} catch (error) {
+			setIsLoading(false);
+		}
 	};
 
 	if (isSubmitSuccessful && !registrationError) {
 		return (
-			<div>
-				<h2>Registration Successful!</h2>
-				<p>Please check your email for a verification link.</p>
-				<p>If you don't see the email, check your spam folder.</p>
-			</div>
+			<StyledForm>
+				<h2 className="form-title">Registration Successful!</h2>
+				<Stack
+					direction="column"
+					spacing={2}
+					sx={{ padding: "0 32px 32px 32px", textAlign: "center" }}>
+					<p>Account created successfully!</p>
+					<p>Please check your email for a verification link.</p>
+				</Stack>
+			</StyledForm>
 		);
 	}
 
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)}>
-			<h2 className="form-title">Welcome Back!</h2>
+			<h2 className="form-title">Create Account</h2>
 			<Stack
 				direction="column"
 				spacing={2}
@@ -114,6 +118,11 @@ const UserSignUpPage = () => {
 						minLength: {
 							value: 3,
 							message: "Username must have at least 3 characters",
+						},
+						pattern: {
+							value: /^[a-zA-Z0-9_-\s]+$/,
+							message:
+								"Username can only contain letters, numbers, underscores and hyphens",
 						},
 					}}
 					error={errors.username?.message}
@@ -131,7 +140,10 @@ const UserSignUpPage = () => {
 						},
 					}}
 					error={
-						errors.email?.message || (emailError ? backendErrorText : undefined)
+						errors.email?.message ||
+						(registrationError as IError)?.data?.error?.field === "email"
+							? (registrationError as IError)?.data?.error?.message
+							: undefined
 					}
 				/>
 				<PasswordField
@@ -143,17 +155,17 @@ const UserSignUpPage = () => {
 					name="passwordConfirm"
 					register={register}
 					validation={{
-						required: "Password is required",
+						required: "Password confirmation is required",
 						validate: (value: string) => {
 							if (watch("password") !== value) {
-								return "Passwords are different";
+								return "Passwords do not match";
 							}
 						},
 					}}
 					error={errors.passwordConfirm?.message}
 				/>
-				<Button size="big" type="submit">
-					{isLoading && !registrationError ? <CircularProgress /> : "Sign Up"}
+				<Button size="big" type="submit" disabled={isLoading}>
+					{isLoading ? <CircularProgress size={24} /> : "Sign Up"}
 				</Button>
 			</Stack>
 			<Box>
