@@ -8,7 +8,9 @@ import publisherRoutes from "./routes/publishers.js";
 import genreRoute from "./routes/genres.js";
 import languageRoute from "./routes/languages.js";
 import userRoute from "./routes/users.js";
+import searchRoutes from "./routes/searchRoutes.js";
 import connectDB from "./config/db.js";
+
 
 const app = express();
 
@@ -31,7 +33,7 @@ app.use("/publishers", publisherRoutes);
 app.use("/genres", genreRoute);
 app.use("/languages", languageRoute);
 app.use("/users", userRoute);
-
+app.use("/search", searchRoutes);
 
 // Start the server
 const PORT = 5000;

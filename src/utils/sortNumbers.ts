@@ -1,16 +1,26 @@
 import { IBook } from "@custom-types/book";
 
-export default function sortNumbers(arr: IBook[], option: string): IBook[] {
-	if (!arr || !Array.isArray(arr)) {
-		console.error("Invalid array passed to useSortNumbers:", arr);
-		return []; // Return an empty array if arr is invalid
+export default function sortBooksByNumericProperty(
+	books: IBook[],
+	property: keyof IBook["info"]
+): IBook[] {
+	if (!books || !Array.isArray(books)) {
+		console.error("Invalid array passed to sortBooksByNumericProperty:", books);
+		return [];
 	}
 
-	// Proceed with filtering and sorting if arr is valid
-	return arr
+	return books
 		.filter(
-			(item) =>
-				item["info"][option] !== null && item["info"][option] !== undefined
-		) // Remove items with no option
-		.sort((a, b) => (b[option] || 0) - (a[option] || 0)); // Sort by rating, defaulting to 0 if undefined
+			(book) =>
+				// Check if book and info property exist before accessing nested properties
+				book?.info &&
+				typeof book.info[property] === "number" &&
+				book.info[property] !== null
+		)
+		.sort((a, b) => {
+			// Safely access nested numeric properties
+			const valueA = a.info[property] as number;
+			const valueB = b.info[property] as number;
+			return valueB - valueA; // Sort in descending order
+		});
 }

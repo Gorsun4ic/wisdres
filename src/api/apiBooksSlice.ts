@@ -32,7 +32,7 @@ export const apiBooksSlice = createApi({
 				"Books",
 			],
 		}),
-		getBookInfo: builder.query<IBookInfo, void>({
+		getBookInfo: builder.query<IBookInfo, string>({
 			query: (id) => ({
 				url: `/books/${id}/info`,
 				providesTags: ["Books"],

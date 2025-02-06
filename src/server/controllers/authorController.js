@@ -1,4 +1,4 @@
-import Author from "../models/author.js";
+import Author from "../models/Author.js";
 
 // Get all authors
 export const getAllAuthors = async (req, res) => {

@@ -1,6 +1,7 @@
-import Genre from "../models/genre.js";
+import Genre from "../models/Genre.js";
 
 // Get all genres
+
 export const getAllGenres = async (req, res) => {
 	try {
 		const genre = await Genre.find();

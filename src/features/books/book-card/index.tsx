@@ -5,19 +5,27 @@ import { Stack } from "@mui/material";
 
 import { IBook } from "@custom-types/book";
 
-import useShowEntityNames from "@hooks/useShowEntityNames ";
-
 import Button from "@components/button";
 
 import theme from "@styles/theme";
 import { StyledCard, StyledCardContent } from "./style";
+import { IAuthor } from "@custom-types/author";
 
-const BookCard: React.FC<{ data: IBook }> = ({ data }) => {
+const BookCard: React.FC<{ data: IBook }> = ({
+	data = {
+		info: {
+			img: "",
+			rating: 0,
+			title: "",
+			author: [],
+		},
+		_id: "",
+		details: { book: "", auditory: "" },
+		reviews: [],
+	},
+}) => {
 	const { info, _id } = data;
 	const { img, rating, title, author } = info;
-	const { getAuthorName } = useShowEntityNames();
-	const authorsName = getAuthorName(author);
-
 
 	return (
 		<Link to={`/book/${_id}`}>
@@ -40,7 +48,16 @@ const BookCard: React.FC<{ data: IBook }> = ({ data }) => {
 							</Stack>
 						)}
 						<h3 className="book-card__name">{title}</h3>
-						<p className="book-card__author">{authorsName}</p>
+						<p className="book-card__author">
+							{Array.isArray(author)
+								? author.map((author: IAuthor, index: number) => (
+										<span key={index}>
+											{author?.title}
+											{index < author.length - 1 ? ", " : ""}
+										</span>
+								  ))
+								: ""}
+						</p>
 					</Stack>
 					<Button size="small">Read</Button>
 				</StyledCardContent>

@@ -5,10 +5,10 @@
 			img: String,
 			rating: Number,
 			title: String,
-			genre: [String],
-			author: { type: mongoose.Schema.Types.ObjectId, ref: "Author" }, // Reference to the author
-			publisher: String,
-			language: String,
+			genre: [{ type: mongoose.Schema.Types.ObjectId, ref: "Genre" }],
+			author: [{ type: mongoose.Schema.Types.ObjectId, ref: "Author" }],
+			publisher: { type: mongoose.Schema.Types.ObjectId, ref: "Publisher" },
+			language: { type: mongoose.Schema.Types.ObjectId, ref: "Language" },
 			year: Number,
 			pages: Number,
 		},
@@ -27,6 +27,6 @@
 		],
 	});
 
-	const Book = mongoose.model("Book", BookSchema);
+	const Book = mongoose.models.Book || mongoose.model("Book", BookSchema);
 
 	export default Book;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@store/index";
+import { Link } from "react-router-dom";
 
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -11,12 +12,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import Alert from "@mui/material/Alert";
 
 import { useGetBooksQuery, useDeleteBookMutation } from "@api/apiBooksSlice";
-import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
-import { useGetGenresQuery } from "@api/apiGenresSlice";
-
 import { IBook } from "@custom-types/book";
-
-import useShowEntityNames from "@hooks/useShowEntityNames ";
 
 import AdminGrid from "../grid-data";
 import AdminBookForm from "./bookForm/adminBookForm";
@@ -25,32 +21,20 @@ import Button from "@components/button";
 import ErrorMessage from "@components/error";
 
 import { StyledAdminBooksSheet } from "./style";
-import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 
 const AdminBooksSheet = () => {
 	const { data: booksData, isLoading, error } = useGetBooksQuery();
 	const [bookToEditId, setBookToEditId] = useState<string | null>(null);
 	const [deleteBook] = useDeleteBookMutation();
-	const { data: authorsData } = useGetAuthorsQuery(null);
-	const {data: publishersData} = useGetPublishersQuery(null);
-	const {data: genresData} = useGetGenresQuery(null);
 	const { alert } = useSelector((state: RootState) => state.alert);
 	const [open, setOpen] = useState(false);
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
-	const [data, setData] = useState<IBook[]>();
-	const { getBooksWithEntityNames } = useShowEntityNames();
 
 	useEffect(() => {
 		if (booksData) {
-			const correctData = getBooksWithEntityNames({
-				booksData,
-				authorsData,
-				publishersData,
-				genresData
-			});
-			setData(correctData);
+			console.log(booksData);
 		}
-	}, [booksData, authorsData, publishersData, genresData]);
+	}, [booksData]);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);
@@ -71,6 +55,7 @@ const AdminBooksSheet = () => {
 			field: "title",
 			headerName: "Title",
 			width: 150,
+			renderCell: (params) => <Link to={`/book/${params.value}`}>{params.value}</Link>,
 		},
 		{
 			field: "author",
@@ -112,6 +97,30 @@ const AdminBooksSheet = () => {
 		},
 	];
 
+	const transformBookData = (data: IBook[]) => {
+		if (!data) return [];
+		return data.map((item: IBook) => {
+			const { info, ...rest } = item;
+			return {
+				id: item._id,
+				...rest,
+				info: {
+					...info,
+					author: Array.isArray(info?.author)
+						? info?.author?.map((a) => a?.title).join(", ")
+						: info?.author?.title || "",
+					publisher: info?.publisher?.title || "",
+						genre: Array.isArray(info?.genre)
+						? info?.genre?.map((g) => g?.title).join(", ")
+						: info?.genre?.title || "",
+					language: info?.language?.title || "",
+				},
+				reviews: item.reviews.length,
+			};
+		});
+	};
+
+
 	return (
 		<StyledAdminBooksSheet>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
@@ -138,12 +147,12 @@ const AdminBooksSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<AdminGrid
-					handleEdit={handleOpen}
-					data={data}
+					data={transformBookData(booksData)}
+					columns={gridColumns}
 					isLoading={isLoading}
 					error={error}
 					deleteMethod={deleteBook}
-					columns={gridColumns}
+					handleEdit={handleOpen}
 				/>
 			</ErrorBoundary>
 			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}

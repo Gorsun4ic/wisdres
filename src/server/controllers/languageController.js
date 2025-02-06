@@ -1,6 +1,7 @@
-import Language from "../models/language.js";
+import Language from "../models/Language.js";
 
 // Get all languages
+
 export const getAllLanguages = async (req, res) => {
 	try {
 		const language = await Language.find();

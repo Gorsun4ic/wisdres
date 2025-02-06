@@ -1,11 +1,15 @@
-import Book from "../models/books.js";
-import Author from "../models/author.js";
-import Genre from "../models/genre.js";
+import Book from "../models/Books.js";
+import Author from "../models/Author.js";
+import Genre from "../models/Genre.js";
 
-// Get all books
+// Get all books with populated fields
 export const getAllBooks = async (req, res) => {
 	try {
-		const books = await Book.find();
+		const books = await Book.find()
+			.populate("info.author")
+			.populate("info.publisher")
+			.populate("info.genre")
+			.populate("info.language");
 		res.json(books);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to fetch books" });
@@ -16,7 +20,11 @@ export const getAllBooks = async (req, res) => {
 export const getBookById = async (req, res) => {
 	const { id } = req.params;
 	try {
-		const book = await Book.findById(id);
+		const book = await Book.findById(id)
+			.populate("info.author")
+			.populate("info.publisher")
+			.populate("info.genre")
+			.populate("info.language");
 		if (!book) {
 			return res.status(404).json({ error: "Book not found" });
 		}
@@ -79,7 +87,11 @@ export const getBookDetails = async (req, res) => {
 export const getBookInfo = async (req, res) => {
 	const { id } = req.params;
 	try {
-		const book = await Book.findById(id);
+		const book = await Book.findById(id)
+			.populate("info.author")
+			.populate("info.publisher")
+			.populate("info.genre")
+			.populate("info.language");
 		if (!book) {
 			return res.status(404).json({ error: "Book not found" });
 		}
@@ -172,7 +184,8 @@ export const addNewReview = async (req, res) => {
 	const review = req.body;
 
 	try {
-		if (!review) {s
+		if (!review) {
+			s;
 			return res.status(400).json({
 				success: false,
 				error: {

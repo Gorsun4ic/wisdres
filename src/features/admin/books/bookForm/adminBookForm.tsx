@@ -18,7 +18,6 @@ import { useGetLanguagesQuery } from "@api/apiLanguagesSlice";
 import useAlert from "@hooks/useAlert";
 import useWatchImg from "@hooks/useWatchImg";
 import useHandleAdminForm from "@hooks/useAdminForm";
-import useShowEntityNames from "@hooks/useShowEntityNames ";
 
 // Custom components
 import Button from "@components/button";
@@ -45,12 +44,6 @@ type FormFields = {
 	about_book: string;
 	about_auditory?: string;
 	id?: string;
-};
-
-type ExecutorsInfo = {
-	author: string;
-	publisher: string;
-	language: string;
 };
 
 const AdminBookForm = ({
@@ -82,9 +75,6 @@ const AdminBookForm = ({
 	const {data: languagesList} = useGetLanguagesQuery(null);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
-	const [executorsInfo, setExecutorsInfo] = useState<ExecutorsInfo | null>(
-		null
-	);
 	const triggerAlert = useAlert();
 	const { onEditMode, defineFormTitle, showTheDifference } = useHandleAdminForm(
 		{ mode, reset }
@@ -94,26 +84,12 @@ const AdminBookForm = ({
 		onAdd: "Add new book",
 	});
 	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
-	const { getAuthorName, getPublisherName, getLanguageName } = useShowEntityNames();
 
 	useEffect(() => {
 		if (bookId) {
 			onEditMode(bookId, getBookById, bookData);
 		}
 	}, [bookId, bookData]);
-
-	useEffect(() => {
-		if (bookData) {
-			const author = getAuthorName(bookData?.info?.author);
-			const publisher = getPublisherName(bookData?.info?.publisher);
-			const language = getLanguageName(bookData?.info?.language);
-			setExecutorsInfo({
-				author,
-				publisher,
-				language
-			});
-		}
-	}, [bookData]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
@@ -251,7 +227,7 @@ const AdminBookForm = ({
 						rules={{ required: "Author is required" }}
 						options={authorsList || []}
 						placeholder="Authors name"
-						value={executorsInfo?.author || ""}
+						value={authorsList || ""}
 						label="Author"
 					/>
 				</Grid2>
@@ -261,7 +237,7 @@ const AdminBookForm = ({
 						control={control}
 						rules={{ required: "Publisher is required" }}
 						options={publishersList || []}
-						value={executorsInfo?.publisher || ""}
+						value={publishersList || ""}
 						placeholder="Publishers name"
 						label="Publisher"
 					/>
@@ -273,7 +249,7 @@ const AdminBookForm = ({
 						rules={{ required: "Language is required" }}
 						options={languagesList || []}
 						placeholder="Languages name"
-						value={executorsInfo?.language || ""}
+						value={languagesList || ""}
 						label="Language"
 					/>
 				</Grid2>

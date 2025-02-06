@@ -117,7 +117,7 @@ const UserProfile = () => {
 				<TabPanel value={activeTab} index={2}>
 					<BookCollection
 						filterBy="recent"
-						number={5}
+						number={6}
 						title="Your recently viewed"
 					/>
 				</TabPanel>

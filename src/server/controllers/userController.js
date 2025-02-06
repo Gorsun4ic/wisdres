@@ -294,15 +294,29 @@ export const resetPassword = async (req, res) => {
 
 // Delete an user by ID
 export const deleteUser = async (req, res) => {
-	const { id } = req.params;
+	const { email } = req.body;
 	try {
-		const deletedUser = await User.findByIdAndDelete(id);
-		if (!deletedUser) {
-			return res.status(404).json({ error: "User not found" });
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(404).json({
+				success: false,
+				error: { message: "No account associated with this email address." },
+			});
 		}
-		res.json({ message: "User deleted successfully", user: deletedUser });
+
+		await User.findByIdAndDelete(user._id);
+
+
+		return res.status(200).json({
+			success: true,
+			message: "User account has been deleted successfully",
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to delete user" });
+		return res.status(500).json({
+			success: false,
+			error: { message: "Failed to delete user account" },
+		});
 	}
 };
 

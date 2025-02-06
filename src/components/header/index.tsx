@@ -14,11 +14,11 @@ import { ICategories } from "@custom-types/categories";
 
 // Custom components
 import Logo from "@components/logo";
-import SearchBar from "@components/search-bar";
+import SearchBar from "../search-bar";
+import HeaderCategories from "./header-categories";
 
 // Custom styles
 import { StyledHeader } from "./style";
-import HeaderCategories from "./header-categories";
 
 const fiction: ICategories = {
 	title: "Fiction",
@@ -62,7 +62,7 @@ const NAV_ITEMS = [
 	{ label: "Authors", content: BookGenresList, link: "/authors" },
 	{ label: "Publishers", content: BookGenresList, link: "/publishers" },
 	{ label: "Top books", content: BookGenresList, link: "/collections" },
-	{ label: "Contacts", content:BookGenresList, link: "/contacts" }
+	{ label: "Contacts", content: BookGenresList, link: "/contacts" },
 ];
 
 const useHoverState = () => {
@@ -80,7 +80,7 @@ const useHoverState = () => {
 			if (!isBlockHovered || hoveredItem === null) {
 				setHoveredItem(null); // Clear hovered item if block is not hovered
 			}
-		}, 1200)
+		}, 1200);
 	}, [isBlockHovered]);
 
 	// Handle block hover state
