@@ -19,6 +19,7 @@ interface AdminGridProps {
 	isLoading: boolean;
 	columns: GridColDef[];
 	data: unknown[];
+	columnVisibilityModel?: GridColDef[];
 }
 
 const AdminGrid = ({
@@ -28,6 +29,7 @@ const AdminGrid = ({
 	error,
 	deleteMethod,
 	columns,
+	columnVisibilityModel,
 }: AdminGridProps) => {
 	const [info, setInfo] = useState<IBook[] | []>([]);
 	const [selectedInfo, setSelectedInfo] = useState<null | IBook>(null); // Stores selected book for delete dialog
@@ -126,6 +128,9 @@ const AdminGrid = ({
 			<DataGrid
 				rows={info}
 				columns={columnsInfo}
+				columnVisibilityModel={columnVisibilityModel}
+
+
 				initialState={{
 					pagination: {
 						paginationModel: {

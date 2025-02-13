@@ -8,7 +8,7 @@ const BookList = ({ data }: { data: IBook[] }) => {
 
 	const list = data?.map((item) => {
 		return (
-			<div>
+			<div key={item?._id}>
 				<BookCard data={item} />
 			</div>
 		);

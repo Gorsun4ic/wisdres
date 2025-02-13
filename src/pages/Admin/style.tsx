@@ -3,7 +3,9 @@ import styled from "styled-components";
 export const StyledAdminPanel = styled.div`
 	&& {
 		display: flex;
-
+		.MuiListItemIcon-root {
+			min-width: 24px;
+		}
 		img {
 			max-width: 100%;
 			min-width: none;

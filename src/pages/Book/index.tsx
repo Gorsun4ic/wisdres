@@ -9,9 +9,6 @@ import { CircularProgress } from "@mui/material";
 import { useLazyGetBookByIdQuery } from "@api/apiBooksSlice";
 import { useLazyGetAuthorByIdQuery } from "@api/apiAuthorsSlice";
 
-// API Reducer
-import { showBook } from "@reducers/activeBookPage";
-
 // Custom utils
 import { addRecentViewedBook } from "@utils/handleLocalStorage";
 

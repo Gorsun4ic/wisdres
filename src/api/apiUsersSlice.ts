@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+import IUser from "@custom-types/user";
+
 export const apiUsersSlice = createApi({
 	reducerPath: "usersApi",
 	baseQuery: fetchBaseQuery({
@@ -31,7 +33,7 @@ export const apiUsersSlice = createApi({
 				method: "POST",
 			}),
 		}),
-		checkAuth: builder.query({
+		checkAuth: builder.query<{success: boolean, user: IUser}, null>({
 			query: () => ({
 				url: "users/check-auth",
 			}),

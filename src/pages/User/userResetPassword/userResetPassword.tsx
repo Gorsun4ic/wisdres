@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // React Hook Form
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { Stack } from "@mui/material";
 // Custom API
 import { useResetPasswordMutation } from "@api/apiUsersSlice";
+
 
 // Custom components
 import PasswordField from "@components/passwordField/PasswordField";
@@ -23,9 +24,11 @@ type FormFields = {
 };
 
 const UserResetPasswordPage = () => {
+	const { token } = useParams();
 	// RTK Query Add function, error
 	const [resetPassword, { error: resetError }] =
 		useResetPasswordMutation();
+
 	const navigate = useNavigate();
 	// RHF functions / data
 	const {
@@ -59,7 +62,7 @@ const UserResetPasswordPage = () => {
 	}, [isSubmitSuccessful, resetError, reset]);
 
 	const onSubmit = (data: FormFields) => {
-		resetPassword(data);
+		resetPassword({ token, password: data.password });
 	};
 
 	return (

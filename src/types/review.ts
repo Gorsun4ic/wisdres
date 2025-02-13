@@ -1,7 +1,8 @@
-export interface IReview {
-	userName: string;
-	userEmail: string;
-	userRating: string;
-	userText: string;
-	date: string;
+interface IReview {
+	user: string;
+	book?: string;
+	rating: number;
+	text: string;
 }
+
+export default IReview;

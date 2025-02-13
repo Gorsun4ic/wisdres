@@ -12,7 +12,7 @@ export const getAllBooks = async (req, res) => {
 			.populate("info.language");
 		res.json(books);
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch books" });
+		res.status(500).json({ error: `Failed to fetch books: ${error.message}` });
 	}
 };
 
@@ -24,13 +24,17 @@ export const getBookById = async (req, res) => {
 			.populate("info.author")
 			.populate("info.publisher")
 			.populate("info.genre")
-			.populate("info.language");
+			.populate("info.language")
+			 .populate({
+        path: "reviews",
+        populate: { path: "user", select: "username" }, // Fetch user details
+      });
 		if (!book) {
 			return res.status(404).json({ error: "Book not found" });
 		}
 		res.json(book);
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch book" });
+		res.status(500).json({ error: `Failed to fetch book: ${error.message}` });
 	}
 };
 
@@ -52,20 +56,6 @@ export const getBooksByGenre = async (req, res) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: "Server error" });
-	}
-};
-
-// Get book's reviews by ID
-export const getBookReviews = async (req, res) => {
-	const { id } = req.params;
-	try {
-		const book = await Book.findById(id);
-		if (!book) {
-			return res.status(404).json({ error: "Book not found" });
-		}
-		res.json(book.reviews);
-	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch book" });
 	}
 };
 
@@ -176,37 +166,5 @@ export const updateBook = async (req, res) => {
 		return res
 			.status(400)
 			.json({ error: "'reviews' is missing in the request body" });
-	}
-};
-
-export const addNewReview = async (req, res) => {
-	const { id } = req.params;
-	const review = req.body;
-
-	try {
-		if (!review) {
-			s;
-			return res.status(400).json({
-				success: false,
-				error: {
-					message: "Review is required!",
-				},
-			});
-		}
-
-		console.log("Received review: ", review);
-
-		const book = await Book.findById(id);
-		if (!book) {
-			console.warn(`[updateBook] Book with ID ${id} not found.`);
-			return res.status(404).json({ error: "Book not found" });
-		}
-
-		book.reviews.push(review);
-		await book.save();
-		return res.json(book);
-	} catch (error) {
-		console.error(`[updateBook] Error updating book ${req.params.id}:`, error);
-		return res.status(500).json({ error: "Internal Server Error" });
 	}
 };

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IBook } from "@custom-types/book";
 import { IBookInfo } from "@custom-types/bookInfo";
-import { IReview } from "@custom-types/review";
+import IReview  from "@custom-types/review";
 import { IBookDetails } from "@custom-types/bookDetails";
 
 export const apiBooksSlice = createApi({
@@ -27,10 +27,7 @@ export const apiBooksSlice = createApi({
 		}),
 		getBookReviews: builder.query<IReview[], string>({
 			query: (id) => `/books/${id}/reviews`,
-			providesTags: (result, error, id) => [
-				{ type: "Reviews", id },
-				"Books",
-			],
+			providesTags: (result, error, id) => [{ type: "Reviews", id }, "Books"],
 		}),
 		getBookInfo: builder.query<IBookInfo, string>({
 			query: (id) => ({
@@ -60,13 +57,23 @@ export const apiBooksSlice = createApi({
 			invalidatesTags: ["Books"],
 		}),
 		addNewReview: builder.mutation({
-			query: ({ id, updates }: { id: string; updates: IReview }) => ({
-				url: `/books/${id}/reviews`,
-				method: "PATCH",
-				body: updates,
+			query: ({ bookId, review }: { bookId: string; review: IReview }) => ({
+				url: `/books/${bookId}/reviews`, // Correct URL
+				method: "POST",
+				body: review,
 			}),
-			invalidatesTags: (result, error, { id }) => [
-				{ type: "Reviews", id },
+			invalidatesTags: (result, error, { bookId }) => [
+				{ type: "Reviews", id: bookId }, // Correct structure for cache invalidation
+				{ type: "Books", id: bookId }, // Ensures book data refresh
+			],
+		}),
+		deleteReview: builder.mutation<void, { bookId: string; reviewId: string }>({
+			query: ({ bookId, reviewId }) => ({
+				url: `/books/${bookId}/reviews/${reviewId}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: (result, error, { bookId }) => [
+				{ type: "Reviews", id: bookId },
 				"Books",
 			],
 		}),
@@ -92,4 +99,5 @@ export const {
 	useLazyGetBookDetailsQuery,
 	useLazyGetBookInfoQuery,
 	useAddNewReviewMutation,
+	useDeleteReviewMutation,
 } = apiBooksSlice;

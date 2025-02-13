@@ -16,15 +16,7 @@
 			book: String,
 			auditory: String,
 		},
-		reviews: [
-			{
-				userName: String,
-				userEmail: String,
-				userRating: Number,
-				userText: String,
-				date: Date,
-			},
-		],
+		reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
 	});
 
 	const Book = mongoose.models.Book || mongoose.model("Book", BookSchema);

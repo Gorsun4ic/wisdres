@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { List, ListItem, Stack } from "@mui/material";
@@ -18,8 +17,9 @@ const BookInfo = () => {
 	useEffect(() => {
 		if (bookId) {
 			getInfoById(bookId);
+			console.log(bookInfo);
 		}
-	}, [getInfoById, bookId]);
+	}, [getInfoById, bookId, bookInfo]);
 
 	return (
 		<StyledBookInfo>

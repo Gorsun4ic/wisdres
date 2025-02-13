@@ -42,7 +42,7 @@ const BookCollection = ({
 	booksArr?: IBook[];
 }) => {
 	const { data, isLoading, error } = useGetBooksQuery();
-	const [getBookById] = useLazyGetBookByIdQuery();
+	const [getBookById, {error: bookError}] = useLazyGetBookByIdQuery();
 	const [books, setBooks] = useState<IBook[] | []>([]);
 
 	useEffect(() => {
@@ -53,6 +53,12 @@ const BookCollection = ({
 			setBooks(booksArr);
 		}
 	}, [data, booksArr]);
+
+	useEffect(() => {
+		if (error || bookError) {
+			console.error("Error fetching books:", error || bookError);
+		}
+	}, [error, bookError])
 
 
   useEffect(() => {

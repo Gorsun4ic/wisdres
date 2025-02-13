@@ -10,10 +10,9 @@ import { apiGenresSlice } from "@api/apiGenresSlice";
 import { apiLanguagesSlice } from "@api/apiLanguagesSlice";
 import { apiUsersSlice } from "@api/apiUsersSlice";
 import { apiSearchSlice } from "@api/apiSearchSlice";
-
+import { apiAdminsSlice } from "@api/apiAdminsSlice";
 // Custom reducers
 import alertReducer from "@reducers/alert";
-import activeBookPageReducer from "@reducers/activeBookPage";
 import filtersReducer from "@reducers/filters";
 
 // Define the store type
@@ -26,9 +25,10 @@ export const store = configureStore({
 		[apiLanguagesSlice.reducerPath]: apiLanguagesSlice.reducer,
 		[apiUsersSlice.reducerPath]: apiUsersSlice.reducer,
 		[apiSearchSlice.reducerPath]: apiSearchSlice.reducer,
+		[apiAdminsSlice.reducerPath]: apiAdminsSlice.reducer,
 		alert: alertReducer,
-		activeBookPage: activeBookPageReducer,
 		filters: filtersReducer,
+
 
 	},
 	middleware: (getDefaultMiddleware) =>
@@ -39,9 +39,11 @@ export const store = configureStore({
 			apiGenresSlice.middleware,
 			apiLanguagesSlice.middleware,
 			apiUsersSlice.middleware,
-			apiSearchSlice.middleware
+			apiSearchSlice.middleware,
+			apiAdminsSlice.middleware,
 		),
 });
+
 
 
 // Set up listeners for refetching queries

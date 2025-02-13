@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
-import ReviewsList from "./reviews-list";
-import ReviewForm from "./review-form";
+import ReviewsList from "./reviews-list/reviewList";
+import ReviewForm from "./review-form/reviewForm";
 import { StyledBookReviews } from "./style";
 
 const BookReviews = () => {

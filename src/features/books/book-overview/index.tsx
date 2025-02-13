@@ -1,5 +1,5 @@
 import { StyledBook } from "./style";
-import BookInfo from "@features/books/book-overview/book-info";
+import BookInfo from "@features/books/book-overview/book-info/bookInfo";
 
 const BookOverview = () => {
 	return (

@@ -31,9 +31,7 @@ const AdminBooksSheet = () => {
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
 
 	useEffect(() => {
-		if (booksData) {
-			console.log(booksData);
-		}
+		console.log("Raw Books Data:", booksData);
 	}, [booksData]);
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
@@ -55,7 +53,9 @@ const AdminBooksSheet = () => {
 			field: "title",
 			headerName: "Title",
 			width: 150,
-			renderCell: (params) => <Link to={`/book/${params.value}`}>{params.value}</Link>,
+			renderCell: (params) => (
+				<Link to={`/book/${params.row.id}`}>{params.value}</Link>
+			),
 		},
 		{
 			field: "author",
@@ -99,27 +99,29 @@ const AdminBooksSheet = () => {
 
 	const transformBookData = (data: IBook[]) => {
 		if (!data) return [];
-		return data.map((item: IBook) => {
+		const transformed = data.map((item: IBook) => {
 			const { info, ...rest } = item;
-			return {
+			const result = {
 				id: item._id,
-				...rest,
-				info: {
-					...info,
-					author: Array.isArray(info?.author)
-						? info?.author?.map((a) => a?.title).join(", ")
-						: info?.author?.title || "",
-					publisher: info?.publisher?.title || "",
-						genre: Array.isArray(info?.genre)
-						? info?.genre?.map((g) => g?.title).join(", ")
-						: info?.genre?.title || "",
-					language: info?.language?.title || "",
-				},
-				reviews: item.reviews.length,
+				img: info?.img || "",
+				title: info?.title || "",
+				author: Array.isArray(info?.author)
+					? info?.author?.map((a) => a?.title).join(", ")
+					: info?.author?.title || "",
+				publisher: info?.publisher?.title || "",
+				genre: Array.isArray(info?.genre)
+					? info?.genre?.map((g) => g?.title).join(", ")
+					: info?.genre?.title || "",
+				language: info?.language?.title || "",
+				year: info?.year || 0,
+				pages: info?.pages || 0,
+				reviews: item.reviews?.length || 0,
 			};
+			console.log("Transformed Item:", result);
+			return result;
 		});
+		return transformed;
 	};
-
 
 	return (
 		<StyledAdminBooksSheet>
@@ -147,7 +149,7 @@ const AdminBooksSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<AdminGrid
-					data={transformBookData(booksData)}
+					data={transformBookData(booksData || [])}
 					columns={gridColumns}
 					isLoading={isLoading}
 					error={error}

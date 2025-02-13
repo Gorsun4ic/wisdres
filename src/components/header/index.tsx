@@ -127,6 +127,7 @@ const Header = () => {
 					{NAV_ITEMS.map((item) => (
 						<div
 							className="header__item"
+							key={item.label}
 							style={{ position: "relative" }}
 							onMouseEnter={() => handleMouseEnterNav(item)}
 							onMouseLeave={handleMouseLeaveNav}>

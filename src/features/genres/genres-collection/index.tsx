@@ -10,7 +10,7 @@ import { StyledGenresCollection } from "./style";
 const GenresCollection = ({ data }: {data: IGenre[]}) => {
 	const genreList = data?.map((item) => {
 		return (
-			<Grid2 size={2}>
+			<Grid2 size={2} key={item?._id}>
 				<Link to={item?.title.toLowerCase()}>
 					<GenreCard img={item?.img} genreName={item?.title} />
 				</Link>

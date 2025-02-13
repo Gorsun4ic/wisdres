@@ -18,11 +18,11 @@ import theme from "@styles/theme";
 import Header from "@components/header";
 import AuthenticateRoute from "@components/authenticateRoute/authenticateRoute";
 import NotAuthenticateRoute from "@components/notAunthenticatedRoute.tsx/notAuthenticatedRoute";
-import VerifyingRoute from "@components/verifyingRoute/verifyingRoute";
+import AdminRoute from "@components/admin-route/adminRoute";
 
 // Pages
 const MainPage = lazy(() => import("@pages/Main"));
-const Admin = lazy(() => import("@pages/Admin"));
+const Admin = lazy(() => import("@pages/Admin/adminPage"));
 
 // Pages with info for specific item
 const BookPage = lazy(() => import("@pages/Book"));
@@ -73,7 +73,12 @@ function App() {
 							<Route path="/authors" element={<AuthorsPage />} />
 							<Route path="/author/:authorId" element={<AuthorPage />} />
 							<Route path="/publishers" element={<PublishersPage />} />
-							<Route path="/admin" element={<Admin />} />
+							<Route
+								element={
+									<AdminRoute allowedRoles={["admin", "super_admin"]} />
+								}>
+								<Route path="/admin" element={<Admin />} />
+							</Route>
 
 							{/* Only for users who are on email verification stage */}
 							<Route

@@ -251,8 +251,7 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
 	try {
-		const { token } = req.params;
-		const { password } = req.body;
+		const { token, password } = req.body;
 
 		const user = await User.findOne({
 			resetPasswordToken: token,

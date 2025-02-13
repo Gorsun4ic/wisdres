@@ -5,6 +5,8 @@ export const StyledForm = styled.form`
 		padding: 24px;
 		background-color: ${({ theme }) => theme?.colors?.formBackground};
 		border-radius: ${({ theme }) => theme?.borders?.borderRadius};
+		max-width: 600px;
+		width: 100%;
 		h3 {
 			margin-bottom: 18px;
 		}
@@ -13,6 +15,14 @@ export const StyledForm = styled.form`
 		}
 		button {
 			max-width: 140px;
+		}
+
+		p {
+			margin-bottom: 16px;
+		}
+
+		.MuiInputBase-root {
+			margin-bottom: 16px;
 		}
 
 		.input-label {
