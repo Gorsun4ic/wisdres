@@ -97,6 +97,7 @@ const AdminBookForm = ({
 
 	const onSubmit = (data: IBookInfo) => {
 		const { details, info } = data;
+		console.log("Submitting data:", data);
 		switch (mode) {
 			case "add":
 				addBook({
@@ -329,7 +330,7 @@ const AdminBookForm = ({
 					/>
 				</Grid2>
 			</Grid2>
-			<Button size="big" submit={true}>
+			<Button size="big" type="submit">
 				{mode === "edit" ? "Edit" : "Publish"}
 			</Button>
 		</StyledForm>

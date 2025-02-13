@@ -3,16 +3,16 @@ import Book from "../models/books.js";
 
 export const createReview = async (req, res) => {
 
-	const { rating, text, userId } = req.body;
+	const { rating, text, user } = req.body;
 	const bookId = req.params.id;
 
 	try {
-		if (!userId || !bookId) {
-			return res.status(400).json({ message: "User ID and book ID are required" });
+		if (!user || !bookId) {
+			return res.status(400).json({ message: "Something went wrong. Please, check if you are authenticated" });
 		}
 
 		const review = await Review.create({
-			user: userId,
+			user: user,
 			book: bookId,
 			rating,
 			text,
@@ -29,10 +29,8 @@ export const createReview = async (req, res) => {
 export const getReviewsByBookId = async (req, res) => {
 	try {
 		const { bookId } = req.params;
-		console.log("Requested bookId:", bookId); // Debugging
 
 		const reviews = await Review.find({ book: bookId }).populate("user");
-		console.log("Reviews found:", reviews);
 
 		if (!reviews.length) {
 			return res

@@ -20,6 +20,8 @@ import AuthenticateRoute from "@components/authenticateRoute/authenticateRoute";
 import NotAuthenticateRoute from "@components/notAunthenticatedRoute.tsx/notAuthenticatedRoute";
 import AdminRoute from "@components/admin-route/adminRoute";
 
+import Page404 from "@pages/404/404";
+
 // Pages
 const MainPage = lazy(() => import("@pages/Main"));
 const Admin = lazy(() => import("@pages/Admin/adminPage"));
@@ -67,6 +69,7 @@ function App() {
 						<Header />
 						<Routes>
 							<Route path="/" element={<MainPage />} />
+							<Route path="*" element={<Page404 />} />
 							<Route path="/books" element={<BooksPage />} />
 							<Route path="/book/:bookId" element={<BookPage />} />
 							<Route path="/books/:genre" element={<GenrePage />} />
@@ -75,7 +78,7 @@ function App() {
 							<Route path="/publishers" element={<PublishersPage />} />
 							<Route
 								element={
-									<AdminRoute allowedRoles={["admin", "super_admin"]} />
+									<AdminRoute />
 								}>
 								<Route path="/admin" element={<Admin />} />
 							</Route>

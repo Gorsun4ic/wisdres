@@ -11,21 +11,30 @@ import theme from "@styles/theme";
 import { StyledCard, StyledCardContent } from "./style";
 import { IAuthor } from "@custom-types/author";
 
-const BookCard: React.FC<{ data: IBook }> = ({
-	data = {
-		info: {
-			img: "",
-			rating: 0,
-			title: "",
-			author: [],
-		},
-		_id: "",
-		details: { book: "", auditory: "" },
-		reviews: [],
-	},
-}) => {
+interface BookCardProps {
+	data: IBook;
+}
+
+const BookCard: React.FC<BookCardProps> = ({ data }) => {
+	if (!data || !data.info) {
+		return null;
+	}
+
 	const { info, _id } = data;
 	const { img, rating, title, author } = info;
+
+	const renderAuthors = () => {
+		if (!Array.isArray(author) || !author.length) {
+			return "Unknown author";
+		}
+
+		return author.map((auth: IAuthor, index: number) => (
+			<span key={auth._id || index}>
+				{auth?.title}
+				{index < author.length - 1 ? ", " : ""}
+			</span>
+		));
+	};
 
 	return (
 		<Link to={`/book/${_id}`}>
@@ -48,16 +57,7 @@ const BookCard: React.FC<{ data: IBook }> = ({
 							</Stack>
 						)}
 						<h3 className="book-card__name">{title}</h3>
-						<p className="book-card__author">
-							{Array.isArray(author)
-								? author.map((author: IAuthor, index: number) => (
-										<span key={index}>
-											{author?.title}
-											{index < author.length - 1 ? ", " : ""}
-										</span>
-								  ))
-								: ""}
-						</p>
+						<p className="book-card__author">{renderAuthors()}</p>
 					</Stack>
 					<Button size="small">Read</Button>
 				</StyledCardContent>

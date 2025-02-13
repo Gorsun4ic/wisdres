@@ -10,14 +10,14 @@ import { IBook } from "@custom-types/book";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
-import BookFilters from "@features/books/book-filters";
+import BookFilters from "@features/books/book-filters/bookFilters";
 import BookList from "@features/books/book-list";
 import BookSort from "@features/books/book-sort";
 
 import { StyledGenrePage } from "./style";
 
 const GenrePage = () => {
-	const { genre } = useParams();
+	const { genre = "" } = useParams<{ genre: string }>();
 	const { data, error } = useGetBooksByGenresQuery(genre);
 	const [filterData, setFilterData] = useState({
 		authors: [],
@@ -27,6 +27,12 @@ const GenrePage = () => {
 	});
 	const { sortBy, filters } = useSelector((state) => state.filters);
 	const genreTitle = upperCaseFirstLetter(genre);
+
+	useEffect(() => {
+		if (error) {
+			console.log("Error fetching books:", error);
+		}
+	}, [error]);
 
 	const filterBooks = (data: IBook[] | undefined) => {
 		if (!data) return [];
@@ -66,7 +72,6 @@ const GenrePage = () => {
 			return 0;
 		});
 	};
-
 
 	const filteredBooks = filterBooks(data);
 	const sortedBooks = sortBooks(filteredBooks, sortBy);

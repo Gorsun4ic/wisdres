@@ -14,7 +14,7 @@ import { addRecentViewedBook } from "@utils/handleLocalStorage";
 
 // Custom features
 import BookOverview from "@features/books/book-overview";
-import BookDescription from "@features/books/book-description";
+import BookDescription from "@features/books/book-description/bookDescription";
 import BookReviews from "@features/books/book-reviews";
 import BookCollection from "@features/books/bookCollection/bookCollection";
 

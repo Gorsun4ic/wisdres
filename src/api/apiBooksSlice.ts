@@ -19,11 +19,9 @@ export const apiBooksSlice = createApi({
 				providesTags: ["Books"],
 			}),
 		}),
-		getBooksByGenres: builder.query<IBook[], void>({
-			query: (genre) => ({
-				url: `/books/genre/${genre}`,
-				providesTags: ["Books"],
-			}),
+		getBooksByGenres: builder.query<IBook[], string>({
+			query: (genre) => `/books/genre/${genre}`,
+			providesTags: ["Books"],
 		}),
 		getBookReviews: builder.query<IReview[], string>({
 			query: (id) => `/books/${id}/reviews`,

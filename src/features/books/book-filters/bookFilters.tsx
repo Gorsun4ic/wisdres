@@ -1,14 +1,23 @@
+// Custom components
 import RangeSlider from "@components/range-slider";
-
-import { StyledBookFilters } from "./style";
 import ScrolledFilter from "./scrolled-filter";
 
-const BookFilters = ({ data }) => {
+// Custom styles
+import { StyledBookFilters } from "./style";
+
+interface IBookFilters {
+	authors: string[];
+	publishers: string[];
+	languages: string[];
+	pages: number[];
+}
+
+const BookFilters = ({ data }: {data: IBookFilters}) => {
 
 	return (
 		<StyledBookFilters>
 			<span>Filters</span>
-			<ScrolledFilter
+			<ScrolledFilter	
 				data={data.authors}
 				type="authors"
 				placeholder="Write authors name"

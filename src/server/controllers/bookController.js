@@ -39,12 +39,12 @@ export const getBookById = async (req, res) => {
 };
 
 export const getBooksByGenre = async (req, res) => {
-	const genreInput = req.params.genre.trim(); // Trim the genre input to avoid issues with spaces
-
+	const genreInput = req.params.genre; // Trim the genre input to avoid issues with spaces
+	console.log("Genre input", genreInput);
 	// Use case-insensitive search to ensure we handle different cases
 	try {
 		const foundGenre = await Genre.findOne({
-			title: { $regex: new RegExp(`^${genreInput}$`, "i") },
+			title: new RegExp(genreInput.trim(), "i"),
 		});
 
 		if (!foundGenre) {

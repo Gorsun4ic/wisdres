@@ -1,6 +1,6 @@
 import { IBookInfo } from "./bookInfo";
 import { IBookDetails } from "./bookDetails";
-import { IReview } from "./review";
+import IReview from "./review";
 
 export interface IBook {
 	_id?: string;

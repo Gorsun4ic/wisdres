@@ -1,20 +1,16 @@
+import { IAuthor } from "./author";
+import { IPublisher } from "./publisher";
+import { IGenre } from "./genre";
+import ILanguage from "./language";
+
 export interface IBookInfo {
 	img: string;
 	rating: number;
 	title: string;
-	genre: string[];
-	author: {
-		_id: string;
-		title: string;
-	};
-	publisher: {
-		_id: string;
-		title: string;
-	};
-	language: {
-		_id: string;
-		title: string;
-	};
+	genre: IGenre[];
+	author: IAuthor[];
+	publisher: IPublisher[];
+	language: ILanguage;
 	year: number;
 	pages: number;
 }
