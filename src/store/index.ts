@@ -11,6 +11,7 @@ import { apiLanguagesSlice } from "@api/apiLanguagesSlice";
 import { apiUsersSlice } from "@api/apiUsersSlice";
 import { apiSearchSlice } from "@api/apiSearchSlice";
 import { apiAdminsSlice } from "@api/apiAdminsSlice";
+import { apiFiltersSlice } from "@api/apiFilters";
 // Custom reducers
 import alertReducer from "@reducers/alert";
 import filtersReducer from "@reducers/filters";
@@ -26,6 +27,7 @@ export const store = configureStore({
 		[apiUsersSlice.reducerPath]: apiUsersSlice.reducer,
 		[apiSearchSlice.reducerPath]: apiSearchSlice.reducer,
 		[apiAdminsSlice.reducerPath]: apiAdminsSlice.reducer,
+		[apiFiltersSlice.reducerPath]: apiFiltersSlice.reducer,
 		alert: alertReducer,
 		filters: filtersReducer,
 
@@ -41,6 +43,7 @@ export const store = configureStore({
 			apiUsersSlice.middleware,
 			apiSearchSlice.middleware,
 			apiAdminsSlice.middleware,
+			apiFiltersSlice.middleware,
 		),
 });
 

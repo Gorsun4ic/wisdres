@@ -26,8 +26,11 @@ const ScrolledFilter = ({
 	const dispatch = useDispatch();
 	const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
-	const dataMap = new Map(data.map(([id, name]) => [id, name]));
-	const uniqueDataArr = Array.from(dataMap.entries());
+	useEffect(() => {
+		if (data) {
+			console.log("Data:", data);
+		}
+	}, [data]);
 
 	useEffect(() => {
 		switch (type) {
@@ -55,13 +58,15 @@ const ScrolledFilter = ({
 		);
 	};
 
-	const checkboxesList = uniqueDataArr.map((item) => {
+	if (!data) return;
+
+	const checkboxesList = data.map((item) => {
 		return (
 			<ListItem key={item[0]}>
 				<Checkbox
 					label={item[1]}
-					checked={checkedItems.includes(item[0])}
-					onChange={() => handleCheckboxChange(item[0])}
+					checked={checkedItems.includes(item)}
+					onChange={() => handleCheckboxChange(item)}
 				/>
 			</ListItem>
 		);
@@ -70,7 +75,7 @@ const ScrolledFilter = ({
 	return (
 		<StyledScrolledFilter className="scrolled-filter">
 			<span className="scrolled-filter__name">{title}</span>
-			{uniqueDataArr.length > 5 && <TextField placeholder={placeholder} />}
+			{data.length > 5 && <TextField placeholder={placeholder} />}
 			<List>{checkboxesList}</List>
 		</StyledScrolledFilter>
 	);

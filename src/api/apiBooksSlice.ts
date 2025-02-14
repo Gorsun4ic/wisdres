@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IBook } from "@custom-types/book";
 import { IBookInfo } from "@custom-types/bookInfo";
-import IReview  from "@custom-types/review";
+import IReview from "@custom-types/review";
 import { IBookDetails } from "@custom-types/bookDetails";
 
 export const apiBooksSlice = createApi({

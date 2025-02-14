@@ -1,7 +1,7 @@
 // filters.ts
 import { createSlice } from "@reduxjs/toolkit";
 
-interface IFilter {
+export interface IFilter {
 	sortBy: string;
 	filters: {
 		authors: string[] | [];

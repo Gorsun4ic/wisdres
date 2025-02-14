@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 // Custom components
 import RangeSlider from "@components/range-slider";
 import ScrolledFilter from "./scrolled-filter";
@@ -13,6 +15,13 @@ interface IBookFilters {
 }
 
 const BookFilters = ({ data }: {data: IBookFilters}) => {
+
+	
+	useEffect(() => {
+		if (data) {
+			console.log("Filter data:", data);
+		}
+	}, [data]);
 
 	return (
 		<StyledBookFilters>

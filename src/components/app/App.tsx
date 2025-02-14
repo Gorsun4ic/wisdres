@@ -28,7 +28,7 @@ const Admin = lazy(() => import("@pages/Admin/adminPage"));
 
 // Pages with info for specific item
 const BookPage = lazy(() => import("@pages/Book"));
-const GenrePage = lazy(() => import("@pages/Genre"));
+const GenrePage = lazy(() => import("@pages/Genre/genrePage"));
 const AuthorPage = lazy(() => import("@pages/Author"));
 
 // Pages with lists

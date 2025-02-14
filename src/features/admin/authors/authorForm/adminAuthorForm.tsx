@@ -87,7 +87,10 @@ const AdminAuthorForm = ({
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				addAuthor(data);
+				addAuthor({
+					...data,
+					img: data.info.img,
+				});
 				triggerAlert({
 					title: `The author ${data?.title} was successfully added`,
 					color: "success",
@@ -209,7 +212,7 @@ const AdminAuthorForm = ({
 					/>
 				</Grid2>
 			</Grid2>
-			<Button size="big" submit={true}>
+			<Button size="big" type="submit">
 				{mode === "edit" ? "Edit" : "Publish"}
 			</Button>
 		</StyledForm>
