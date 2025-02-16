@@ -62,6 +62,7 @@ export const updatePublisher = async (req, res) => {
 			new: true,
 			runValidators: true,
 		});
+		console.log("Updated publisher", req.body);
 		if (!updatedPublisher) {
 			return res.status(404).json({ error: "Publisher not found" });
 		}

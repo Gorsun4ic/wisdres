@@ -43,7 +43,7 @@ const FormField = <T extends Record<string, unknown>>({
 			}}
 			rows={rows}
 			type={type}
-			sx={{ width: "100%", borderColor: error ? "red" : null }}
+			sx={{ width: "100%", borderColor: error ? "red" : null, marginBottom: 2 }}
 		/>
 	);
 };

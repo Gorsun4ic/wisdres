@@ -78,7 +78,7 @@ const AdminPublishersSheet = () => {
 					<Modal open={open} onClose={handleClose}>
 						<PublisherForm
 							mode={formMode}
-							publisherId={publisherToEditId}
+							id={publisherToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>

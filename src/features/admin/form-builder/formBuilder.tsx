@@ -59,6 +59,11 @@ const FormBuilder = ({
 		}
 	}, [errors]);
 
+	useEffect(() => {
+		console.log("Mode", mode);
+		console.log("Id", id);
+	}, [mode, id]);
+
 	if (openDialog) {
 		return (
 			<ConfirmAction

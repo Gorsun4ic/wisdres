@@ -31,10 +31,10 @@ export const apiPublishersSlice = createApi({
 			invalidatesTags: ["Publishers"],
 		}),
 		updatePublisher: builder.mutation({
-			query: ({ id, updated }) => ({
+			query: ({ id, updates }) => ({
 				url: `/publishers/${id}`,
 				method: "PATCH",
-				body: updated,
+				body: updates,
 			}),
 			invalidatesTags: ["Publishers"],
 		}),

@@ -68,7 +68,7 @@ const AdminGrid = ({
 	};
 	// Handle change/edit click
 	const handleChangeClick = (rowData: IBook) => {
-		handleEdit("edit", rowData?.id);
+		handleEdit?.("edit", rowData?.id);
 	};
 
 	const handleId = (data: IBook[]) => {

@@ -20,6 +20,8 @@ export const useAdminForm = (
 		{ data: dataById, isLoading: isGettingById, error: getByIdError },
 	] = config.mutations.getById();
 
+	const [dataToEdit, setDataToEdit] = useState(null);
+
 	const form = useForm();
 	const triggerAlert = useAlert();
 
@@ -41,6 +43,19 @@ export const useAdminForm = (
 		}
 	}, [isSubmitSuccessful, addError]);
 
+	useEffect(() => {
+		if (id && mode === "edit") {
+			getById(id);
+		}
+	}, [id]);
+
+	useEffect(() => {
+		if (dataById) {
+			form.reset(dataById);
+		}
+	}, [dataById]);
+
+
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
@@ -48,6 +63,7 @@ export const useAdminForm = (
 				break;
 			case "edit":
 				setOpenDialog(true);
+				setDataToEdit(data);
 				break;
 			default:
 				console.warn(`Unknown mode: ${mode}`);
@@ -58,8 +74,9 @@ export const useAdminForm = (
 		if (confirm) {
 			updateMutation({
 				id,
-				updates: dataById,
+				updates: dataToEdit,
 			});
+			console.log("Data", dataToEdit);
 		}
 		setOpenDialog(false);
 	};
