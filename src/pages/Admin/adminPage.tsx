@@ -23,9 +23,9 @@ import hasPermission from "@utils/hasPermission";
 // Tab content
 import AdminBooksSheet from "@features/admin/books/adminBooksSheet";
 import AuthorsSheet from "@features/admin/authors/authorsSheet";
-import AdminPublishersSheet from "@features/admin/publishers/adminPublishersSheet";
-import AdminGenresSheet from "@features/admin/genres/adminGenresSheet";
-import AdminLanguagesSheet from "@features/admin/languages/adminLanguagesSheet";
+import PublishersSheet from "@features/admin/publishers/publishersSheet";
+import GenresSheet from "@features/admin/genres/genresSheet";
+import LanguagesSheet from "@features/admin/languages/languagesSheet";
 import AdminUsersSheet from "@features/admin/users/adminUsersSheet";
 import AdminAdminsSheet from "@features/admin/admins/adminAdminsSheet";
 
@@ -114,13 +114,13 @@ const Admin = () => {
 					<AuthorsSheet />
 				</TabPanel>
 				<TabPanel value="3">
-					<AdminPublishersSheet />
+					<PublishersSheet />
 				</TabPanel>
 				<TabPanel value="4">
-					<AdminGenresSheet />
+					<GenresSheet />
 				</TabPanel>
 				<TabPanel value="5">
-					<AdminLanguagesSheet />
+					<LanguagesSheet />
 				</TabPanel>
 				{/* <TabPanel value="6">
 					<AdminUsersSheet />

@@ -1,15 +1,20 @@
-import { AdminFormConfig } from "@custom-types/adminFormConfig";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+
+import { AdminConfig } from "@custom-types/adminFormConfig";
 
 import {
 	useAddPublisherMutation,
 	useUpdatePublisherMutation,
 	useLazyGetPublisherByIdQuery,
+	useDeletePublisherMutation,
+	useGetPublishersQuery,
 } from "@api/apiPublishersSlice";
 
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 
-export const publisherFormConfig: AdminFormConfig = {
+export const publisherConfig: AdminConfig = {
 	entityName: "publisher",
+	icon: <NewspaperIcon />,
 	fields: [
 		{
 			name: "img",
@@ -45,9 +50,29 @@ export const publisherFormConfig: AdminFormConfig = {
 			},
 		},
 	],
+	columns: [
+		{
+			field: "img",
+			headerName: "Image",
+			width: 80,
+			renderCell: (params: {value: string}) => <img src={params.value} width="40" />,
+		},
+		{
+			field: "title",
+			headerName: "Title",
+			width: 150,
+		},
+		{
+			field: "about",
+			headerName: "About",
+			width: 150,
+		},
+	],
 	mutations: {
 		add: useAddPublisherMutation,
 		update: useUpdatePublisherMutation,
 		getById: useLazyGetPublisherByIdQuery,
+		delete: useDeletePublisherMutation,
+		getAll: useGetPublishersQuery,
 	},
 };

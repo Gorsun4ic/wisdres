@@ -1,15 +1,20 @@
-import { AdminFormConfig } from "@custom-types/adminFormConfig";
+import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
+
+import { AdminConfig } from "@custom-types/adminFormConfig";
 
 import {
 	useAddGenreMutation,
 	useUpdateGenreMutation,
 	useLazyGetGenreByIdQuery,
+	useDeleteGenreMutation,
+	useGetGenresQuery,
 } from "@api/apiGenresSlice";
 
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 
-export const genreFormConfig: AdminFormConfig = {
+export const genreConfig: AdminConfig = {
 	entityName: "genre",
+	icon: <TheaterComedyIcon />,
 	fields: [
 		{
 			name: "img",
@@ -33,11 +38,25 @@ export const genreFormConfig: AdminFormConfig = {
 				required: "Name is required",
 				minLength: 1,
 			},
-		}
+		},
+	],
+	columns: [		{
+			field: "img",
+			headerName: "Image",
+			width: 80,
+			renderCell: (params: {value: string}) => <img src={params.value} width="40" />,
+		},
+		{
+			field: "title",
+			headerName: "Title",
+			width: 150,
+		},
 	],
 	mutations: {
 		add: useAddGenreMutation,
 		update: useUpdateGenreMutation,
 		getById: useLazyGetGenreByIdQuery,
+		delete: useDeleteGenreMutation,
+		getAll: useGetGenresQuery,
 	},
 };

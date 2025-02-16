@@ -1,13 +1,17 @@
-import { AdminFormConfig } from "@custom-types/adminFormConfig";
+import LanguageIcon from "@mui/icons-material/Language";
+import { AdminConfig } from "@custom-types/adminFormConfig";
 
 import {
 	useAddLanguageMutation,
 	useUpdateLanguageMutation,
 	useLazyGetLanguageByIdQuery,
+	useDeleteLanguageMutation,
+	useGetLanguagesQuery,
 } from "@api/apiLanguagesSlice";
 
-export const languageFormConfig: AdminFormConfig = {
+export const languageConfig: AdminConfig = {
 	entityName: "language",
+	icon: <LanguageIcon />,
 	fields: [
 		{
 			name: "title",
@@ -19,9 +23,18 @@ export const languageFormConfig: AdminFormConfig = {
 			},
 		},
 	],
+	columns: [
+		{
+			field: "title",
+			headerName: "Title",
+			width: 150,
+		},
+	],
 	mutations: {
 		add: useAddLanguageMutation,
 		update: useUpdateLanguageMutation,
 		getById: useLazyGetLanguageByIdQuery,
+		delete: useDeleteLanguageMutation,
+		getAll: useGetLanguagesQuery,
 	},
 };
