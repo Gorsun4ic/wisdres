@@ -17,6 +17,7 @@ import {
 
 import AdminGrid from "@features/admin/grid-data";
 import AdminPublisherForm from "./publisherForm/adminPublisherForm";
+import PublisherForm from "./publisherForm/publisherForm";
 
 import Modal from "@components/modal";
 import Button from "@components/button";
@@ -75,7 +76,7 @@ const AdminPublishersSheet = () => {
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminPublisherForm
+						<PublisherForm
 							mode={formMode}
 							publisherId={publisherToEditId}
 							openModal={setOpen}
@@ -93,7 +94,7 @@ const AdminPublishersSheet = () => {
 					columns={gridColumns}
 				/>
 			</ErrorBoundary>
-			{alert && <Alert severity={alert.color}>{alert.title}</Alert>}
+			{(alert && alert.place === "sheet") && <Alert severity={alert.color}>{alert.title}</Alert>}
 		</StyledAdminPublishersSheet>
 	);
 };

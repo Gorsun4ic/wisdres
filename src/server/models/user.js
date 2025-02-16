@@ -27,7 +27,7 @@ const ROLES = {
 		"delete:reviews",
 		"manage:users",
 		"manage:reviews",
-		"view:analytics",
+		"view:admin_panel",
 	],
 	SUPER_ADMIN: [
 		"view:books",

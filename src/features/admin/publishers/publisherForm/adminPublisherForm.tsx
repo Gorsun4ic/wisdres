@@ -12,7 +12,7 @@ import {
 // Custom hooks
 import useAlert from "@hooks/useAlert";
 import useWatchImg from "@hooks/useWatchImg";
-import useHandleAdminForm from "@hooks/useAdminForm";
+import { useAdminForm } from "@hooks/useAdminForm";
 
 // Custom components
 import Button from "@components/button";
@@ -48,27 +48,24 @@ const AdminPublisherForm = ({
 		formState: { errors, isSubmitSuccessful },
 	} = useForm<FormFields>();
 
-	const [addPublisher, { isLoading: isAdding, error: addError }] =
-		useAddPublisherMutation();
-	const [updatePublisher] = useUpdatePublisherMutation();
-	const [getPublisherById, { data: publisherData, isLoading, error }] =
-		useLazyGetPublisherByIdQuery();
+		const {addMutation, updateMutation, getById, dataById, isAdding, addError, isGettingById, getByIdError} = useCRUAdmin({
+			useAddMutation: useAddPublisherMutation,
+			useUpdateMutation: useUpdatePublisherMutation,
+			useLazyGetByIdQuery: useLazyGetPublisherByIdQuery,
+		})
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [dataToEdit, setDataToEdit] = useState<FormFields | null>(null);
 	const triggerAlert = useAlert();
 	const { onEditMode, defineFormTitle, showTheDifference } = useHandleAdminForm(
 		{ mode, triggerAlert, reset }
 	);
-	const formTitle = defineFormTitle({
-		onEdit: `Edit ${publisherData?.title || null} publisher`,
-		onAdd: "Add new publisher",
-	});
+	const formTitle = defineFormTitle("publisher");
 
-	const { isValidImageType, img, imgTypeError } = useWatchImg(watch);
+	const { img, imgTypeError } = useWatchImg(watch);
 
 	useEffect(() => {
-		onEditMode(publisherId, getPublisherById, publisherData);
-	}, [publisherId, mode, publisherData]);
+		onEditMode(publisherId, getById, dataById);
+	}, [publisherId, mode, dataById]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) reset();
@@ -77,7 +74,7 @@ const AdminPublisherForm = ({
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				addPublisher(data);
+				addMutation(data);
 				triggerAlert({
 					title: `The publisher ${data?.title} was successfully added`,
 					color: "success",
@@ -94,13 +91,13 @@ const AdminPublisherForm = ({
 
 	const handleEdit = (confirm: boolean) => {
 		if (confirm) {
-			updatePublisher({
+			updateMutation({
 				id: publisherId,
 				updates: dataToEdit,
 			});
 			openModal(false);
 			triggerAlert({
-				title: `The publisher ${publisherData?.title} was successfully changed`,
+				title: `The publisher ${dataById?.title} was successfully changed`,
 				color: "success",
 			});
 		}
@@ -108,7 +105,7 @@ const AdminPublisherForm = ({
 	};
 
 	const changedInfo = () => {
-		const differences = showTheDifference(publisherData, dataToEdit);
+		const differences = showTheDifference(dataById, dataToEdit);
 
 		// Handle case when there are no differences
 		if (!differences || differences.length === 0) {
@@ -129,9 +126,7 @@ const AdminPublisherForm = ({
 	if (openDialog) {
 		return (
 			<ConfirmAction
-				title={`Are you confirm to change the ${
-					publisherData.title || null
-				} info?`}
+				title={`Are you confirm to change the ${dataById.title || null} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>
@@ -140,9 +135,9 @@ const AdminPublisherForm = ({
 		);
 	}
 
-	if (isLoading || isAdding) {
+	if (isGettingById || isAdding) {
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
-	} else if (error || addError) {
+	} else if (getByIdError || addError) {
 		return <ErrorMessage />;
 	}
 
@@ -204,7 +199,7 @@ const AdminPublisherForm = ({
 					/>
 				</Grid2>
 			</Grid2>
-			<Button size="big" submit={true}>
+			<Button size="big" type="submit">
 				{mode === "edit" ? "Edit" : "Publish"}
 			</Button>
 		</StyledForm>

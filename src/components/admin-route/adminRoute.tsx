@@ -22,6 +22,8 @@ const AdminRoute = () => {
 	useEffect(() => {
 		if (!isLoading && userData?.user) {
 			const hasAccess = hasPermission(userData.user, "view:admin_panel");
+			console.log(hasAccess);
+			console.log(userData.user);
 			setHasAdminAccess(hasAccess);
 			setAccessChecked(true);
 

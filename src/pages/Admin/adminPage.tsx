@@ -61,7 +61,7 @@ const Admin = () => {
 		<StyledAdminPanel className="admin-panel">
 			<TabContext value={value}>
 				<Tabs value={value} onChange={handleChange}>
-					<Tab
+					{/* <Tab
 						icon={<LibraryBooksIcon />}
 						iconPosition="start"
 						label="Books"
@@ -72,14 +72,14 @@ const Admin = () => {
 						iconPosition="start"
 						label="Authors"
 						value="2"
-					/>
+					/> */}
 					<Tab
 						icon={<NewspaperIcon />}
 						iconPosition="start"
 						label="Publishers"
 						value="3"
 					/>
-					<Tab
+					{/* <Tab
 						icon={<TheaterComedyIcon />}
 						iconPosition="start"
 						label="Genres"
@@ -103,20 +103,20 @@ const Admin = () => {
 							iconPosition="start"
 							label="Admins"
 							value="7"
-						/>
-					)}
+						/> */}
+					{/* )} */}
 				</Tabs>
-				<TabPanel value="1">
+				{/* <TabPanel value="1">
 					<AdminBooksSheet />
 
 				</TabPanel>
 				<TabPanel value="2">
 					<AdminAuthorsSheet />
-				</TabPanel>
+				</TabPanel> */}
 				<TabPanel value="3">
 					<AdminPublishersSheet />
 				</TabPanel>
-				<TabPanel value="4">
+				{/* <TabPanel value="4">
 					<AdminGenresSheet />
 				</TabPanel>
 				<TabPanel value="5">
@@ -127,7 +127,7 @@ const Admin = () => {
 				</TabPanel>
 				<TabPanel value="7">
 					<AdminAdminsSheet />
-				</TabPanel>
+				</TabPanel> */}
 			</TabContext>
 		</StyledAdminPanel>
 

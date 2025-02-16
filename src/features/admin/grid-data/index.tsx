@@ -58,6 +58,7 @@ const AdminGrid = ({
 			triggerAlert({
 				title: `The ${selectedInfo?.info?.title} was successfully deleted`,
 				color: "success",
+				place: "sheet",
 			});
 		}
 		setOpenDialog(false);

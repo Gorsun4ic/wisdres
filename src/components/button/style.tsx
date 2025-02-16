@@ -44,7 +44,7 @@ export const StyledButton = styled(Button)<StyledButtonProps>`
 	&& {
 		min-height: ${({ size }) => (size === "big" ? "48px" : "36px")};
 		padding: ${({ size }) => (size === "big" ? "8px 32px" : "4px 16px")};
-		font-size: ${({ size }) => (size === "big" ? "16px" : "14px")};
+		font-size: 16px;
 		font-weight: 500;
 		line-height: 1.5;
 		letter-spacing: 0.3px;

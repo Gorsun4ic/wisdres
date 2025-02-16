@@ -32,7 +32,7 @@ const FormField = <T extends Record<string, unknown>>({
 		<TextField
 			{...register(name, validation)} // Spread the register function's returned object
 			placeholder={placeholder}
-			error={!!error}
+			error={error}
 			helperText={error}
 			multiline={multiline}
 			slotProps={{
