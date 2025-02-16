@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
 
-import { AdminFormConfig } from "@custom-types/adminFormConfig";
+import { AdminConfig } from "@custom-types/adminFormConfig";
 
 import { findDifferenceObjs } from "@utils/findDiffObjs";
 
 import useAlert from "./useAlert";
 
 export const useAdminForm = (
-	config: AdminFormConfig,
+	config: AdminConfig,
 	mode: "add" | "edit",
 	id?: string
 ) => {

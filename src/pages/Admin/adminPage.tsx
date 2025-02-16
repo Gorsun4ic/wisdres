@@ -22,7 +22,7 @@ import hasPermission from "@utils/hasPermission";
 
 // Tab content
 import AdminBooksSheet from "@features/admin/books/adminBooksSheet";
-import AdminAuthorsSheet from "@features/admin/authors/adminAuthorsSheet";
+import AuthorsSheet from "@features/admin/authors/authorsSheet";
 import AdminPublishersSheet from "@features/admin/publishers/adminPublishersSheet";
 import AdminGenresSheet from "@features/admin/genres/adminGenresSheet";
 import AdminLanguagesSheet from "@features/admin/languages/adminLanguagesSheet";
@@ -103,15 +103,15 @@ const Admin = () => {
 							iconPosition="start"
 							label="Admins"
 							value="7"
-						/> 
-					 )}
+						/>
+					)}
 				</Tabs>
 				{/* <TabPanel value="1">
 					<AdminBooksSheet />
 
 				</TabPanel> */}
 				<TabPanel value="2">
-					<AdminAuthorsSheet />
+					<AuthorsSheet />
 				</TabPanel>
 				<TabPanel value="3">
 					<AdminPublishersSheet />
@@ -130,7 +130,6 @@ const Admin = () => {
 				</TabPanel>
 			</TabContext>
 		</StyledAdminPanel>
-
 	);
 };
 

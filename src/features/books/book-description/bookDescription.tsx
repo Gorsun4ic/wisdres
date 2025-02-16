@@ -64,12 +64,6 @@ const BookDescription = () => {
 						<p>{bookInfo.details.auditory}</p>
 					</Grid>
 				)}
-				{bookInfo.info.author && (
-					<Grid size={6}>
-						<h3>About author</h3>
-						<p>{bookInfo.info.author[0].about}</p>
-					</Grid>
-				)}
 			</Grid>
 		</StyledBookDescription>
 	);

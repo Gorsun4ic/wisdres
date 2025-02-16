@@ -1,15 +1,20 @@
-import { AdminFormConfig } from "@custom-types/adminFormConfig";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+
+import { AdminConfig } from "@custom-types/adminFormConfig";
 
 import {
 	useAddAuthorMutation,
 	useUpdateAuthorMutation,
 	useLazyGetAuthorByIdQuery,
+	useDeleteAuthorMutation,
+	useGetAuthorsQuery,
 } from "@api/apiAuthorsSlice";
 
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 
-export const authorFormConfig: AdminFormConfig = {
+export const authorConfig: AdminConfig = {
 	entityName: "author",
+	icon: <RecentActorsIcon />,
 	fields: [
 		{
 			name: "img",
@@ -45,9 +50,29 @@ export const authorFormConfig: AdminFormConfig = {
 			},
 		},
 	],
+	columns: [
+		{
+			field: "img",
+			headerName: "Image",
+			width: 80,
+			renderCell: (params: { value: string }) => <img src={params.value} width="40" />,
+		},
+		{
+			field: "title",
+			headerName: "Title",
+			width: 150,
+		},
+		{
+			field: "about",
+			headerName: "About",
+			width: 150,
+		},
+	],
 	mutations: {
 		add: useAddAuthorMutation,
 		update: useUpdateAuthorMutation,
 		getById: useLazyGetAuthorByIdQuery,
+		delete: useDeleteAuthorMutation,
+		getAll: useGetAuthorsQuery,
 	},
 };
