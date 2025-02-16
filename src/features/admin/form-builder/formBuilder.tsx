@@ -21,6 +21,7 @@ import useWatchImg from "@hooks/useWatchImg";
 import FormField from "@components/formField";
 import Button from "@components/button";
 import ConfirmAction from "@components/confirmAction";
+import ChangedInfo from "@components/changedInfo/changedInfo";
 
 import { StyledForm } from "./style";
 
@@ -33,7 +34,7 @@ const FormBuilder = ({
 	mode: "add" | "edit";
 	id?: string;
 }) => {
-	const { onSubmit, openDialog, handleEdit, dataById, form } = useAdminForm(
+	const { onSubmit, openDialog, handleEdit, dataById, form, differences } = useAdminForm(
 		config,
 		mode,
 		id
@@ -59,11 +60,6 @@ const FormBuilder = ({
 		}
 	}, [errors]);
 
-	useEffect(() => {
-		console.log("Mode", mode);
-		console.log("Id", id);
-	}, [mode, id]);
-
 	if (openDialog) {
 		return (
 			<ConfirmAction
@@ -71,7 +67,7 @@ const FormBuilder = ({
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>
-				{/* {changedInfo()} */}
+				<ChangedInfo differences={differences} />
 			</ConfirmAction>
 		);
 	}

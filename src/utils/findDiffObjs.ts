@@ -1,23 +1,34 @@
-type Difference<T> = {
-	[K in keyof T]?: {
-		from: T[K];
-		to: T[K];
-	};
+export type Difference<T> = {
+	[K in keyof T]?: T[K] extends object
+		? Difference<T[K]> | { from: T[K]; to: T[K] }
+		: { from: T[K]; to: T[K] };
 };
 
-const findDifferenceObjs = <T extends object>(
+export const findDifferenceObjs = <T extends object>(
 	obj1: T,
 	obj2: T
 ): Difference<T> => {
-	if (obj1 && obj2) {
-		return (Object.keys(obj1) as Array<keyof T>).reduce((differences, key) => {
-			if (obj1[key] !== obj2[key]) {
-				differences[key] = { from: obj1[key], to: obj2[key] };
+	if (!obj1 || !obj2) return {} as Difference<T>;
+
+	const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]) as Set<
+		keyof T
+	>;
+
+	return [...allKeys].reduce((differences, key) => {
+		const val1 = obj1[key];
+		const val2 = obj2[key];
+
+		if (typeof val1 === "object" && typeof val2 === "object" && val1 && val2) {
+			// Recursively check nested objects
+			const nestedDiff = findDifferenceObjs(val1, val2);
+			if (Object.keys(nestedDiff).length) {
+				differences[key] = nestedDiff;
 			}
-			return differences;
-		}, {} as Difference<T>);
-	}
-	return {};
+		} else if (val1 !== val2) {
+			differences[key] = { from: val1, to: val2 };
+		}
+
+		return differences;
+	}, {} as Difference<T>);
 };
 
-export default findDifferenceObjs;

@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 
 import { AdminFormConfig } from "@custom-types/adminFormConfig";
 
+import { findDifferenceObjs } from "@utils/findDiffObjs";
+
 import useAlert from "./useAlert";
 
 export const useAdminForm = (
@@ -31,6 +33,7 @@ export const useAdminForm = (
 
 	// Dialog state
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [differences, setDifferences] = useState(null);
 
 	useEffect(() => {
 		if (isSubmitSuccessful && !addError) {
@@ -64,6 +67,7 @@ export const useAdminForm = (
 			case "edit":
 				setOpenDialog(true);
 				setDataToEdit(data);
+				setDifferences(findDifferenceObjs(dataById, data));
 				break;
 			default:
 				console.warn(`Unknown mode: ${mode}`);
@@ -87,5 +91,6 @@ export const useAdminForm = (
 		handleEdit,
 		dataById,
 		form,
+		differences,
 	};
 };
