@@ -47,6 +47,9 @@ export const useAdminForm = (
 	}, [isSubmitSuccessful, addError]);
 
 	useEffect(() => {
+		if (id) {
+			console.log("id", id);
+		}
 		if (id && mode === "edit") {
 			getById(id);
 		}
@@ -54,6 +57,7 @@ export const useAdminForm = (
 
 	useEffect(() => {
 		if (dataById) {
+			console.log("dataById", dataById);
 			form.reset(dataById);
 		}
 	}, [dataById]);
@@ -80,7 +84,7 @@ export const useAdminForm = (
 				id,
 				updates: dataToEdit,
 			});
-			console.log("Data", dataToEdit);
+			form.reset(dataToEdit);
 		}
 		setOpenDialog(false);
 	};

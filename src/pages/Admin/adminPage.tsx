@@ -66,20 +66,20 @@ const Admin = () => {
 						iconPosition="start"
 						label="Books"
 						value="1"
-					/>
+					/> */}
 					<Tab
 						icon={<RecentActorsIcon />}
 						iconPosition="start"
 						label="Authors"
 						value="2"
-					/> */}
+					/>
 					<Tab
 						icon={<NewspaperIcon />}
 						iconPosition="start"
 						label="Publishers"
 						value="3"
 					/>
-					{/* <Tab
+					<Tab
 						icon={<TheaterComedyIcon />}
 						iconPosition="start"
 						label="Genres"
@@ -103,31 +103,31 @@ const Admin = () => {
 							iconPosition="start"
 							label="Admins"
 							value="7"
-						/> */}
-					{/* )} */}
+						/> 
+					 )}
 				</Tabs>
 				{/* <TabPanel value="1">
 					<AdminBooksSheet />
 
-				</TabPanel>
+				</TabPanel> */}
 				<TabPanel value="2">
 					<AdminAuthorsSheet />
-				</TabPanel> */}
+				</TabPanel>
 				<TabPanel value="3">
 					<AdminPublishersSheet />
 				</TabPanel>
-				{/* <TabPanel value="4">
+				<TabPanel value="4">
 					<AdminGenresSheet />
 				</TabPanel>
 				<TabPanel value="5">
 					<AdminLanguagesSheet />
 				</TabPanel>
-				<TabPanel value="6">
+				{/* <TabPanel value="6">
 					<AdminUsersSheet />
-				</TabPanel>
+				</TabPanel> */}
 				<TabPanel value="7">
 					<AdminAdminsSheet />
-				</TabPanel> */}
+				</TabPanel>
 			</TabContext>
 		</StyledAdminPanel>
 

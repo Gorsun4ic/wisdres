@@ -13,7 +13,7 @@ import Alert from "@mui/material/Alert";
 import { useGetAuthorsQuery, useDeleteAuthorMutation } from "@api/apiAuthorsSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminAuthorForm from "@features/admin/authors/authorForm/adminAuthorForm";
+import AuthorForm from "./authorForm/authorForm";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
@@ -71,9 +71,9 @@ const AdminAuthorsSheet = () => {
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminAuthorForm
+						<AuthorForm
 							mode={formMode}
-							authorId={authorToEditId}
+							id={authorToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>

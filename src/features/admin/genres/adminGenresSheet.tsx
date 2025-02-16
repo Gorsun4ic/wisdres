@@ -13,7 +13,7 @@ import Alert from "@mui/material/Alert";
 import {useGetGenresQuery, useDeleteGenreMutation} from "@api/apiGenresSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminGenreForm from "./genresForm/adminGenresForm";
+import GenresForm from "./genresForm/genresForm";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
@@ -66,9 +66,9 @@ const AdminGenresSheet = () => {
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminGenreForm
+						<GenresForm
 							mode={formMode}
-							genreId={genreToEditId}
+							id={genreToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>

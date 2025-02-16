@@ -16,7 +16,6 @@ import {
 } from "@api/apiPublishersSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminPublisherForm from "./publisherForm/adminPublisherForm";
 import PublisherForm from "./publisherForm/publisherForm";
 
 import Modal from "@components/modal";

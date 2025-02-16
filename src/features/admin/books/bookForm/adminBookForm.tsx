@@ -27,8 +27,7 @@ import ErrorMessage from "@components/error";
 import SelectCheckboxes from "@components/selectCheckboxes";
 import AutoCompleteField from "@components/autoCompleteField";
 
-import ChangedInfo from "@features/admin/changedInfo";
-
+import ChangedInfo from "@components/changedInfo/changedInfo";
 import { StyledForm } from "./style";
 import { IBookInfo } from "@custom-types/book";
 

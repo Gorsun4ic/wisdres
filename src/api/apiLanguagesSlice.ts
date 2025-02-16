@@ -31,10 +31,10 @@ export const apiLanguagesSlice = createApi({
 			invalidatesTags: ["Languages"],
 		}),
 		updateLanguage: builder.mutation({
-			query: ({ id, updated }) => ({
+			query: ({ id, updates }) => ({
 				url: `/languages/${id}`,
 				method: "PATCH",
-				body: updated,
+				body: updates,
 			}),
 			invalidatesTags: ["Languages"],
 		}),

@@ -52,18 +52,24 @@ const BookDescription = () => {
 		<StyledBookDescription className="book-details">
 			<h2>What is the book about</h2>
 			<Grid container spacing={6} rowSpacing={6}>
-				<Grid size={6}>
-					<h3>About the book</h3>
-					<p>{bookInfo.details.book}</p>
-				</Grid>
-				<Grid size={6}>
-					<h3>Who this book is for</h3>
-					<p>{bookInfo.details.auditory}</p>
-				</Grid>
-				<Grid size={6}>
-					<h3>About author</h3>
-					<p>{bookInfo.info.author[0].about}</p>
-				</Grid>
+				{bookInfo.details.book && (
+					<Grid size={6}>
+						<h3>About the book</h3>
+						<p>{bookInfo.details.book}</p>
+					</Grid>
+				)}
+				{bookInfo.details.auditory && (
+					<Grid size={6}>
+						<h3>Who this book is for</h3>
+						<p>{bookInfo.details.auditory}</p>
+					</Grid>
+				)}
+				{bookInfo.info.author && (
+					<Grid size={6}>
+						<h3>About author</h3>
+						<p>{bookInfo.info.author[0].about}</p>
+					</Grid>
+				)}
 			</Grid>
 		</StyledBookDescription>
 	);

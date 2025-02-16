@@ -31,10 +31,10 @@ export const apiGenresSlice = createApi({
 			invalidatesTags: ["Genres"],
 		}),
 		updateGenre: builder.mutation({
-			query: ({ id, updated }) => ({
+			query: ({ id, updates }) => ({
 				url: `/genres/${id}`,
 				method: "PATCH",
-				body: updated,
+				body: updates,
 			}),
 			invalidatesTags: ["Genres"],
 		}),

@@ -16,7 +16,7 @@ import {
 } from "@api/apiLanguagesSlice";
 
 import AdminGrid from "@features/admin/grid-data";
-import AdminLanguageForm from "@features/admin/languages/languageForm/adminLanguageForm";
+import LanguageForm from "./languageForm/languageForm";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
@@ -63,9 +63,9 @@ const AdminLanguagesSheet = () => {
 				</Button>
 				<ErrorBoundary fallback={<ErrorMessage />}>
 					<Modal open={open} onClose={handleClose}>
-						<AdminLanguageForm
+						<LanguageForm
 							mode={formMode}
-							languageId={languageToEditId}
+							id={languageToEditId}
 							openModal={setOpen}
 						/>
 					</Modal>

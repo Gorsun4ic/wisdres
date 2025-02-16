@@ -60,6 +60,12 @@ const FormBuilder = ({
 		}
 	}, [errors]);
 
+	useEffect(() => {
+		if (dataById) {
+			console.log("dataById", dataById);
+		}
+	}, [dataById]);
+
 	if (openDialog) {
 		return (
 			<ConfirmAction
