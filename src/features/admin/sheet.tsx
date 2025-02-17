@@ -51,9 +51,11 @@ const Sheet = ({
 			</Stack>
 
 			<ErrorBoundary fallback={<ErrorMessage />}>
-				<Modal open={open} onClose={handleClose}>
-					<FormBuilder config={config} mode={formMode} id={toEditId} />
-				</Modal>
+				{config.fields && (
+					<Modal open={open} onClose={handleClose}>
+						<FormBuilder config={config} mode={formMode} id={toEditId} />
+					</Modal>
+				)}
 
 				<GridData
 					handleEdit={handleOpen}
@@ -62,6 +64,8 @@ const Sheet = ({
 					error={error}
 					onDelete={handleDelete}
 					columns={config.columns}
+					deleteButton={config.deleteButton || true}
+					changeButton={config.changeButton || true}
 				/>
 			</ErrorBoundary>
 

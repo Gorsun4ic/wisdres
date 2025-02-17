@@ -13,6 +13,8 @@ interface AdminGridProps<T> {
 	columns: GridColDef[];
 	data: T[];
 	onDelete: (id: string, title: string) => Promise<void>;
+	deleteButton?: boolean;
+	changeButton?: boolean;
 	error: unknown;
 	columnVisibilityModel?: GridColDef[];
 }
@@ -24,6 +26,8 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 	error,
 	onDelete,
 	columns,
+	deleteButton,
+	changeButton,
 	columnVisibilityModel,
 }: AdminGridProps<T>) => {
 	const {
@@ -41,7 +45,7 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
 	if (error) return <ErrorMessage />;
 
-	const actionColumns: GridColDef[] = [
+	const deleteColumn: GridColDef[] = [
 		{
 			field: "delete",
 			headerName: "Delete",
@@ -56,6 +60,9 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 				</Tooltip>
 			),
 		},
+	];
+
+	const changeColumn: GridColDef[] = [
 		{
 			field: "change",
 			headerName: "Change",
@@ -76,7 +83,11 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 		<>
 			<DataGrid
 				rows={items}
-				columns={[...columns, ...actionColumns]}
+				columns={[
+					...columns,
+					...(deleteButton ? deleteColumn : []),
+					...(changeButton ? changeColumn : []),
+				]}
 				columnVisibilityModel={columnVisibilityModel}
 				initialState={{
 					pagination: { paginationModel: { pageSize: 15 } },

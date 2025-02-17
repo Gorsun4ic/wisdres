@@ -16,14 +16,19 @@ export interface FormFieldConfig {
 
 export interface AdminConfig {
 	entityName: string; // 'publisher', 'author', 'book'
-	fields: FormFieldConfig[];
+	fields?: FormFieldConfig[];
 	icon: React.ReactNode;
 	columns: GridColDef[];
+	deleteButton?: boolean;
+	changeButton?: boolean;
+	successChangeUserStatus?: string;
+	failChangeUserStatus?: string;
 	mutations: {
-		add: typeof fetchBaseQuery; // RTK Query mutation
-		update: typeof fetchBaseQuery; // RTK Query mutation
-		getById: typeof fetchBaseQuery; // RTK Query query
-		delete: typeof fetchBaseQuery; // RTK Query mutation
+		add?: typeof fetchBaseQuery; // RTK Query mutation
+		update?: typeof fetchBaseQuery; // RTK Query mutation
+		getById?: typeof fetchBaseQuery; // RTK Query query
+		delete?: typeof fetchBaseQuery; // RTK Query mutation
 		getAll: typeof fetchBaseQuery; // RTK Query query
+		changeUserStatus?: typeof fetchBaseQuery; // RTK Query mutation
 	};
 }

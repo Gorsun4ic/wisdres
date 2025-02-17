@@ -35,7 +35,7 @@ export const promoteToAdmin = async (req, res) => {
 			return res.status(404).json({ error: "User not found" });
 		}
 		if (user.role.some(role => role !== "USER")) {
-			return res.status(400).json({ error: `User is already an ${user.role}. Here is user object:`, user });
+			return res.status(400).json({ error: `User is already an ${user.role}.`});
 		}
 		user.role = "ADMIN";
 		await user.save();

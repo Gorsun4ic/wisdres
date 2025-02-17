@@ -26,8 +26,8 @@ import AuthorsSheet from "@features/admin/authors/authorsSheet";
 import PublishersSheet from "@features/admin/publishers/publishersSheet";
 import GenresSheet from "@features/admin/genres/genresSheet";
 import LanguagesSheet from "@features/admin/languages/languagesSheet";
-import AdminUsersSheet from "@features/admin/users/adminUsersSheet";
-import AdminAdminsSheet from "@features/admin/admins/adminAdminsSheet";
+import UsersSheet from "@features/admin/users/usersSheet";
+import AdminsSheet from "@features/admin/admins/adminsSheet";
 
 import { StyledAdminPanel } from "./style";
 
@@ -122,11 +122,11 @@ const Admin = () => {
 				<TabPanel value="5">
 					<LanguagesSheet />
 				</TabPanel>
-				{/* <TabPanel value="6">
-					<AdminUsersSheet />
-				</TabPanel> */}
+				<TabPanel value="6">
+					<UsersSheet />
+				</TabPanel>
 				<TabPanel value="7">
-					<AdminAdminsSheet />
+					<AdminsSheet />
 				</TabPanel>
 			</TabContext>
 		</StyledAdminPanel>
