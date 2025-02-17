@@ -20,7 +20,7 @@ const BookFormData = () => {
 			data: genres || [],
 			isLoading: isLoadingGenres,
 		},
-		"info.Author": {
+		"info.author": {
 			data: authors || [],
 			isLoading: isLoadingAuthors,
 		},

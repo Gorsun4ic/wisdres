@@ -50,11 +50,14 @@ export const booksConfig: AdminConfig = {
 		{
 			name: "info.genre",
 			label: "Genres",
-			type: "selectCheckboxes",
+			type: "autoComplete",
+			rules: {
+				required: "Genres are required",
+			},
 			data: useGetGenresQuery,
 		},
 		{
-			name: "info.Author",
+			name: "info.author",
 			label: "Author",
 			type: "autoComplete",
 			rules: {
@@ -66,6 +69,7 @@ export const booksConfig: AdminConfig = {
 			name: "info.publisher",
 			label: "Publisher",
 			type: "autoComplete",
+			multiple: false,
 			rules: {
 				required: "Publisher is required",
 			},
@@ -75,6 +79,7 @@ export const booksConfig: AdminConfig = {
 			name: "info.language",
 			label: "Language",
 			type: "autoComplete",
+			multiple: false,
 			rules: {
 				required: "Language is required",
 			},
@@ -156,8 +161,8 @@ export const booksConfig: AdminConfig = {
 			headerName: "Author",
 			width: 150,
 			renderCell: (params) => {
-				return params.value.map((author: IAuthor) => {
-					return params.value && <Link to={`/author/${author._id}`}>{author.title}</Link> || "Unknown Author";
+				return params.value.map((author: IAuthor, index:number, arr: IAuthor[]) => {
+					return params.value && <Link to={`/author/${author._id}`}>{author.title}{index < arr.length - 1 ? ", " : ""}</Link> || "Unknown Author";
 				});
 			},
 		},
@@ -174,8 +179,8 @@ export const booksConfig: AdminConfig = {
 			headerName: "Genres",
 			width: 150,
 			renderCell: (params) => {
-				return params.value.map((genre: IGenre) => {
-					return params.value && <Link to={`/genre/${genre._id}`}>{genre.title}</Link> || "Unknown Genre";
+				return params.value.map((genre: IGenre, index:number, arr: IGenre[]) => {
+					return params.value && <Link to={`/genre/${genre._id}`}>{genre.title}{index < arr.length - 1 ? ", " : ""}</Link> || "Unknown Genre";
 				});
 			},
 		},

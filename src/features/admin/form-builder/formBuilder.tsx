@@ -105,20 +105,9 @@ const FormBuilder = ({
 								placeholder={field.placeholder}
 								value={fieldData[field.name]?.data || ""}
 								label={field.label}
+								multiple={field.multiple ?? true}
 							/>
 						</Grid>
-						);
-					}
-					if (field.type === "selectCheckboxes") {
-						return (
-							<Grid size={12}>
-								<SelectCheckboxes
-									dataList={fieldData[field.name]?.data || []}
-									control={control}
-									name={field.name}
-									label={field.label}
-								/>
-							</Grid>
 						);
 					}
 					return (
