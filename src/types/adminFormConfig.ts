@@ -14,9 +14,27 @@ export interface FormFieldConfig {
   rows?: number; // for textarea
 }
 
+interface SelectCheckboxesConfig {
+	name: string;
+	label: string;
+	type: "selectCheckboxes";
+}
+
+interface AutoCompleteConfig {
+	name: string;
+	label: string;
+	type: "autoComplete";
+	rules: {
+		required?: string;
+		minLength?: number;
+		maxLength?: number;
+		validate?: (value: string) => boolean | string;
+	};
+}
+
 export interface AdminConfig {
 	entityName: string; // 'publisher', 'author', 'book'
-	fields?: FormFieldConfig[];
+	fields?: FormFieldConfig[] | SelectCheckboxesConfig[] | AutoCompleteConfig[];
 	icon: React.ReactNode;
 	columns: GridColDef[];
 	deleteButton?: boolean;

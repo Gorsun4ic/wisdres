@@ -16,11 +16,13 @@ import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
 interface BaseSheetProps<T> {
 	config: AdminConfig;
+	fieldData?: T[];
 }
 
 const Sheet = ({
-	config
-}: BaseSheetProps<T>) =>{
+	config,
+	fieldData,
+}: BaseSheetProps<T>) => {
 	const {
 		open,
 		data,
@@ -53,7 +55,12 @@ const Sheet = ({
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				{config.fields && (
 					<Modal open={open} onClose={handleClose}>
-						<FormBuilder config={config} mode={formMode} id={toEditId} />
+						<FormBuilder
+							config={config}
+							mode={formMode}
+							id={toEditId}
+							fieldData={fieldData}
+						/>
 					</Modal>
 				)}
 

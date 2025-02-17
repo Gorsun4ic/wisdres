@@ -6,10 +6,47 @@ import Genre from "../models/Genre.js";
 export const getAllBooks = async (req, res) => {
 	try {
 		const books = await Book.find()
-			.populate("info.author")
-			.populate("info.publisher")
-			.populate("info.genre")
-			.populate("info.language");
+			.populate({
+				path: "info.author",
+				// If author not found, set default values
+				options: {
+					default: {
+						_id: "default",
+						title: "Unknown Author",
+					},
+				},
+			})
+			.populate({
+				path: "info.publisher",
+				// If publisher not found, set default values
+				options: {
+					default: {
+						_id: "default",
+						title: "Unknown Publisher",
+					},
+				},
+			})
+			.populate({
+				path: "info.genre",
+				// If genre not found, set default values
+				options: {
+					default: {
+						_id: "default",
+						title: "Unknown Genre",
+					},
+				},
+			})
+			.populate({
+				path: "info.language",
+				// If language not found, set default values
+				options: {
+					default: {
+						_id: "default",
+						title: "Unknown Language",
+					},
+				},
+			});
+
 		res.json(books);
 	} catch (error) {
 		res.status(500).json({ error: `Failed to fetch books: ${error.message}` });

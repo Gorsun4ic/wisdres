@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
 import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -40,6 +42,12 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 		data,
 		onDelete,
 	});
+
+	useEffect(() => {
+		if (columns) {
+			console.log("Columns:", columns);
+		}
+	}, [columns]);
 
 	if (isLoading)
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;

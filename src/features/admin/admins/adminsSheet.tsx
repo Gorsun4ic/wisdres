@@ -44,12 +44,7 @@ const AdminsSheet = () => {
 		changeStatus,
 		handleChange,
 		isChanging,
-		changeError,
 	} = useChangeUserStatus(adminsConfig);
-
-	useEffect(() => {
-		console.log(changeError);
-	}, [changeError]);
 
 	const gridColumns: GridColDef[] = [
 		{

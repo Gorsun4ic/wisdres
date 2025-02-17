@@ -61,6 +61,10 @@ const AdminBooksSheet = () => {
 			field: "author",
 			headerName: "Author",
 			width: 150,
+			valueGetter: (params) => {
+				console.log("Author params:", params);
+				return params.value.join(", ");
+			}
 		},
 		{
 			field: "publisher",
@@ -71,6 +75,10 @@ const AdminBooksSheet = () => {
 			field: "genre",
 			headerName: "Genres",
 			width: 150,
+			valueGetter: (params) => {
+				console.log("Genre params:", params);
+				return params.value.join(", ");
+			}
 		},
 		{
 			field: "language",

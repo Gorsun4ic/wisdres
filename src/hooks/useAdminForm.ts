@@ -66,6 +66,7 @@ export const useAdminForm = (
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
+				console.log("data", data);
 				addMutation(data);
 				break;
 			case "edit":

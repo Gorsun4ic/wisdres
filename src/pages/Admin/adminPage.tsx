@@ -21,7 +21,7 @@ import { useCheckAuthQuery } from "@api/apiUsersSlice";
 import hasPermission from "@utils/hasPermission";
 
 // Tab content
-import AdminBooksSheet from "@features/admin/books/adminBooksSheet";
+import BookSheet from "@features/admin/books/bookSheet";
 import AuthorsSheet from "@features/admin/authors/authorsSheet";
 import PublishersSheet from "@features/admin/publishers/publishersSheet";
 import GenresSheet from "@features/admin/genres/genresSheet";
@@ -61,12 +61,12 @@ const Admin = () => {
 		<StyledAdminPanel className="admin-panel">
 			<TabContext value={value}>
 				<Tabs value={value} onChange={handleChange}>
-					{/* <Tab
+					<Tab
 						icon={<LibraryBooksIcon />}
 						iconPosition="start"
 						label="Books"
 						value="1"
-					/> */}
+					/>
 					<Tab
 						icon={<RecentActorsIcon />}
 						iconPosition="start"
@@ -106,10 +106,9 @@ const Admin = () => {
 						/>
 					)}
 				</Tabs>
-				{/* <TabPanel value="1">
-					<AdminBooksSheet />
-
-				</TabPanel> */}
+				<TabPanel value="1">
+					<BookSheet />
+				</TabPanel>
 				<TabPanel value="2">
 					<AuthorsSheet />
 				</TabPanel>

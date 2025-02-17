@@ -46,12 +46,7 @@ const UsersSheet = () => {
 		changeStatus,
 		handleChange,
 		isChanging,
-		changeError,
 	} = useChangeUserStatus(usersConfig);
-
-	useEffect(() => {
-		console.log(changeError);
-	}, [changeError]);
 
 	const gridColumns: GridColDef[] = [
 		{
@@ -99,7 +94,7 @@ const UsersSheet = () => {
 					onClose={() => setIsChangeDialogOpen(false)}>
 					<DialogTitle>Confirm Promotion</DialogTitle>
 					<DialogContent>
-						<Stack spacing={2}>
+						<Stack spacing={2}>	
 							<p>Are you sure you want to promote this user to admin?</p>
 							{changeStatus.show && changeStatus.severity === "error" && (
 								<Alert severity="error">{changeStatus.message}</Alert>
