@@ -51,9 +51,6 @@ const GlobalStyle = createGlobalStyle`
 			}
     }
 
-    .MuiCircularProgress-root {
-      color: ${({theme}) => theme.colors.white} !important;
-    }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {

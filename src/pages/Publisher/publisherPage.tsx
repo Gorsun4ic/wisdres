@@ -6,27 +6,26 @@ import { Stack, CircularProgress } from "@mui/material";
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
 import { useGetBooksQuery } from "@api/apiBooksSlice";
-import { useLazyGetAuthorByIdQuery } from "@api/apiAuthorsSlice";
+import { useLazyGetPublisherByIdQuery } from "@api/apiPublishersSlice";
 
-const AuthorPage = () => {
-	const { authorId } = useParams();
-	const [getAuthorById, { data: authorData, isLoading, isError }] =
-		useLazyGetAuthorByIdQuery();
+const PublisherPage = () => {
+	const { publisherId } = useParams();
+	const [getPublisherById, { data: publisherData, isLoading }] =
+		useLazyGetPublisherByIdQuery();
 	const { data } = useGetBooksQuery();
 	const navigate = useNavigate();
 	const books = data?.filter((book) =>
-		authorData?.bookIds?.includes(book?._id)
+		publisherData?.bookIds?.includes(book?._id)
 	);
 
 	useEffect(() => {
-		if (authorId) {
-			getAuthorById(authorId);
+		if (publisherId) {
+			getPublisherById(publisherId);
 		}
-	}, [authorId]);
+	}, [publisherId]);
 
 	useEffect(() => {
 		if (!isLoading && !data) {
-			// navigate("*")
 			const navigateTo404 = setTimeout(() => {
 				navigate("*");
 			}, 1000);
@@ -53,18 +52,18 @@ const AuthorPage = () => {
 		<Stack gap={6}>
 			<Stack direction="row" gap={4}>
 				<img
-					src={authorData?.img}
-					width="500"
-					alt={`Picture of ${authorData?.title}`}
+					src={publisherData?.img}
+					width="500"	
+					alt={`Picture of ${publisherData?.title}`}
 				/>
 				<Stack gap={2}>
-					<h1>{authorData?.title}</h1>
-					<p>{authorData?.about}</p>
+					<h1>{publisherData?.title}</h1>
+					<p>{publisherData?.about}</p>
 				</Stack>
 			</Stack>
-			<BookCollection title="Author's books" booksArr={books} />
+			<BookCollection title="Publisher's books" booksArr={books} />
 		</Stack>
 	);
 };
 
-export default AuthorPage;
+export default PublisherPage;

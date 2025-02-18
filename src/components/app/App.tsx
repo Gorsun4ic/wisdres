@@ -30,7 +30,7 @@ const Admin = lazy(() => import("@pages/Admin/adminPage"));
 const BookPage = lazy(() => import("@pages/Book"));
 const GenrePage = lazy(() => import("@pages/Genre/genrePage"));
 const AuthorPage = lazy(() => import("@pages/Author"));
-
+const PublisherPage = lazy(() => import("@pages/Publisher/publisherPage"));
 // Pages with lists
 const BooksPage = lazy(() => import("@pages/Books"));
 const AuthorsPage = lazy(() => import("@pages/Authors"));
@@ -76,6 +76,7 @@ function App() {
 							<Route path="/authors" element={<AuthorsPage />} />
 							<Route path="/author/:authorId" element={<AuthorPage />} />
 							<Route path="/publishers" element={<PublishersPage />} />
+							<Route path="/publisher/:publisherId" element={<PublisherPage />} />
 							<Route
 								element={
 									<AdminRoute />
