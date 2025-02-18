@@ -19,6 +19,12 @@ const AuthorPage = () => {
 	);
 
 	useEffect(() => {
+		if (data) {
+			console.log(books)
+		}
+	}, [data]);
+
+	useEffect(() => {
 		if (authorId) {
 			getAuthorById(authorId);
 		}

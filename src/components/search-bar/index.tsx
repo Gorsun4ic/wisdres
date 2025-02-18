@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextField, Box, Typography, ClickAwayListener } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -25,6 +25,12 @@ const SearchBar = () => {
 	const { data: searchResults, isLoading } = useSearchQuery(debouncedSearch, {
 		skip: !debouncedSearch,
 	});
+
+	useEffect(() => {
+		if (searchResults) {
+			console.log("Search results", searchResults);
+		}
+	}, [searchResults]);
 
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
@@ -77,7 +83,7 @@ const SearchBar = () => {
 												<Typography variant="body1">{result.title}</Typography>
 												<Typography variant="caption" color="textSecondary">
 													{result.type === "book" && result.author
-														? `by ${result.author}`
+														? `by ${result.author.map((author: string) => author?.title).join(", ")}`
 														: result.type}
 												</Typography>
 											</Box>

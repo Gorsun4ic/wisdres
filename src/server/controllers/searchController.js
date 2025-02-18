@@ -44,7 +44,7 @@ export const searchAll = async (req, res) => {
 				title: book.info.title,
 				type: "book",
 				imageUrl: book.info.img,
-				author: book.info.author?.title, // Get author name if populated
+				author: book.info.author, // Get author name if populated
 				publisher: book.info.publisher?.title, // Get publisher name if populated
 				genre: book.info.genre,
 				language: book.info.language,

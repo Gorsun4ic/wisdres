@@ -54,34 +54,29 @@ const BookCollection = ({
 		}
 	}, [data, booksArr]);
 
-	useEffect(() => {
-		if (error || bookError) {
-			console.error("Error fetching books:", error || bookError);
-		}
-	}, [error, bookError])
 
 
-  useEffect(() => {
-		const recentBooksIds = getRecentViewedBook(); // Assuming you have a function to get book IDs
+  // useEffect(() => {
+	// 	const recentBooksIds = getRecentViewedBook(); // Assuming you have a function to get book IDs
 
-		if (recentBooksIds && Array.isArray(recentBooksIds)) {
-			// Make parallel API calls for all the recent books
-			const bookRequests = recentBooksIds.map((id) => {
-				return getBookById(id); // Trigger lazy query for each book
-			});
+	// 	if (recentBooksIds && Array.isArray(recentBooksIds)) {
+	// 		// Make parallel API calls for all the recent books
+	// 		const bookRequests = recentBooksIds.map((id) => {
+	// 			return getBookById(id); // Trigger lazy query for each book
+	// 		});
 
-			// Using Promise.all to fetch data for all books in parallel
-			Promise.all(bookRequests)
-				.then((responses) => {
-					// Assuming each response contains the book info, you can now update the state
-					const bookData = responses.map((response) => response.data); // Extract data from each response
-					setBooks(bookData); // Update state with the book data
-				})
-				.catch((error) => {
-					console.error("Error fetching book data:", error);
-				});
-		}
-	}, [getBookById]);
+	// 		// Using Promise.all to fetch data for all books in parallel
+	// 		Promise.all(bookRequests)
+	// 			.then((responses) => {
+	// 				// Assuming each response contains the book info, you can now update the state
+	// 				const bookData = responses.map((response) => response.data); // Extract data from each response
+	// 				setBooks(bookData); // Update state with the book data
+	// 			})
+	// 			.catch((error) => {
+	// 				console.error("Error fetching book data:", error);
+	// 			});
+	// 	}
+	// }, [getBookById]);
 
 
 	const list = useFilterArr(books, filterBy, number);
@@ -92,7 +87,7 @@ const BookCollection = ({
 		return <ErrorMessage />;
 	}
 
-	if (!data) {
+	if (list.length === 0) {
 		return null;
 	}
 

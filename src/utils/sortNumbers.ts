@@ -8,19 +8,21 @@ export default function sortBooksByNumericProperty(
 		console.error("Invalid array passed to sortBooksByNumericProperty:", books);
 		return [];
 	}
-
-	return books
-		.filter(
-			(book) =>
-				// Check if book and info property exist before accessing nested properties
-				book?.info &&
-				typeof book.info[property] === "number" &&
-				book.info[property] !== null
-		)
+	const arr = books
+		.filter((book, index, arr) => {
+			// Check if book and info property exist before accessing nested properties
+			if (book?.info && typeof book.info[property] === "number") {
+				return book.info[property];
+			}
+			if (!book?.info[property]) {
+				return arr;
+			}
+		})
 		.sort((a, b) => {
 			// Safely access nested numeric properties
 			const valueA = a.info[property] as number;
 			const valueB = b.info[property] as number;
 			return valueB - valueA; // Sort in descending order
 		});
+	return arr;
 }

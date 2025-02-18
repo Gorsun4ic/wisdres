@@ -8,6 +8,7 @@ import { IBook } from "@custom-types/book";
 export default function useFilterArr(arr: IBook[], filter: string, number: number) {
 	const [option, setOption] = useState("");
 
+
 	useEffect(() => {
 		switch (filter) {
 			case "popularity":

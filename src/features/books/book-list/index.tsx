@@ -5,6 +5,7 @@ import { IBook } from "@custom-types/book";
 import BookCard from "@features/books/book-card/bookCard";
 
 const BookList = ({ data }: { data: IBook[] }) => {
+
 	const list = data?.map((item) => {
 		return (
 			<div key={item?._id}>

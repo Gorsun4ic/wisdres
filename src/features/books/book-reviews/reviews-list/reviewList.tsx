@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { List, Stack, Paper, Button } from "@mui/material";
+import { List, Stack, Paper, Button, Pagination } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
 import {
@@ -9,7 +9,6 @@ import {
 } from "@api/apiBooksSlice";
 import { useCheckAuthQuery } from "@api/apiUsersSlice";
 
-import getArrLength from "@utils/getArrLength";
 import hasPermission from "@utils/hasPermission";
 
 import { StyledReviewsList } from "./style";
@@ -31,14 +30,14 @@ const ReviewItem = ({
 }) => {
 	const { data: userData } = useCheckAuthQuery(null);
 	const [deleteReview] = useDeleteReviewMutation();
-	console.log(data)
+	console.log(data);
 	const handleDeleteReview = (id: string) => {
 		if (id) {
-			deleteReview({bookId: bookId, reviewId:id})
+			deleteReview({ bookId: bookId, reviewId: id });
 		}
 	};
 
-	const { user, date, rating, text, _id} = data;
+	const { user, date, rating, text, _id } = data;
 	const formatedDate = date.slice(0, 10);
 	return (
 		<Paper elevation={3} sx={{ padding: 2 }} className="review__item">
@@ -57,14 +56,16 @@ const ReviewItem = ({
 				<StarIcon color="warning" />
 			</Stack>
 			<p className="review__text">{text}</p>
-			{(userData?.user?._id === user?._id || hasPermission(userData?.user, "delete:reviews")) && (
+			{(userData?.user?._id === user?._id ||
+				hasPermission(userData?.user, "delete:reviews")) && (
 				<Button
 					sx={{ marginTop: "16px" }}
 					variant="contained"
 					color="error"
 					onClick={() => handleDeleteReview(_id)}>
-					Delete this review 
-					{hasPermission(userData?.user, "delete:reviews") && "Because you are admin"}
+					Delete this review
+					{hasPermission(userData?.user, "delete:reviews") &&
+						"Because you are admin"}
 				</Button>
 			)}
 		</Paper>
@@ -73,12 +74,19 @@ const ReviewItem = ({
 
 const ReviewsList = () => {
 	const { bookId } = useParams();
-	const {
-		data: reviews,
-		error,
-		isLoading,
-	} = useGetBookReviewsQuery(bookId || "");
-	const reviewsAmount = getArrLength(reviews);
+	const [page, setPage] = useState(1);
+	const [reviews, setReviews] = useState([]);
+	const { data, error, isLoading } = useGetBookReviewsQuery({
+		id: bookId || "",
+		page: page,
+		limit: 3,
+	});
+
+	useEffect(() => {
+		if (data?.reviews) {
+			setReviews(data.reviews);
+		}
+	}, [data]);
 
 	const list = reviews?.map((item) => {
 		const { user, date } = item;
@@ -94,9 +102,16 @@ const ReviewsList = () => {
 
 	return (
 		<StyledReviewsList>
-			<h3>Reviews ({reviewsAmount})</h3>
-			{reviews?.length === 0 && <p>Write the first review</p>}
+			<h3>Reviews ({data?.totalReviews || 0 })</h3>
+			{reviews.length === 0 && <p>Write the first review</p>}
 			<List>{list}</List>
+			{reviews.length !== 0 && (
+				<Pagination
+					count={Math.ceil(data?.totalReviews / 3)}
+					page={page}
+					onChange={(_, value) => setPage(value)}
+				/>
+			)}
 		</StyledReviewsList>
 	);
 };
