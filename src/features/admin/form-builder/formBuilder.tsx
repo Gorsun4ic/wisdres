@@ -122,7 +122,7 @@ const FormBuilder = ({
 								multiline={field.rows ? true : false}
 								error={errors[field.name]?.message}
 							/>
-							{field.name === "img" && img && (
+							{field.name.match(/.*img.*/) && img && (
 								<img src={img} width="256" height="256" />
 							)}
 						</Grid>

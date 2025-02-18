@@ -1,19 +1,34 @@
-// Show img put in form
-
 import { useState, useEffect } from "react";
+
+
+
 import { validateImageType } from "@utils/imgValidation";
 
-const useWatchImg = (watch: (arg0: string) => string) => {
+const regex = /.*img.*/;
+
+const findImgField = (data: any): string | null => {
+	if (!data) return null;
+
+	if (typeof data === "object") {
+		for (const key in data) {
+			if (regex.test(key) && typeof data[key] === "string") {
+				return data[key]; // Return the first matching "img" field
+			}
+			const nestedResult = findImgField(data[key]); // Search deeper
+			if (nestedResult) return nestedResult;
+		}
+	}
+	return null;
+};
+
+const useWatchImg = (watch: () => any) => {
 	const [img, setImg] = useState<string | null | undefined>(undefined);
-	const watchImg = watch("img");
+	const formValues = watch();
 
 	useEffect(() => {
-		if (watchImg && validateImageType(watchImg)) {
-			setImg(watchImg); // Set the image if it's valid
-		} else {
-			setImg(null);
-		}
-	}, [watchImg]);
+		const matchedImg = findImgField(formValues);
+		setImg(matchedImg && validateImageType(matchedImg) ? matchedImg : null);
+	}, [formValues]);
 
 	return { img };
 };
