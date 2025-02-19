@@ -29,7 +29,6 @@ import ChangedInfo from "@components/changedInfo/changedInfo";
 
 import { StyledForm } from "./style";
 import AutoCompleteField from "@components/autoCompleteField";
-import SelectCheckboxes from "@components/selectCheckboxes";
 
 const FormBuilder = ({
 	config,

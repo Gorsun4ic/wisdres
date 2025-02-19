@@ -43,12 +43,6 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 		onDelete,
 	});
 
-	useEffect(() => {
-		if (columns) {
-			console.log("Columns:", columns);
-		}
-	}, [columns]);
-
 	if (isLoading)
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
 	if (error) return <ErrorMessage />;

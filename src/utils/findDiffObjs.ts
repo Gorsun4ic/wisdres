@@ -10,6 +10,9 @@ export const findDifferenceObjs = <T extends object>(
 ): Difference<T> => {
 	if (!obj1 || !obj2) return {} as Difference<T>;
 
+	console.log("obj1", obj1);
+	console.log("obj2", obj2);
+
 	const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]) as Set<
 		keyof T
 	>;
@@ -21,6 +24,7 @@ export const findDifferenceObjs = <T extends object>(
 		if (typeof val1 === "object" && typeof val2 === "object" && val1 && val2) {
 			// Recursively check nested objects
 			const nestedDiff = findDifferenceObjs(val1, val2);
+			console.log("nestedDiff", nestedDiff);
 			if (Object.keys(nestedDiff).length) {
 				differences[key] = nestedDiff;
 			}
