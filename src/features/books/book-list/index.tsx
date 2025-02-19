@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Stack } from "@mui/material";
 
 import { IBook } from "@custom-types/book";
@@ -5,6 +6,10 @@ import { IBook } from "@custom-types/book";
 import BookCard from "@features/books/book-card/bookCard";
 
 const BookList = ({ data }: { data: IBook[] }) => {
+
+	useEffect(() => {
+		console.log("data", data);
+	}, [data]);
 
 	const list = data?.map((item) => {
 		return (

@@ -1,13 +1,35 @@
 import { useState, useEffect } from "react";
 
-// Custom utils
-import sortNumbers from "@utils/sortNumbers";
+import { useLazyGetBookByIdQuery } from "@api/apiBooksSlice";
 
 import { IBook } from "@custom-types/book";
 
-export default function useFilterArr(arr: IBook[], filter: string, number: number) {
-	const [option, setOption] = useState("");
+// Custom utils
+import sortNumbers from "@utils/sortNumbers";
+import { getRecentViewedBook } from "@utils/handleLocalStorage";
 
+export default function useFilterArr(
+	arr: IBook[],
+	filter: string,
+	number: number
+) {
+	const [option, setOption] = useState("");
+	const [getBookById] = useLazyGetBookByIdQuery();
+	const [booksData, setBooksData] = useState<IBook[]>([]);
+
+	useEffect(() => {
+			const recentBooksIds = getRecentViewedBook();
+		if (recentBooksIds.length === 0) return;
+
+		const getMultipleBooksById = async () => {
+			const results = await Promise.all(
+				recentBooksIds.map((id) => getBookById(id).unwrap())
+			);
+			setBooksData(results);
+		};
+
+		getMultipleBooksById();
+	}, [getBookById]);
 
 	useEffect(() => {
 		switch (filter) {
@@ -26,7 +48,7 @@ export default function useFilterArr(arr: IBook[], filter: string, number: numbe
 	}, [filter]);
 
 	if (option === "recent") {
-		return arr.slice(0, number);
+		return booksData;
 	}
 	// Call the sorting hook unconditionally
 	const sortedArr = sortNumbers(arr, option); // Use filter directly for dynamic sorting
