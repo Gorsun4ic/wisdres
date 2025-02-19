@@ -1,7 +1,3 @@
-import { useEffect } from "react";
-
-import { getRecentViewedBook } from "@utils/handleLocalStorage";
-
 import Hero from "@features/hero";
 import GenresCollection from "@features/genres/genres-collection";
 import BookCollection from "@features/books/bookCollection/bookCollection";

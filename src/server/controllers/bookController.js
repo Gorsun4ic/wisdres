@@ -62,10 +62,10 @@ export const getBookById = async (req, res) => {
 			.populate("info.publisher")
 			.populate("info.genre")
 			.populate("info.language")
-			 .populate({
-        path: "reviews",
-        populate: { path: "user", select: "username" }, // Fetch user details
-      });
+			.populate({
+				path: "reviews",
+				populate: { path: "user", select: "username" }, // Fetch user details
+			});
 		if (!book) {
 			return res.status(404).json({ error: "Book not found" });
 		}
@@ -177,31 +177,18 @@ export const updateBook = async (req, res) => {
 	const { id } = req.params;
 	const updates = req.body;
 
-	console.log("Received updates:", updates);
+	try {
+		const updatedBook = await Book.findByIdAndUpdate(id, updates, {
+			new: true,
+			runValidators: true,
+		});
 
-	if (updates && updates.reviews) {
-		const review = updates.reviews;
-		console.log("Received review:", review);
-
-		try {
-			const updatedBook = await Book.findByIdAndUpdate(
-				id,
-				{ $push: { reviews: review } },
-				{ new: true, runValidators: true }
-			);
-
-			if (!updatedBook) {
-				return res.status(404).json({ error: "Book not found" });
-			}
-
-			return res.json(updatedBook);
-		} catch (error) {
-			console.error("Error updating book:", error);
-			return res.status(500).json({ error: "Failed to update book" });
+		if (!updatedBook) {
+			return res.status(404).json({ error: "Book not found" });
 		}
-	} else {
-		return res
-			.status(400)
-			.json({ error: "'reviews' is missing in the request body" });
+
+		return res.json(updatedBook);
+	} catch (error) {
+		res.status(500).json({ error: "Failed to update book" });
 	}
 };
