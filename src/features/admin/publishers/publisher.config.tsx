@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
@@ -55,12 +57,15 @@ export const publisherConfig: AdminConfig = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params: {value: string}) => <img src={params.value} width="40" />,
+			renderCell: (params) => <img src={params.value} width="40" />,
 		},
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
+			renderCell: (params) => (
+				<Link to={`/publisher/${params.row._id}`}>{params.value}</Link>
+			),
 		},
 		{
 			field: "about",

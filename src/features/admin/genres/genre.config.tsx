@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
@@ -44,12 +46,15 @@ export const genreConfig: AdminConfig = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params: {value: string}) => <img src={params.value} width="40" />,
+			renderCell: (params) => <img src={params.value} width="40" />,
 		},
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
+			renderCell: (params) => (
+				<Link to={`/books/${params.value.toLowerCase()}`}>{params.value}</Link>
+			),
 		},
 	],
 	mutations: {
