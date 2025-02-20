@@ -42,17 +42,17 @@ const BookCard = ({ data }: BookCardProps) => {
 				<img src={img} className="book-card__img" width="200" height="300" />
 				<StyledCardContent>
 					<Stack>
-						{rating && (
-							<Stack
+						{rating ? <Stack
 								direction="row"
 								spacing={0.2}
 								sx={{ alignItems: "center", marginBottom: "4px" }}>
 								<StarIcon color="warning" />
-								<p>{rating}</p>
-							</Stack>
-						)}
+								<p>{rating && rating > 0 ? rating : 1}</p>
+							</Stack> : null}
 						<h3 className="book-card__name">{title}</h3>
-						<p className="book-card__author">{author.map((auth: {title: string}) => auth.title).join(", ")}</p>
+						<p className="book-card__author">
+							{author.map((auth: { title: string }) => auth.title).join(", ")}
+						</p>
 					</Stack>
 					<Button size="small">Read</Button>
 				</StyledCardContent>

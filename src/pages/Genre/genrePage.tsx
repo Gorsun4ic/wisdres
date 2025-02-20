@@ -37,12 +37,6 @@ const GenrePage = () => {
 		}
 	}, [data, updateFilterData]);
 
-	useEffect(() => {
-		if (data) {
-			console.log("Filter data:", filterData);
-		}
-	}, [filterData]);
-
 	const genreTitle = upperCaseFirstLetter(genre);
 
 	return (
@@ -55,11 +49,14 @@ const GenrePage = () => {
 						direction="row"
 						gap={2}
 						sx={{ justifyContent: "space-between", marginBottom: 3 }}>
-						<p className="book-amount">543 Books</p>
+						<p className="book-amount">{data?.length} Books</p>
 						<BookSort />
 					</Stack>
 					<Stack>
 						<BookList data={sortedBooks} />
+						{data?.length === 0 && (
+							<p>No books found</p>
+						)}
 					</Stack>
 				</Stack>
 			</Stack>

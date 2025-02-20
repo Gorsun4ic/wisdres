@@ -18,14 +18,18 @@ export default function useFilterArr(
 	const [booksData, setBooksData] = useState<IBook[]>([]);
 
 	useEffect(() => {
-			const recentBooksIds = getRecentViewedBook();
+		const recentBooksIds = getRecentViewedBook();
 		if (recentBooksIds.length === 0) return;
 
 		const getMultipleBooksById = async () => {
-			const results = await Promise.all(
-				recentBooksIds.map((id) => getBookById(id).unwrap())
-			);
-			setBooksData(results);
+			try {
+				const results = await Promise.all(
+					recentBooksIds.map((id) => getBookById(id).unwrap())
+				);
+				setBooksData(results);
+			} catch (error) {
+				console.error("Error fetching books:", error);
+			}
 		};
 
 		getMultipleBooksById();
@@ -33,7 +37,7 @@ export default function useFilterArr(
 
 	useEffect(() => {
 		switch (filter) {
-			case "popularity":
+			case "rating":
 				setOption("rating");
 				break;
 			case "date":
@@ -52,6 +56,7 @@ export default function useFilterArr(
 	}
 	// Call the sorting hook unconditionally
 	const sortedArr = sortNumbers(arr, option); // Use filter directly for dynamic sorting
+	if (option === "rating") console.log("Arr by rating", sortedArr);
 
 	return sortedArr.slice(0, number);
 }

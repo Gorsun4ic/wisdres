@@ -10,7 +10,7 @@ interface IFilter {
 	authors: string[] | [];
 	publishers: string[] | [];
 	languages: string[] | [];
-	pages: [number, number];
+	pages: [number, number] | null;
 }
 
 export const useBookFilters = (
@@ -22,13 +22,13 @@ export const useBookFilters = (
 		authors: [],
 		publishers: [],
 		languages: [],
-		pages: [0, 1],
+		pages: null,
 	});
 	const [filterTitles, setFilterTitles] = useState<IFilter>({
 		authors: [],
 		publishers: [],
 		languages: [],
-		pages: [0, 1],
+		pages: null,
 	});
 
 	const { data: filterTitlesData } = useGetFilterTitlesQuery({
@@ -69,12 +69,10 @@ export const useBookFilters = (
 
 	// Get min and max pages
 	const getMinMaxPages = useCallback(() => {
-		if (!books) return [0, 1];
+		if (!books || (Array.isArray(books) && books.length === 0)) return null;
+
 		const maxPages = Math.max(...books.map((book) => book?.info?.pages));
-		return [
-			0,
-			isFinite(maxPages) ? maxPages : 1,
-		];
+		return [0, isFinite(maxPages) ? maxPages : 1];
 	}, [books]);
 
 	// Update filter data
@@ -109,9 +107,10 @@ export const useBookFilters = (
 					book?.info?.language.includes(language[0])
 				);
 
-			const pageMatch =
-				!pages.length ||
-				(book?.info?.pages >= pages[0] && book?.info?.pages <= pages[1]);
+			const pageMatch = pages
+				? !pages.length ||
+				  (book?.info?.pages >= pages[0] && book?.info?.pages <= pages[1])
+				: true;
 
 			return authorMatch && publisherMatch && languageMatch && pageMatch;
 		});
@@ -123,11 +122,13 @@ export const useBookFilters = (
 
 		if (!filtered.length) return [];
 
+		console.log("SORTED BOOKS", filtered)
+
 		return [...filtered].sort((a, b) => {
 			switch (sortBy) {
 				case "reviews":
 					return b.reviews.length - a.reviews.length;
-				case "ratings":
+				case "rating":
 					return b.info.rating - a.info.rating;
 				default:
 					return 0;
@@ -136,7 +137,7 @@ export const useBookFilters = (
 	}, [filteredBooks, sortBy]);
 
 	return {
-		filterData: filterTitles,
+		filterData: Array.isArray(books) && books.length > 0 ? filterTitles : null,
 		filteredBooks: filteredBooks(),
 		sortedBooks: sortBooks(),
 		updateFilterData,

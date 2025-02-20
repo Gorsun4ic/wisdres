@@ -45,7 +45,7 @@ const BookFilters = ({ data }: {data: IBookFilters}) => {
 					title="Languages"
 				/>
 			)}
-			{data.pages.length > 0 && (
+			{data.pages && data.pages.length > 0 && (
 				<RangeSlider pageDiapason={data.pages}/>
 			)}
 		</StyledBookFilters>

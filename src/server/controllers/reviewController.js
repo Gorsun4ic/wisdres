@@ -21,6 +21,20 @@ export const createReview = async (req, res) => {
 
 		await Book.findByIdAndUpdate(bookId, { $push: { reviews: review._id } });
 
+		const book = await Book.findById(bookId).populate("reviews");
+		if (book) {
+			// Calculate new average rating
+			const totalReviews = book.reviews.length;
+			const totalRating = book.reviews.reduce((sum, r) => sum + r.rating, 0);
+			const newAverageRating =
+				totalReviews > 0 ? totalRating / totalReviews : 0;
+
+			// Update the book's rating
+			await Book.findByIdAndUpdate(bookId, {
+				"info.rating": newAverageRating.toFixed(1),
+			});
+		}
+
 		res
 			.status(201)
 			.json({ success: true, message: "Review created successfully", review });

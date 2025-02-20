@@ -8,6 +8,9 @@ export default function sortBooksByNumericProperty(
 		console.error("Invalid array passed to sortBooksByNumericProperty:", books);
 		return [];
 	}
+
+	console.log("PROPERTY", property)
+
 	const arr = books
 		.filter((book, index, arr) => {
 			// Check if book and info property exist before accessing nested properties

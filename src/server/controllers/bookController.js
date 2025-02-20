@@ -1,5 +1,6 @@
 import Book from "../models/Books.js";
 import Author from "../models/Author.js";
+import Publisher from "../models/Publisher.js";
 import Genre from "../models/Genre.js";
 
 // Get all books with populated fields
@@ -135,6 +136,10 @@ export const getBookInfo = async (req, res) => {
 export const createBook = async (req, res) => {
 	const { info, details, reviews } = req.body;
 
+	if (!info.rating) {
+		info.rating = 0;
+	}
+
 	try {
 		// 1. Create the new book
 		const newBook = new Book({
@@ -150,6 +155,14 @@ export const createBook = async (req, res) => {
 		if (info.author) {
 			// Update the author's `bookIds` array
 			await Author.findByIdAndUpdate(info.author, {
+				$push: { bookIds: newBook._id },
+			});
+		}
+
+		// 3. Check if the publisher ID is provided in the book info
+		if (info.publisher) {
+			// Update the publisher's `bookIds` array
+			await Publisher.findByIdAndUpdate(info.publisher, {
 				$push: { bookIds: newBook._id },
 			});
 		}
@@ -173,6 +186,10 @@ export const deleteBook = async (req, res) => {
 		}
 
 		await Author.findByIdAndUpdate(deletedBook.info.author, {
+			$pull: { bookIds: id },
+		});
+
+		await Publisher.findByIdAndUpdate(deletedBook.info.publisher, {
 			$pull: { bookIds: id },
 		});
 

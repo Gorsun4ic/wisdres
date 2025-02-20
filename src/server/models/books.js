@@ -3,7 +3,10 @@
 	const BookSchema = new mongoose.Schema({
 		info: {
 			img: String,
-			rating: Number,
+			rating: {
+				type: Number,
+				default: 0,
+			},
 			title: String,
 			genre: [{ type: mongoose.Schema.Types.ObjectId, ref: "Genre" }],
 			author: [{ type: mongoose.Schema.Types.ObjectId, ref: "Author" }],

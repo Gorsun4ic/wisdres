@@ -72,6 +72,14 @@ export const publisherConfig: AdminConfig = {
 			headerName: "About",
 			width: 150,
 		},
+		{
+			field: "books",
+			headerName: "Books",
+			width: 80,
+			renderCell: (params) => (
+				params.row.bookIds.length
+			)
+		}
 	],
 	mutations: {
 		add: useAddPublisherMutation,
