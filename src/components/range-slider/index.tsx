@@ -9,16 +9,23 @@ function valuetext(value: number) {
 	return `${value}`;
 }
 
-export default function RangeSlider() {
-	const [value, setValue] = useState<number[]>([0, 1144]);
+const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
+	const [value, setValue] = useState<[number, number]>([0, 1144]);
+	const [minPage, maxPage] = pageDiapason;
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(setPageFilter(value));
-	}, [value]);
+	}, [value, dispatch]);
 
-	const handleChange = (event: Event, newValue: number | number[]) => {
-		setValue(newValue as number[]);
+	useEffect(() => {
+		if (pageDiapason) {
+			setValue([minPage, maxPage]);
+		}
+	}, [pageDiapason, maxPage, minPage]);
+
+	const handleChange = (event: Event, newValue: [number, number]) => {
+		setValue(newValue as [number, number]);
 	};
 
 	const setInputsValue = (order: number, inputValue: string) => {
@@ -37,10 +44,10 @@ export default function RangeSlider() {
 			<span>Page count</span>
 			<Slider
 				getAriaLabel={() => "Page count range"}
-				defaultValue={1144}
+				defaultValue={maxPage}
 				value={value}
-				max={1144}
-				min={1}
+				max={maxPage}
+				min={minPage}
 				onChange={handleChange}
 				valueLabelDisplay="auto"
 				getAriaValueText={valuetext}
@@ -66,3 +73,5 @@ export default function RangeSlider() {
 		</StyledSlider>
 	);
 }
+
+export default RangeSlider;

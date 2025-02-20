@@ -88,7 +88,10 @@ export const getBooksByGenre = async (req, res) => {
 			return res.status(404).json({ message: "Genre not found" });
 		}
 
-		const books = await Book.find({ "info.genre": foundGenre._id });
+		const books = await Book.find({ "info.genre": foundGenre._id }).populate({
+			path: "info.author",
+			select: "title",
+		})
 		res.status(200).json(books);
 	} catch (error) {
 		console.error(error);
@@ -164,9 +167,15 @@ export const deleteBook = async (req, res) => {
 	const { id } = req.params;
 	try {
 		const deletedBook = await Book.findByIdAndDelete(id);
+
 		if (!deletedBook) {
 			return res.status(404).json({ error: "Book not found" });
 		}
+
+		await Author.findByIdAndUpdate(deletedBook.info.author, {
+			$pull: { bookIds: id },
+		});
+
 		res.json({ message: "Book deleted successfully", book: deletedBook });
 	} catch (error) {
 		res.status(500).json({ error: "Failed to delete book" });

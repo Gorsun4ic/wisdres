@@ -1,4 +1,7 @@
+// React Hook Form
 import { Controller, FieldValues, Control } from "react-hook-form";
+
+// MUI
 import useAutocomplete, {
 	AutocompleteGetTagProps,
 } from "@mui/material/useAutocomplete";
@@ -25,37 +28,6 @@ interface TagProps extends ReturnType<AutocompleteGetTagProps> {
 const Root = styled("div")`
 	width: 100%;
 	position: relative;
-`;
-
-const Label = styled("label")`
-	display: block;
-	margin-bottom: 8px;
-`;
-
-const InputWrapper = styled("div")`
-	width: 100%;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	padding: 8px;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-
-	&:hover {
-		border-color: #666;
-	}
-
-	&.focused {
-		border-color: #1976d2;
-		box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-	}
-
-	input {
-		border: none;
-		outline: none;
-		flex: 1;
-		min-width: 100px;
-	}
 `;
 
 function Tag(props: TagProps) {
@@ -126,7 +98,6 @@ const AutoCompleteField = ({
 	options,
 	label,
 	placeholder,
-	value = null,
 	rules = {},
 	multiple = true,
 }: AutoCompleteFieldProps) => {
@@ -136,76 +107,85 @@ const AutoCompleteField = ({
 			control={control}
 			rules={rules}
 			defaultValue={multiple ? [] : null}
-			render={({ field }) => {
-				const {
-					getRootProps,
-					getInputLabelProps,
-					getInputProps,
-					getTagProps,
-					getListboxProps,
-					getOptionProps,
-					groupedOptions,
-					value,
-					focused,
-					setAnchorEl,
-				} = useAutocomplete({
-					...field,
-					id: name,
-					multiple,
-					options,
-					getOptionLabel: (option) => option.title,
-					isOptionEqualToValue: (option, value) => option.title === value.title,
-					onChange: (_, newValue) => {
-						field.onChange(newValue);
-					},
-				});
+			render={({ field }) => (
+				<AutocompleteInput
+					field={field}
+					options={options}
+					label={label}
+					placeholder={placeholder}
+					multiple={multiple}
+				/>
+			)}
+		/>
+	);
+};
 
-				return (
-					<Root>
-						<div {...getRootProps()}>
-							<TextField
-								ref={setAnchorEl}
-								label={label}
-								placeholder={placeholder}
-								fullWidth
-								InputProps={{
-									...getInputProps(),
-									startAdornment: multiple && value && Array.isArray(value) && (
-										<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-											{value.map((option: any, index: number) => {
-												const { key, ...tagProps } = getTagProps({ index });
-												return (
-													<StyledTag
-														key={key}
-														{...tagProps}
-														label={option.title}
-													/>
-												);
-											})}
-										</Box>
-									),
-								}}
-							/>
-						</div>
-						{groupedOptions.length > 0 ? (
-							<Listbox {...getListboxProps()}>
-								{(groupedOptions as typeof options).map((option, index) => {
-									const { key, ...optionProps } = getOptionProps({
-										option,
-										index,
-									});
+// Separate component to handle Autocomplete logic
+const AutocompleteInput = ({
+	field,
+	options,
+	label,
+	placeholder,
+	multiple,
+}: AutocompleteInputProps) => {
+	const {
+		getRootProps,
+		getInputProps,
+		getTagProps,
+		getListboxProps,
+		getOptionProps,
+		groupedOptions,
+		value,
+		setAnchorEl,
+	} = useAutocomplete({
+		...field,
+		id: field.name,
+		multiple,
+		options,
+		getOptionLabel: (option: {title: string}) => option.title,
+		isOptionEqualToValue: (option: {title: string}, value: {title: string}) => option.title === value.title,
+		onChange: (_, newValue) => field.onChange(newValue),
+	});
+
+	return (
+		<Root>
+			<div {...getRootProps()}>
+				<TextField
+					ref={setAnchorEl}
+					label={label}
+					placeholder={placeholder}
+					fullWidth
+					InputProps={{
+						...getInputProps(),
+						startAdornment: multiple && value && Array.isArray(value) && (
+							<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+								{value.map((option: {title: string}, index: number) => {
+									const { key, ...tagProps } = getTagProps({ index });
 									return (
-										<li key={key} {...optionProps}>
-											<span>{option.title}</span>
-										</li>
+										<StyledTag key={key} {...tagProps} label={option.title} />
 									);
 								})}
-							</Listbox>
-						) : null}
-					</Root>
-				);
-			}}
-		/>
+							</Box>
+						),
+					}}
+				/>
+			</div>
+			{groupedOptions.length > 0 ? (
+				<Listbox {...getListboxProps()}>
+					{(groupedOptions as typeof options).map((option: {title: string}, index: number) => {
+						const { key, ...optionProps } = getOptionProps({
+							option,
+							index,
+						});
+						return (
+							<li key={key} {...optionProps}>
+								<span>{option.title}</span>
+							</li>
+						);
+					})}
+				</Listbox>
+			) : null}
+		</Root>
 	);
 };
 

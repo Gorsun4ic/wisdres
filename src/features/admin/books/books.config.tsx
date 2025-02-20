@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
+import { IAuthor } from "@custom-types/author";
 
 import {
 	useAddBookMutation,
@@ -11,11 +12,6 @@ import {
 	useDeleteBookMutation,
 	useGetBooksQuery,
 } from "@api/apiBooksSlice";
-
-import { useGetGenresQuery } from "@api/apiGenresSlice";
-import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
-import { useGetPublishersQuery } from "@api/apiPublishersSlice";
-import { useGetLanguagesQuery } from "@api/apiLanguagesSlice";
 
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 import { IGenre } from "@custom-types/genre";
@@ -54,7 +50,6 @@ export const booksConfig: AdminConfig = {
 			rules: {
 				required: "Genres are required",
 			},
-			data: useGetGenresQuery,
 		},
 		{
 			name: "info.author",
@@ -63,7 +58,6 @@ export const booksConfig: AdminConfig = {
 			rules: {
 				required: "Author is required",
 			},
-			data: useGetAuthorsQuery,
 		},
 		{
 			name: "info.publisher",
@@ -73,7 +67,6 @@ export const booksConfig: AdminConfig = {
 			rules: {
 				required: "Publisher is required",
 			},
-			data: useGetPublishersQuery,
 		},
 		{
 			name: "info.language",
@@ -83,7 +76,6 @@ export const booksConfig: AdminConfig = {
 			rules: {
 				required: "Language is required",
 			},
-			data: useGetLanguagesQuery,
 		},
 		{
 			name: "info.year",
@@ -144,7 +136,7 @@ export const booksConfig: AdminConfig = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params: { value: string }) => (
+			renderCell: (params) => (
 				<img src={params.value} width="40" />
 			),
 		},
@@ -198,6 +190,9 @@ export const booksConfig: AdminConfig = {
 			headerName: "Year",
 			width: 60,
 			type: "number",
+			renderCell: (params) => {
+				return params.value
+			}
 		},
 		{
 			field: "pages",

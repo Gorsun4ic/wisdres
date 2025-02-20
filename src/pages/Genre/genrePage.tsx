@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -20,19 +20,28 @@ import { StyledGenrePage } from "./style";
 
 const GenrePage = () => {
 	const { genre = "" } = useParams<{ genre: string }>();
-	const { data, error } = useGetBooksByGenresQuery(genre);
+	const { data } = useGetBooksByGenresQuery(genre);
 	const { sortBy, filters } = useSelector(
 		(state: { filters: IFilter }) => state.filters
 	);
 
-	const { filterData, sortedBooks, updateFilterData } =
-		useBookFilters(data || [], sortBy, filters);
+	const { filterData, sortedBooks, updateFilterData } = useBookFilters(
+		data || [],
+		sortBy,
+		filters
+	);
 
-  useEffect(() => {
+	useEffect(() => {
 		if (data) {
 			updateFilterData();
 		}
 	}, [data, updateFilterData]);
+
+	useEffect(() => {
+		if (data) {
+			console.log("Filter data:", filterData);
+		}
+	}, [filterData]);
 
 	const genreTitle = upperCaseFirstLetter(genre);
 

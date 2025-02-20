@@ -1,19 +1,17 @@
-import { useEffect } from "react";
 import { Stack } from "@mui/material";
 
-import { Difference } from "@utils/findDiffObjs";
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
 interface Change {
-	from: any;
-	to: any;
+	from: string | number;
+	to: string | number;
 }
 
 interface Changes {
 	[key: string]: Change | Changes;
 }
 
-const formatValue = (value: any): string => {
+const formatValue = (value: string | number): string => {
 	if (value === null || value === undefined) {
 		return "none";
 	}
@@ -24,10 +22,6 @@ const formatValue = (value: any): string => {
 				typeof item === "object" ? item.title || JSON.stringify(item) : item
 			)
 			.join(", ");
-	}
-
-	if (typeof value === "object") {
-		return value.title || JSON.stringify(value);
 	}
 
 	return String(value);

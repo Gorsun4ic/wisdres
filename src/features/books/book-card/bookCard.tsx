@@ -3,38 +3,33 @@ import { Link } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import { Stack } from "@mui/material";
 
-import { IBook } from "@custom-types/book";
+import { IAuthor } from "@custom-types/author";
 
 import Button from "@components/button";
 
 import theme from "@styles/theme";
 import { StyledCard, StyledCardContent } from "./style";
-import { IAuthor } from "@custom-types/author";
 
 interface BookCardProps {
-	data: IBook;
+	data: {
+		info: {
+			img: string;
+			rating: number;
+			title: string;
+			author: IAuthor[];
+		};
+		_id: string;
+	};
 }
 
-const BookCard: React.FC<BookCardProps> = ({ data }) => {
-	if (!data || !data.info) {
-		return null;
-	}
+const BookCard = ({ data }: BookCardProps) => {
 
 	const { info, _id } = data;
 	const { img, rating, title, author } = info;
 
-	const renderAuthors = () => {
-		if (!Array.isArray(author) || !author.length) {
-			return "Unknown author";
-		}
-
-		return author.map((auth: IAuthor, index: number) => (
-			<span key={auth._id || index}>
-				{auth?.title}
-				{index < author.length - 1 ? ", " : ""}
-			</span>
-		));
-	};
+	if (!data.info) {
+		return null;
+	}
 
 	return (
 		<Link to={`/book/${_id}`}>
@@ -57,7 +52,7 @@ const BookCard: React.FC<BookCardProps> = ({ data }) => {
 							</Stack>
 						)}
 						<h3 className="book-card__name">{title}</h3>
-						<p className="book-card__author">{renderAuthors()}</p>
+						<p className="book-card__author">{author.map((auth: {title: string}) => auth.title).join(", ")}</p>
 					</Stack>
 					<Button size="small">Read</Button>
 				</StyledCardContent>

@@ -10,7 +10,7 @@ interface IFilter {
 	authors: string[] | [];
 	publishers: string[] | [];
 	languages: string[] | [];
-	pages: [number, number] | [null, null];
+	pages: [number, number];
 }
 
 export const useBookFilters = (
@@ -22,13 +22,13 @@ export const useBookFilters = (
 		authors: [],
 		publishers: [],
 		languages: [],
-		pages: [null, null],
+		pages: [0, 1],
 	});
 	const [filterTitles, setFilterTitles] = useState<IFilter>({
 		authors: [],
 		publishers: [],
 		languages: [],
-		pages: [null, null],
+		pages: [0, 1],
 	});
 
 	const { data: filterTitlesData } = useGetFilterTitlesQuery({
@@ -41,6 +41,7 @@ export const useBookFilters = (
 		if (filterData && filterTitlesData) {
 			setFilterTitles((prev) => ({
 				...prev,
+				pages: getMinMaxPages(),
 				...filterTitlesData,
 			}));
 		}
@@ -66,6 +67,16 @@ export const useBookFilters = (
 		[]
 	);
 
+	// Get min and max pages
+	const getMinMaxPages = useCallback(() => {
+		if (!books) return [0, 1];
+		const maxPages = Math.max(...books.map((book) => book?.info?.pages));
+		return [
+			0,
+			isFinite(maxPages) ? maxPages : 1,
+		];
+	}, [books]);
+
 	// Update filter data
 	const updateFilterData = useCallback(() => {
 		if (!books) return;
@@ -73,9 +84,9 @@ export const useBookFilters = (
 			authors: getBooksSpecificData(books, "author"),
 			publishers: getBooksSpecificData(books, "publisher"),
 			languages: getBooksSpecificData(books, "language"),
-			pages: [null, null],
+			pages: getMinMaxPages(),
 		});
-	}, [books, getBooksSpecificData]);
+	}, [books, getBooksSpecificData, getMinMaxPages]);
 
 	// Filter books based on selected filters
 	const filteredBooks = useCallback(() => {
@@ -84,11 +95,19 @@ export const useBookFilters = (
 		return books.filter((book) => {
 			const { authors, publishers, languages, pages } = filters;
 
-			const authorMatch = !authors.length || authors.some((author) => book?.info?.author.includes(author[0]));
+			const authorMatch =
+				!authors.length ||
+				authors.some((author) => book?.info?.author.includes(author[0]));
 			const publisherMatch =
-				!publishers.length || publishers.some((publisher) => book?.info?.publisher.includes(publisher[0]));
+				!publishers.length ||
+				publishers.some((publisher) =>
+					book?.info?.publisher.includes(publisher[0])
+				);
 			const languageMatch =
-				!languages.length || languages.some((language) => book?.info?.language.includes(language[0]));
+				!languages.length ||
+				languages.some((language) =>
+					book?.info?.language.includes(language[0])
+				);
 
 			const pageMatch =
 				!pages.length ||

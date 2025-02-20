@@ -59,18 +59,6 @@ const FormBuilder = ({
 	// Alert state
 	const { alert } = useSelector((state: RootState) => state.alert);
 
-	useEffect(() => {
-		if (errors) {
-			console.log("errors", errors);
-		}
-	}, [errors]);
-
-	useEffect(() => {
-		if (dataById) {
-			console.log("dataById", dataById);
-		}
-	}, [dataById]);
-
 	if (openDialog) {
 		return (
 			<ConfirmAction

@@ -11,42 +11,43 @@ interface IBookFilters {
 	authors: string[];
 	publishers: string[];
 	languages: string[];
-	pages: number[];
+	pages: [number, number];
 }
 
 const BookFilters = ({ data }: {data: IBookFilters}) => {
 
-	
-	useEffect(() => {
-		if (data) {
-			console.log("Filter data:", data);
-		}
-	}, [data]);
+	if (!data) return
 
 	return (
 		<StyledBookFilters>
 			<span>Filters</span>
-			<ScrolledFilter	
-				data={data.authors}
-				type="authors"
-				placeholder="Write authors name"
-				title="Authors"
-			/>
-			<ScrolledFilter
-				data={data.publishers}
-				type="publishers"
-				placeholder="Write publisher name"
-				title="Publishers"
-
-			/>
-			<ScrolledFilter
-				data={data.languages}
-				type="languages"
-				placeholder="Write language"
-				title="Languages"
-
-			/>
-			<RangeSlider />
+			{data.authors.length > 0 && (
+				<ScrolledFilter
+					data={data.authors}
+					type="authors"
+					placeholder="Write authors name"
+					title="Authors"
+				/>
+			)}
+			{data.publishers.length > 0 && (
+				<ScrolledFilter
+					data={data.publishers}
+					type="publishers"
+					placeholder="Write publisher name"
+					title="Publishers"
+				/>
+			)}
+			{data.languages.length > 0 && (
+				<ScrolledFilter
+					data={data.languages}
+					type="languages"
+					placeholder="Write language"
+					title="Languages"
+				/>
+			)}
+			{data.pages.length > 0 && (
+				<RangeSlider pageDiapason={data.pages}/>
+			)}
 		</StyledBookFilters>
 	);
 };

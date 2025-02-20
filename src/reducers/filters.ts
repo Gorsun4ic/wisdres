@@ -7,7 +7,7 @@ export interface IFilter {
 		authors: string[] | [];
 		publishers: string[] | [];
 		languages: string[] | [];
-		pages: [number, number] | [null, null];
+		pages: [number, number];
 	};
 }
 
@@ -17,7 +17,7 @@ const initialState: IFilter = {
 		authors: [],
 		publishers: [],
 		languages: [],
-		pages: [null, null],
+		pages: [0, 1],
 	},
 };
 

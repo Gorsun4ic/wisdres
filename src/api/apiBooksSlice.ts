@@ -25,7 +25,7 @@ export const apiBooksSlice = createApi({
 		}),
 		getBookReviews: builder.query<IReview[], { id: string; page?: number; limit?: number }>({
 			query: ({id, page = 1, limit = 3}) => `/books/${id}/reviews?page=${page}&limit=${limit}`,
-			providesTags: (result, error, id) => [{ type: "Reviews", id }, "Books"],
+			providesTags: ["Reviews", "Books"]
 		}),
 		getBookInfo: builder.query<IBookInfo, string>({
 			query: (id) => ({
@@ -60,20 +60,14 @@ export const apiBooksSlice = createApi({
 				method: "POST",
 				body: review,
 			}),
-			invalidatesTags: (result, error, { bookId }) => [
-				{ type: "Reviews", id: bookId }, // Correct structure for cache invalidation
-				{ type: "Books", id: bookId }, // Ensures book data refresh
-			],
+			invalidatesTags: ["Reviews", "Books"],
 		}),
 		deleteReview: builder.mutation<void, { bookId: string; reviewId: string }>({
 			query: ({ bookId, reviewId }) => ({
 				url: `/books/${bookId}/reviews/${reviewId}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: (result, error, { bookId }) => [
-				{ type: "Reviews", id: bookId },
-				"Books",
-			],
+			invalidatesTags: ["Reviews", "Books"],
 		}),
 		updateBook: builder.mutation({
 			query: ({ id, updates }) => ({

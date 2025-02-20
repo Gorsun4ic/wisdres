@@ -6,7 +6,7 @@ import { validateImageType } from "@utils/imgValidation";
 
 const regex = /.*img.*/;
 
-const findImgField = (data: any): string | null => {
+const findImgField = (data: object): string | null => {
 	if (!data) return null;
 
 	if (typeof data === "object") {
