@@ -37,6 +37,12 @@ const GenrePage = () => {
 		}
 	}, [data, updateFilterData]);
 
+	useEffect(() => {
+		if (sortedBooks.length) {
+			console.log("sortedBooks: ", sortedBooks);
+		}
+	}, [sortedBooks]);
+
 	const genreTitle = upperCaseFirstLetter(genre);
 
 	return (

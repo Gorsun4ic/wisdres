@@ -93,9 +93,11 @@ export const useBookFilters = (
 		return books.filter((book) => {
 			const { authors, publishers, languages, pages } = filters;
 
+			const authorsIds = book.info.author.map((author) => author._id);
+
 			const authorMatch =
 				!authors.length ||
-				authors.some((author) => book?.info?.author.includes(author[0]));
+				authors.some((author) => authorsIds.includes(author[0]));
 			const publisherMatch =
 				!publishers.length ||
 				publishers.some((publisher) =>
@@ -121,8 +123,6 @@ export const useBookFilters = (
 		const filtered = filteredBooks();
 
 		if (!filtered.length) return [];
-
-		console.log("SORTED BOOKS", filtered)
 
 		return [...filtered].sort((a, b) => {
 			switch (sortBy) {
