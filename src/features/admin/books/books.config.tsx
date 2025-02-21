@@ -203,6 +203,9 @@ export const booksConfig: AdminConfig = {
 			headerName: "Pages",
 			width: 60,
 			type: "number",
+			renderCell: (params) => {
+				return params.value
+			}
 		},
 		{
 			field: "reviews",

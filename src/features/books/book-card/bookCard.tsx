@@ -47,7 +47,7 @@ const BookCard = ({ data }: BookCardProps) => {
 								spacing={0.2}
 								sx={{ alignItems: "center", marginBottom: "4px" }}>
 								<StarIcon color="warning" />
-								<p>{rating && rating > 0 ? rating : 1}</p>
+								<p>{rating && rating > 0 ? rating : null}</p>
 							</Stack> : null}
 						<h3 className="book-card__name">{title}</h3>
 						<p className="book-card__author">

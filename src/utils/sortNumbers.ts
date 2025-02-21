@@ -9,22 +9,25 @@ export default function sortBooksByNumericProperty(
 		return [];
 	}
 
-	console.log("PROPERTY", property)
-
 	const arr = books
-		.filter((book, index, arr) => {
-			// Check if book and info property exist before accessing nested properties
-			if (book?.info && typeof book.info[property] === "number") {
-				return book.info[property];
-			}
-			if (!book?.info[property]) {
-				return arr;
-			}
+		.filter((book) => {
+			// Keep only books that have the property
+			return book?.info && book.info[property] !== undefined;
 		})
 		.sort((a, b) => {
-			// Safely access nested numeric properties
-			const valueA = a.info[property] as number;
-			const valueB = b.info[property] as number;
+			// Handle date properties
+			if (property === "arrived") {
+				// Convert string dates to timestamps for comparison
+				const dateA = new Date(a.info[property] as string).getTime();
+				const dateB = new Date(b.info[property] as string).getTime();
+
+				// Sort in descending order (newest first)
+				return dateB - dateA;
+			}
+
+			// Handle numeric properties
+			const valueA = Number(a.info[property]);
+			const valueB = Number(b.info[property]);
 			return valueB - valueA; // Sort in descending order
 		});
 	return arr;

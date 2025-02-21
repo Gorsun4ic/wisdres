@@ -14,6 +14,7 @@
 			language: { type: mongoose.Schema.Types.ObjectId, ref: "Language" },
 			year: Number,
 			pages: Number,
+			arrived: Date,
 		},
 		details: {
 			book: String,

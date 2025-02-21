@@ -6,6 +6,7 @@ export interface IBookInfo {
 	author: string[];
 	publisher: string;
 	language: string;
+	arrived: string;
 	year: number;
 	pages: number;
 }

@@ -41,7 +41,7 @@ export default function useFilterArr(
 				setOption("rating");
 				break;
 			case "date":
-				setOption("year");
+				setOption("arrived");
 				break;
 			case "recent":
 				setOption("recent");
@@ -56,7 +56,7 @@ export default function useFilterArr(
 	}
 	// Call the sorting hook unconditionally
 	const sortedArr = sortNumbers(arr, option); // Use filter directly for dynamic sorting
-	if (option === "rating") console.log("Arr by rating", sortedArr);
+
 
 	return sortedArr.slice(0, number);
 }

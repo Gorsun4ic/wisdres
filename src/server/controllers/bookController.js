@@ -137,7 +137,11 @@ export const createBook = async (req, res) => {
 	const { info, details, reviews } = req.body;
 
 	if (!info.rating) {
-		info.rating = 0;
+		info.rating = 5;
+	}
+
+	if (!info.arrived) {
+		info.arrived = new Date();
 	}
 
 	try {
