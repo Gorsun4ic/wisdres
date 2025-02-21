@@ -41,7 +41,7 @@ const FormBuilder = ({
 	fieldData?: IGenre[] | IAuthor[] | IPublisher[] | ILanguage[];
 	id?: string;
 }) => {
-	const { onSubmit, openDialog, handleEdit, dataById, form, differences } =
+	const { onSubmit, openDialog, handleEdit, dataById, form, differences, getFieldError } =
 		useAdminForm(config, mode, id);
 
 	// React Hook Form
@@ -55,6 +55,12 @@ const FormBuilder = ({
 
 	// Hook to track img input status
 	const { img } = useWatchImg(watch);
+
+	useEffect(() => {
+		if (errors) {
+			console.log(Object.values(errors));
+		}
+	}, [errors]);
 
 	// Alert state
 	const { alert } = useSelector((state: RootState) => state.alert);
@@ -93,6 +99,7 @@ const FormBuilder = ({
 								value={fieldData[field.name]?.data || ""}
 								label={field.label}
 								multiple={field.multiple ?? true}
+								error={getFieldError(errors, field.name)}
 							/>
 						</Grid>
 						);
@@ -107,7 +114,7 @@ const FormBuilder = ({
 								register={register}
 								rows={field.rows}
 								multiline={field.rows ? true : false}
-								error={errors[field.name]?.message}
+								error={getFieldError(errors, field.name)}
 							/>
 							{field.name.match(/.*img.*/) && img && (
 								<img src={img} width="256" height="256" />

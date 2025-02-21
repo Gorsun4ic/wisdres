@@ -100,6 +100,7 @@ const AutoCompleteField = ({
 	placeholder,
 	rules = {},
 	multiple = true,
+	error
 }: AutoCompleteFieldProps) => {
 	return (
 		<Controller
@@ -114,6 +115,7 @@ const AutoCompleteField = ({
 					label={label}
 					placeholder={placeholder}
 					multiple={multiple}
+					error={error}
 				/>
 			)}
 		/>
@@ -127,6 +129,7 @@ const AutocompleteInput = ({
 	label,
 	placeholder,
 	multiple,
+	error
 }: AutocompleteInputProps) => {
 	const {
 		getRootProps,
@@ -153,6 +156,8 @@ const AutocompleteInput = ({
 				<TextField
 					ref={setAnchorEl}
 					label={label}
+					error={error}
+					helperText={error}
 					placeholder={placeholder}
 					fullWidth
 					InputProps={{

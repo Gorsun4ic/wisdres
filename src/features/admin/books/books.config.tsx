@@ -82,7 +82,7 @@ export const booksConfig: AdminConfig = {
 			label: "Year",
 			placeholder: "Year",
 			type: "number",
-			rules: {
+			validation: {
 				required: "Year is required",
 				minLength: {
 					value: 3,
@@ -99,7 +99,7 @@ export const booksConfig: AdminConfig = {
 			label: "Pages number",
 			placeholder: "Pages number",
 			type: "number",
-			rules: {
+			validation: {
 				required: "Pages is required",
 				minLength: {
 					value: 1,
@@ -112,7 +112,7 @@ export const booksConfig: AdminConfig = {
 			placeholder: "About the book",
 			type: "textarea",
 			rows: 4,
-			rules: {
+			validation: {
 				required: "Information about the book is required",
 				minLength: {
 					value: 30,
@@ -126,8 +126,12 @@ export const booksConfig: AdminConfig = {
 			placeholder: "About the auditory",
 			type: "textarea",
 			rows: 4,
-			rules: {
-				required: "Information about the auditory is required",
+			validation: {
+				minLength: {
+					value: 30,
+					message:
+						"Information about the auditory must have at least 30 characters",
+				},
 			},
 		},
 	],

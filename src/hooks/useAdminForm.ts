@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useForm } from "react-hook-form";
+import { useForm, FieldErrors, FieldValues } from "react-hook-form";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
@@ -90,6 +90,24 @@ export const useAdminForm = (
 		setOpenDialog(false);
 	};
 
+	const getFieldError = (
+		errors: FieldErrors<FieldValues>,
+		fieldName: string
+	) => {
+		if (!errors || !fieldName) {
+			return undefined;
+		}
+
+		const parts = fieldName.split(".");
+
+		if (errors[fieldName]?.message) {
+			console.log("direct error", errors[fieldName].message);
+			return errors[fieldName]?.message;
+		}
+
+		return errors?.[parts[0]]?.[parts[1]]?.message;
+	};
+
 	return {
 		onSubmit,
 		openDialog,
@@ -97,5 +115,6 @@ export const useAdminForm = (
 		dataById,
 		form,
 		differences,
+		getFieldError,
 	};
 };
