@@ -108,6 +108,15 @@ export const booksConfig: AdminConfig = {
 			},
 		},
 		{
+			name: "info.link",
+			label: "Link",
+			placeholder: "Link",
+			type: "text",
+			rules: {
+				required: "Link is required"
+			}
+		},
+		{
 			name: "details.book",
 			placeholder: "About the book",
 			type: "textarea",

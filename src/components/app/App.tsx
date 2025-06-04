@@ -21,6 +21,7 @@ import NotAuthenticateRoute from "@components/notAunthenticatedRoute.tsx/notAuth
 import AdminRoute from "@components/admin-route/adminRoute";
 
 import Page404 from "@pages/404/404";
+import ContactsPage from "@pages/Contacts/contactsPage";
 
 // Pages
 const MainPage = lazy(() => import("@pages/Main"));
@@ -76,11 +77,12 @@ function App() {
 							<Route path="/authors" element={<AuthorsPage />} />
 							<Route path="/author/:authorId" element={<AuthorPage />} />
 							<Route path="/publishers" element={<PublishersPage />} />
-							<Route path="/publisher/:publisherId" element={<PublisherPage />} />
 							<Route
-								element={
-									<AdminRoute />
-								}>
+								path="/publisher/:publisherId"
+								element={<PublisherPage />}
+							/>
+							<Route path="/contacts" element={<ContactsPage />} />
+							<Route element={<AdminRoute />}>
 								<Route path="/admin" element={<Admin />} />
 							</Route>
 

@@ -1,5 +1,10 @@
+import { Link } from "react-router-dom";
 import { Grid2 } from "@mui/material";
+
+import { useGetPublishersQuery } from "@api/apiPublishersSlice";
+
 import SearchBar from "@components/search-bar";
+
 import { StyledPublishersPage } from "./style";
 
 const publishers: [string, number][] = [
@@ -156,12 +161,17 @@ const publishers: [string, number][] = [
 
 
 const PublishersPage = () => {
-	const List = publishers.map((item) => {
-		const [authorName, authorBooksAmount] = item;
+
+	const {data: publishers} = useGetPublishersQuery(null);
+
+	const publishersList = publishers?.map((item) => {
+		// const [authorName, authorBooksAmount] = item;
 		return (
 			<Grid2 size={3}>
-				{authorName}
-				{` (${authorBooksAmount})`}
+				<Link to={`/publisher/${item?._id}`}>
+					{item?.title}
+					{` (${item?.bookIds?.length})`}
+				</Link>
 			</Grid2>
 		);
 	});
@@ -171,7 +181,7 @@ const PublishersPage = () => {
 			<h1>Publishers</h1>
 			<SearchBar />
 			<Grid2 container spacing={1} className="publishers-list">
-				{List}
+				{publishersList}
 			</Grid2>
 		</StyledPublishersPage>
 	);

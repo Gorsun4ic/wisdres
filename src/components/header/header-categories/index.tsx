@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import { Link } from "react-router-dom";
 import { ICategories } from "@custom-types/categories";
 import { StyledHeaderCategories } from "./style";
 
@@ -7,9 +8,9 @@ const ContentList = ({ arr }: { arr: string[] }) => {
 	return arr.map((item, i) => {
 		if (i < 7) {
 			return (
-				<a href="#" key={i} className="category-item">
+				<Link to={item.toLowerCase()} key={i} className="category-item">
 					{item}
-				</a>
+				</Link>
 			);
 		} else {
 			return null;
@@ -18,19 +19,18 @@ const ContentList = ({ arr }: { arr: string[] }) => {
 };
 
 // Component for rendering categories (ICategories[])
-const CategoriesList = ({ arr }: { arr: ICategories[] }) => {
-	return arr.map((item, i) => (
+const CategoriesList = ({ data }: { arr: ICategories[] }) => {
+	const {content, link} = data;
+	
+	return content.map((item, i) => (
 		<Stack key={i}>
-			<a href="#" className="category-title">
-				{item.title}
-			</a>
 			<Stack gap={1} sx={{ marginBottom: 2 }}>
 				{/* Here, we pass 'item.content' to ContentList */}
 				<ContentList arr={item.content} />
 			</Stack>
-			<a href="#" className="category-all">
-				{item.more || "Watch all"}
-			</a>
+			<Link to={link} className="category-all">
+				Watch all
+			</Link>
 		</Stack>
 	));
 };
@@ -42,11 +42,11 @@ interface HeaderCategoriesProps {
 }
 
 const HeaderCategories: React.FC<HeaderCategoriesProps> = ({
-	arr,
+	data,
 	onMouseEnter,
 	onMouseLeave,
 }) => {
-	if (!arr || !Array.isArray(arr)) {
+	if (!data || !Array.isArray(data.content)) {
 		return null;
 	}
 
@@ -58,7 +58,7 @@ const HeaderCategories: React.FC<HeaderCategoriesProps> = ({
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave}>
 			{/* Pass arr as a prop to CategoriesList */}
-			<CategoriesList arr={arr} />
+			<CategoriesList data={data} />
 		</StyledHeaderCategories>
 	);
 };

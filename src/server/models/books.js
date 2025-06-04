@@ -15,6 +15,7 @@
 			year: Number,
 			pages: Number,
 			arrived: Date,
+			link: String,
 		},
 		details: {
 			book: String,

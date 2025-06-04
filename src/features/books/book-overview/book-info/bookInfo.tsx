@@ -78,7 +78,9 @@ const BookInfo = () => {
 							</ListItem>
 						)}
 					</List>
-					<Button size="big">Download</Button>
+					<Link to={bookInfo?.link}>
+						<Button size="big">Download</Button>
+					</Link>
 				</div>
 			</Stack>
 		</StyledBookInfo>

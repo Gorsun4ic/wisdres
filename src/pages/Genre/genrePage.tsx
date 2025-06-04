@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import { Stack } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { useGetBooksByGenresQuery } from "@api/apiBooksSlice";
 
@@ -51,18 +52,29 @@ const GenrePage = () => {
 			<Stack direction="row" gap={2} sx={{ alignItems: "flex-start" }}>
 				<BookFilters data={filterData} />
 				<Stack sx={{ width: "100%" }}>
+					<Link to=".." relative="path">
+						<Stack
+							direction="row"
+							sx={{
+								alignItems: "center",
+								justifyContent: "space-between",
+								maxWidth: 140,
+								marginBottom: 4,
+							}}>
+							<ArrowBackIcon />
+							<h4>Previous page</h4>
+						</Stack>
+					</Link>
 					<Stack
 						direction="row"
 						gap={2}
 						sx={{ justifyContent: "space-between", marginBottom: 3 }}>
 						<p className="book-amount">{data?.length} Books</p>
-						<BookSort />
+						{data?.length > 0 && <BookSort />}
 					</Stack>
 					<Stack>
 						<BookList data={sortedBooks} />
-						{data?.length === 0 && (
-							<p>No books found</p>
-						)}
+						{data?.length === 0 && <p>No books found</p>}
 					</Stack>
 				</Stack>
 			</Stack>

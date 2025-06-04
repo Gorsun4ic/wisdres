@@ -21,8 +21,7 @@ const Hero = () => {
 					autoplay={{ delay: 0, disableOnInteraction: false }}
 					allowTouchMove={false}
 					speed={3000}
-					loop={true}
-					>
+					loop={true}>
 					<SwiperSlide>
 						<img
 							src="https://m.media-amazon.com/images/I/6158m1qLqFL._AC_UF1000,1000_QL80_.jpg"
@@ -70,7 +69,7 @@ const Hero = () => {
 					</SwiperSlide>
 					<SwiperSlide>
 						<img
-							src="https://bookclub.ua/images/db/goods/53452_98113.jpg"
+							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0I2KxPeE4HsPewPnvpNmUP8M0Cb6unBvZWw&s"
 							alt=""
 							width="100"
 							height="140"
@@ -88,7 +87,7 @@ const Hero = () => {
 					</SwiperSlide>
 					<SwiperSlide>
 						<img
-							src="https://bookclub.ua/images/db/goods/62445_124524.jpg"
+							src="https://m.media-amazon.com/images/I/71de1OC-ZIL._AC_UF350,350_QL50_.jpg"
 							alt=""
 							width="100"
 							height="140"
@@ -115,7 +114,7 @@ const Hero = () => {
 					</SwiperSlide>
 					<SwiperSlide>
 						<img
-							src="https://bookclub.ua/images/db/goods/60834_120831.jpg"
+							src="https://static.yakaboo.ua/media/catalog/product/i/m/img_63663.jpg"
 							alt=""
 							width="100"
 							height="140"
@@ -135,8 +134,7 @@ const Hero = () => {
 					allowTouchMove={false}
 					speed={3000}
 					dir="rtl"
-					loop={true}
-					>
+					loop={true}>
 					<SwiperSlide>
 						<img
 							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQei8UwvedGRmp_7ppTOQZQ1I9IMK6dTt0fzg&s"

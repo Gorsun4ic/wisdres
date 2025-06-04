@@ -90,10 +90,9 @@ const ReviewsList = () => {
 
 	const list = reviews?.map((item) => {
 		const { user, date } = item;
-		const { _id } = user;
 		return (
 			<ReviewItem
-				key={_id || `${user?.username}-${date}`}
+				key={user?._id || `${user?.username}-${date}`}
 				data={item}
 				bookId={bookId}
 			/>

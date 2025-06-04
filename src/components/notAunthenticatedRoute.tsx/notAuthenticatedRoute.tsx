@@ -1,10 +1,13 @@
 // Component to redirect not authenticated users
 import { Navigate, Outlet } from "react-router-dom";
+import { useCheckAuthQuery } from "@api/apiUsersSlice";
+
 
 const NotAuthenticateRoute = () => {
-	const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+	const { data, error, isLoading } = useCheckAuthQuery();
 
-	if (isAuthenticated) {
+
+	if (data?.success) {
 		return <Navigate to="/" replace />;
 	}
 

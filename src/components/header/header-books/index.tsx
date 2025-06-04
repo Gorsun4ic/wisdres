@@ -1,6 +1,11 @@
 import { Container } from "@mui/material";
-import { StyledSubCategories } from "../style";
+
+import { useGetGenresQuery } from "@api/apiGenresSlice";
+
 import { ICategories } from "@custom-types/categories";
+
+import { StyledSubCategories } from "../style";
+
 import HeaderCategories from "../header-categories";
 
 
@@ -37,6 +42,10 @@ const BookGenresList: ICategories[] = [fiction, nonFiction];
 
 
 const HeaderBooks = () => {
+
+	const { data } = useGetGenresQuery(null);
+	
+
 	return (
 		<Container>
 			<StyledSubCategories direction="row" gap={32}>

@@ -9,5 +9,10 @@ export const StyledGenrePage = styled.div`
 		.book-amount {
 			font-size: 1.5rem;
 		}
+
+		.button {
+			max-width: 150px;
+			margin-bottom: 32px;
+		}
 	}
 `

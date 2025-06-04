@@ -1,12 +1,17 @@
 // Component to redirect authenticated users
+import { useCheckAuthQuery } from "@api/apiUsersSlice";
 
 // React Router DOM
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthenticateRoute = () => {
-	const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+	const { data, error, isLoading } = useCheckAuthQuery();
 
-	if (!isAuthenticated) {
+
+
+	if (isLoading) return <div>Loading...</div>;
+
+	if (error || !data?.success) {
 		return <Navigate to="/sign-in" replace />;
 	}
 
