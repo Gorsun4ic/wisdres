@@ -5,15 +5,19 @@ import { useDispatch } from "react-redux";
 import { Stack, Typography } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
+import { useTranslation } from "react-i18next";
+
 import { sortBy } from "@reducers/filters";
 
 import { StyledBookSort } from "./style";
 
 const BookSort = () => {
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
+
 	const [isActive, setIsActive] = useState<number | null>(null);
 
-	const sortCriteria: string[] = ["Reviews", "Downloads", "Rating"];
+	const sortCriteria: string[] = [t("reviews"), t("downloads"), t("rating")];
 
 	const handleClick = (criteria: string) => {
 		dispatch(sortBy(criteria.toLowerCase()));
@@ -26,10 +30,10 @@ const BookSort = () => {
 
 	return (
 		<StyledBookSort direction="row" className="book-sort" gap={1} sx={{alignItems: "center"}}>
-			<p>Sort by:</p>
+			<p>{t("sort")}:</p>
 			{sortCriteria.map((item, i, arr) => {
 				return (
-					<Stack direction="row" gap={1} sx={{ alignItems: "center" }}>
+					<Stack className="sort-list" direction="row" gap={1} sx={{ alignItems: "center" }}>
 						<Typography
 							onClick={() => {
 								handleClick(item);

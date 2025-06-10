@@ -9,6 +9,8 @@ import {
 	DialogActions,
 } from "@mui/material";
 // import { useUpdatePasswordMutation } from "@api/apiUsersSlice";
+import { useTranslation } from "react-i18next";
+
 import PasswordField from "@components/passwordField/PasswordField";
 import { useForm } from "react-hook-form";
 import Button from "@components/button";
@@ -31,6 +33,8 @@ type PasswordFormData = {
 export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 	const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const { t } = useTranslation();
+
 	// const [updatePassword] = useUpdatePasswordMutation();
 	const theme = useTheme();
 
@@ -58,7 +62,7 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 	return (
 		<>
 			<Typography variant="h4" gutterBottom>
-				Personal Information
+				{t("personalInfo")}
 			</Typography>
 
 			<Box
@@ -71,10 +75,10 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 				<Stack spacing={3}>
 					<Stack spacing={2}>
 						<Typography>
-							<strong>Username:</strong> {userData?.username}
+							<strong>{t("userName")}:</strong> {userData?.username}
 						</Typography>
 						<Typography>
-							<strong>Email:</strong> {userData?.email}
+							<strong>{t("email")}:</strong> {userData?.email}
 						</Typography>
 					</Stack>
 					<Button
@@ -82,7 +86,7 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 						size="small"
 						onClick={() => setIsPasswordDialogOpen(true)}
 						startIcon={<LockIcon />}>
-						Change Password
+						{t("changePassword")}
 					</Button>
 				</Stack>
 			</Box>
@@ -91,23 +95,23 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 				open={isPasswordDialogOpen}
 				onClose={() => setIsPasswordDialogOpen(false)}>
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<DialogTitle>Change Password</DialogTitle>
+					<DialogTitle>{t("changePassword")}</DialogTitle>
 					<DialogContent>
 						<Stack spacing={2} sx={{ marginTop: 2 }}>
 							<Stack spacing={1}>
-								<Typography variant="body1">Current Password</Typography>
+								<Typography variant="body1">{t("currentPassword")}</Typography>
 								<PasswordField
 									name="currentPassword"
-									placeholder="Enter your current password"
+									placeholder={t("enterCurrentPassword")}
 									register={register}
 									error={errors.currentPassword?.message}
 								/>
 							</Stack>
 							<Stack spacing={1}>
-								<Typography variant="body1">New Password</Typography>
+								<Typography variant="body1">{t("newPassword")}</Typography>
 								<PasswordField
 									name="newPassword"
-									placeholder="Enter your new password"
+									placeholder={t("enterNewPassword")}
 									register={register}
 									error={errors.newPassword?.message}
 								/>
@@ -116,12 +120,12 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 								<Typography variant="body1">Confirm New Password</Typography>
 								<PasswordField
 									name="confirmPassword"
-									placeholder="Confirm your new password"
+									placeholder={t("confirmNewPassword")}
 									register={register}
 									validation={{
 										validate: (value: string) => {
 											if (watch("newPassword") !== value) {
-												return "Passwords do not match";
+												return t("passwordIncorrect");
 											}
 										},
 									}}
@@ -140,14 +144,14 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 							variant="outlined"
 							onClick={() => setIsPasswordDialogOpen(false)}
 							sx={{ minWidth: "120px" }}>
-							Cancel
+							{t("cancel")}
 						</Button>
 						<Button
 							variant="primary"
 							type="submit"
 							isLoading={isLoading}
 							sx={{ minWidth: "120px" }}>
-							Update Password
+							{t("updatePassword")}
 						</Button>
 					</DialogActions>
 				</form>

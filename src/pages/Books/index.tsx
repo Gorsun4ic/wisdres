@@ -9,8 +9,8 @@ const BooksPage = () => {
 	return (
 		<div className="books-page">
 			<GenresCollection data={data} />
-			<BookCollection title="New arrivals" filterBy="date" number={4} />
-			<BookCollection title="Top books" filterBy="popularity" number={4} />
+			<BookCollection title="New arrivals" filterBy="date" number={6} />
+			<BookCollection title="Top books" filterBy="popularity" number={6} />
 		</div>
 	);
 };

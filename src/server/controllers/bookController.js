@@ -78,6 +78,9 @@ export const getBookById = async (req, res) => {
 
 export const getBooksByGenre = async (req, res) => {
 	const genreInput = req.params.genre; // Trim the genre input to avoid issues with spaces
+	console.log(req.params);
+	const {page = 1, limit = 25} = req.query;
+	const skip = (page - 1) * limit;
 
 	// Use case-insensitive search to ensure we handle different cases
 	try {
@@ -89,11 +92,18 @@ export const getBooksByGenre = async (req, res) => {
 			return res.status(404).json({ message: "Genre not found" });
 		}
 
-		const books = await Book.find({ "info.genre": foundGenre._id }).populate({
+		const totalBooks = await Book.countDocuments({"info.genre": foundGenre._id});
+		const books = await Book.find({ "info.genre": foundGenre._id })
+		.populate({
 			path: "info.author",
 			select: "title",
 		})
-		res.status(200).json(books);
+		.skip(skip)
+		.limit(parseInt(limit))
+		res.status(200).json({
+			books,
+			totalBooks
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: "Server error" });

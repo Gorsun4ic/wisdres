@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 // Custom components
 import RangeSlider from "@components/range-slider";
@@ -14,9 +14,11 @@ interface IBookFilters {
 	pages: [number, number];
 }
 
-const BookFilters = ({ data }: {data: IBookFilters}) => {
+const BookFilters = ({ data }: { data: IBookFilters }) => {
 
-	if (!data) return
+	const { t } = useTranslation();
+
+	if (!data) return;
 
 	return (
 		<StyledBookFilters>
@@ -25,28 +27,28 @@ const BookFilters = ({ data }: {data: IBookFilters}) => {
 				<ScrolledFilter
 					data={data.authors}
 					type="authors"
-					placeholder="Write authors name"
-					title="Authors"
+					placeholder={t("writeAuthorName")}
+					title={t("authors")}
 				/>
 			)}
 			{data.publishers.length > 0 && (
 				<ScrolledFilter
 					data={data.publishers}
 					type="publishers"
-					placeholder="Write publisher name"
-					title="Publishers"
+					placeholder={t("writePublisherName")}
+					title={t("publishers")}
 				/>
 			)}
 			{data.languages.length > 0 && (
 				<ScrolledFilter
 					data={data.languages}
 					type="languages"
-					placeholder="Write language"
-					title="Languages"
+					placeholder={t("writeLanguageName")}
+					title={t("languages")}
 				/>
 			)}
 			{data.pages && data.pages.length > 0 && (
-				<RangeSlider pageDiapason={data.pages}/>
+				<RangeSlider pageDiapason={data.pages} />
 			)}
 		</StyledBookFilters>
 	);

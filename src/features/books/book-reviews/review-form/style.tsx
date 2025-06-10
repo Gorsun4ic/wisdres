@@ -7,6 +7,11 @@ export const StyledForm = styled.form`
 		border-radius: ${({ theme }) => theme?.borders?.borderRadius};
 		max-width: 600px;
 		width: 100%;
+
+		@media (max-width: 768px) {
+			max-width: none;
+		}
+
 		h3 {
 			margin-bottom: 18px;
 		}

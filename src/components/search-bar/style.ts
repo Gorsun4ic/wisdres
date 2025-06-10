@@ -3,7 +3,9 @@ import styled from "styled-components";
 export const StyledSearchBar = styled.div`
     position: relative;
     width: 300px;
-    
+    @media (max-width: 992px){
+        width: 100%;
+    }
     .MuiTextField-root {
         background-color: ${({ theme }) => theme.colors.lightGray};
         border-radius: 20px;

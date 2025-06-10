@@ -3,20 +3,28 @@ import { Stack } from "@mui/material";
 
 export const StyledBookSort = styled(Stack)`
 	&& {
-
-		& > p {
-			font-weight: ${({theme}) => theme?.fontWeights?.medium};
+		@media (max-width: 380px) {
+			flex-wrap: wrap;
+			justify-content: center;
+			p {
+				width: 100%;
+			}
 		}
 
-		span, svg {
-			color: ${({theme}) => theme?.colors?.grey};
+		& > p {
+			font-weight: ${({ theme }) => theme?.fontWeights?.medium};
+		}
+
+		span,
+		svg {
+			color: ${({ theme }) => theme?.colors?.grey};
 		}
 
 		span {
 			transition: color 0.3s ease;
 			cursor: pointer;
 			&:hover {
-				color: ${({theme}) => theme?.colors?.green};
+				color: ${({ theme }) => theme?.colors?.green};
 			}
 		}
 
@@ -24,4 +32,4 @@ export const StyledBookSort = styled(Stack)`
 			font-size: 0.8rem;
 		}
 	}
-`
+`;

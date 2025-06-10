@@ -1,7 +1,10 @@
-import { useLogoutUserMutation } from "@api/apiUsersSlice";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
+import { useLogoutUserMutation } from "@api/apiUsersSlice";
 
 const UserLogout = () => {
+	const { t } = useTranslation();
 	const [logout] = useLogoutUserMutation();
 
 	useEffect(() => {
@@ -11,8 +14,7 @@ const UserLogout = () => {
 
 	return (
 		<div>
-			<h1>You successfully logged out from your account!</h1>
-			<p>To ensure it, here is your token: {localStorage.getItem("token")}</p>
+			<h1>{t("logOutSuccess")}</h1>
 		</div>
 	);
 };

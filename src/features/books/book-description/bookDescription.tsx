@@ -5,8 +5,11 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 // MUI
-import Grid from "@mui/material/Grid2";
+import { Stack } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+
+import { useTranslation } from "react-i18next";
+
 
 // RTK Query
 import { useLazyGetBookByIdQuery } from "@api/apiBooksSlice";
@@ -16,6 +19,8 @@ import { StyledBookDescription } from "./style";
 
 const BookDescription = () => {
 	const { bookId } = useParams();
+	const { t } = useTranslation();
+
 
 	const [
 		getBookById,
@@ -39,7 +44,7 @@ const BookDescription = () => {
 	if (bookError) {
 		return (
 			<StyledBookDescription>
-				<p>Error loading book details. Please try again later.</p>
+				<p>{t("errorBookDescription")}</p>
 			</StyledBookDescription>
 		);
 	}
@@ -50,21 +55,21 @@ const BookDescription = () => {
 
 	return (
 		<StyledBookDescription className="book-details">
-			<h2>What is the book about</h2>
-			<Grid container spacing={6} rowSpacing={6}>
+			<h2>{t("whatIsBookAbout")}</h2>
+			<Stack>
 				{bookInfo.details.book && (
-					<Grid size={6}>
-						<h3>About the book</h3>
+					<div>
+						<h3>{t("aboutBooks")}</h3>
 						<p>{bookInfo.details.book}</p>
-					</Grid>
+					</div>
 				)}
 				{bookInfo.details.auditory && (
-					<Grid size={6}>
-						<h3>Who this book is for</h3>
+					<div>
+						<h3>{t("bookAuditory")}</h3>
 						<p>{bookInfo.details.auditory}</p>
-					</Grid>
+					</div>
 				)}
-			</Grid>
+			</Stack>
 		</StyledBookDescription>
 	);
 };

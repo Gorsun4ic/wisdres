@@ -7,37 +7,52 @@ import { Stack } from "@mui/material";
 // MUI Icons
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
+import { useTranslation } from "react-i18next";
+
 // Custom components
 import Logo from "@components/logo";
 import SearchBar from "../search-bar";
+import LanguageSwitcher from "@components/languageSwitcher";
+
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+
 
 // Custom styles
 import { StyledHeader } from "./style";
 
-
-const NAV_ITEMS = [
-	{ label: "Books", link: "/books" },
-	{ label: "Authors", link: "/authors" },
-	{ label: "Publishers", link: "/publishers" },
-	{ label: "Contacts", link: "/contacts" },
-];
-
 const Header = () => {
 	const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+	const { t } = useTranslation();
 
+	const NAV_ITEMS = [
+		{ label: t("books"), link: "/books" },
+		{ label: t("authors"), link: "/authors" },
+		{ label: t("publishers"), link: "/publishers" },
+		{ label: t("contacts"), link: "/contacts" },
+	];
+
+	
 
 	return (
 		<StyledHeader className="header">
 			<Stack
 				direction="row"
-				sx={{ justifyContent: "space-between", alignItems: "center" }}>
-				<Link to="/">
+				sx={{
+					justifyContent: "space-between",
+					alignItems: "center",
+					flexWrap: "wrap",
+				}}
+				className="header__container">
+				<Link to="/" className="logo">
 					<Logo />
 				</Link>
 				<Stack
 					direction="row"
-					gap={2.5}
-					sx={{ alignItems: "center", justifyContent: "center" }}
+					sx={{
+						alignItems: "center",
+						justifyContent: "center",
+						flexWrap: "wrap",
+					}}
 					className="header__nav">
 					{NAV_ITEMS.map((item) => (
 						<div
@@ -48,8 +63,13 @@ const Header = () => {
 						</div>
 					))}
 				</Stack>
-				<Stack direction="row" sx={{ alignItems: "center" }} gap={1}>
+				<Stack
+					direction="row"
+					sx={{ alignItems: "center" }}
+					gap={1}
+					className="search-input">
 					<SearchBar />
+					<LanguageSwitcher />
 					<Link to={isAuthenticated ? "/check-auth" : "/sign-in"}>
 						<PersonOutlineOutlinedIcon />
 					</Link>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setPageFilter } from "@reducers/filters";
+import { useTranslation } from "react-i18next";
+
 
 import { Slider, Stack, TextField } from "@mui/material";
 import { StyledSlider } from "./style";
@@ -10,6 +12,8 @@ function valuetext(value: number) {
 }
 
 const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
+	const { t } = useTranslation();
+
 	const [value, setValue] = useState<[number, number]>([0, 1144]);
 	const [minPage, maxPage] = pageDiapason;
 	const dispatch = useDispatch();
@@ -43,7 +47,7 @@ const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
 		<StyledSlider>
 			<span>Page count</span>
 			<Slider
-				getAriaLabel={() => "Page count range"}
+				getAriaLabel={() => t("pageCountRange")}
 				defaultValue={maxPage}
 				value={value}
 				max={maxPage}
@@ -54,7 +58,7 @@ const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
 			/>
 			<Stack direction="row" sx={{ alignItems: "center", gap: 2 }}>
 				<Stack direction="row" sx={{ alignItems: "center", gap: 1 }}>
-					<span>From</span>
+					<span>{t("from")}</span>
 					<TextField
 						placeholder={value[0].toString()}
 						value={value[0]}
@@ -62,7 +66,7 @@ const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
 					/>
 				</Stack>
 				<Stack direction="row" sx={{ alignItems: "center", gap: 1 }}>
-					<span>To</span>
+					<span>{t("to")}</span>
 					<TextField
 						placeholder={value[1].toString()}
 						value={value[1]}

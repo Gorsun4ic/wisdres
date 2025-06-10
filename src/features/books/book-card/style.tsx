@@ -7,13 +7,12 @@ export const StyledCard = styled(Card)`
 		display: flex; 
 		flex-direction: column;
 		height: 100%;
-		max-width: 200px;
 		width: 100%;
 
 		img {
 			max-width: 100%;
 			width: 100%;
-			/* object-fit: cover; */
+			object-fit: contain;
 		}
 
 		:hover {

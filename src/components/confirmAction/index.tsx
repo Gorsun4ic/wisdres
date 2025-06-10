@@ -5,6 +5,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent  from "@mui/material/DialogContent";
 
+import { useTranslation } from "react-i18next";
+
+
 import { StyledDialog } from "./style";
 
 const ConfirmAction = ({
@@ -19,28 +22,28 @@ const ConfirmAction = ({
 	onConfirm: (arg0: boolean) => void;
 	onCancel: (arg0: boolean) => void;
 	children?: ReactNode
-}) => (
-	<StyledDialog
-		open={openDialog}
-		onClose={onCancel}
-		aria-labelledby="alert-dialog-title"
-		aria-describedby="alert-dialog-description">
-		<DialogTitle id="alert-dialog-title">
-			{title}
-		</DialogTitle>
-		{children && 
-		<DialogContent>
-			{children}
-		</DialogContent>}
-		<DialogActions>
-			<Button onClick={() => onConfirm(true)} color="error">
-				Yes
-			</Button>
-			<Button onClick={() => onConfirm(false)} autoFocus>
-				No
-			</Button>
-		</DialogActions>
-	</StyledDialog>
-);
+}) => {
+	const { t } = useTranslation();
+
+
+	return (
+		<StyledDialog
+			open={openDialog}
+			onClose={onCancel}
+			aria-labelledby="alert-dialog-title"
+			aria-describedby="alert-dialog-description">
+			<DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+			{children && <DialogContent>{children}</DialogContent>}
+			<DialogActions>
+				<Button onClick={() => onConfirm(true)} color="error">
+					{t("yes")}
+				</Button>
+				<Button onClick={() => onConfirm(false)} autoFocus>
+					{t("no")}
+				</Button>
+			</DialogActions>
+		</StyledDialog>
+	);
+};
 
 export default ConfirmAction;

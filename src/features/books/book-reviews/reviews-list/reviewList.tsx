@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { List, Stack, Paper, Button, Pagination } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
+import { useTranslation } from "react-i18next";
+
 import {
 	useGetBookReviewsQuery,
 	useDeleteReviewMutation,
@@ -28,9 +30,10 @@ const ReviewItem = ({
 	bookId: string;
 	handleDeleteReview: (reviewId: string) => void;
 }) => {
+	const { t } = useTranslation();
+
 	const { data: userData } = useCheckAuthQuery(null);
 	const [deleteReview] = useDeleteReviewMutation();
-	console.log(data);
 	const handleDeleteReview = (id: string) => {
 		if (id) {
 			deleteReview({ bookId: bookId, reviewId: id });
@@ -52,7 +55,9 @@ const ReviewItem = ({
 				direction="row"
 				className="review__rating"
 				sx={{ alignItems: "center", marginBottom: 0.5 }}>
-				<p>Rating: {rating}</p>
+				<p>
+					{t("rating")}: {rating}
+				</p>
 				<StarIcon color="warning" />
 			</Stack>
 			<p className="review__text">{text}</p>
@@ -63,9 +68,9 @@ const ReviewItem = ({
 					variant="contained"
 					color="error"
 					onClick={() => handleDeleteReview(_id)}>
-					Delete this review
+					{t("reviewDelete")}
 					{hasPermission(userData?.user, "delete:reviews") &&
-						"Because you are admin"}
+						t("reviewDeleteAdmin")}
 				</Button>
 			)}
 		</Paper>
@@ -73,6 +78,8 @@ const ReviewItem = ({
 };
 
 const ReviewsList = () => {
+	const { t } = useTranslation();
+
 	const { bookId } = useParams();
 	const [page, setPage] = useState(1);
 	const [reviews, setReviews] = useState([]);
@@ -101,7 +108,7 @@ const ReviewsList = () => {
 
 	return (
 		<StyledReviewsList>
-			<h3>Reviews ({data?.totalReviews || 0 })</h3>
+			<h3>{t("reviewsNumber")} ({data?.totalReviews || 0 })</h3>
 			{reviews.length === 0 && <p>Write the first review</p>}
 			<List>{list}</List>
 			{reviews.length !== 0 && (

@@ -9,13 +9,19 @@ import {
 	DialogActions,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+
+
 import { useUpdateUserMutation } from "@api/apiUsersSlice";
+
 import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
+
 import FormField from "@components/formField";
 import Button from "@components/button";
 import { StyledUserProfileContainer } from "../style";
+
 import { useTheme } from "styled-components";
 import { IError } from "@custom-types/apiError";
 
@@ -36,6 +42,8 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [updateUser] = useUpdateUserMutation();
 	const theme = useTheme();
+	const { t } = useTranslation();
+
 	const [formError, setFormError] = useState<string | null>(null);
 	const [apiError, setApiError] = useState<string | null>(null);
 
@@ -60,7 +68,7 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 		if (data.email !== userData?.email) changedFields.email = data.email;
 
 		if (Object.keys(changedFields).length === 0) {
-			setFormError("Please change at least one field before saving");
+			setFormError(t("changeOneField"));
 			return;
 		}
 
@@ -70,9 +78,8 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 			setIsEditDialogOpen(false);
 		} catch (error) {
 			const errorMessage =
-				(error as IError)?.data?.error?.message || "Failed to update profile";
+				(error as IError)?.data?.error?.message || t("failedUpdateProfile");
 			setApiError(errorMessage);
-			console.error("Update error:", error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -81,8 +88,7 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 	return (
 		<Box>
 			<Typography variant="h4" gutterBottom>
-				Welcome, {userData?.username || "User"} to the Wisdres and wish you a
-				pleasant reading experience!
+				{t("welcomeFirst")}, {userData?.username || "User"} {t("welcomeTwo")}
 			</Typography>
 
 			<StyledUserProfileContainer
@@ -93,13 +99,13 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 					marginTop: 3,
 				}}>
 				<Stack spacing={3}>
-					<Typography variant="h6">Personal Information</Typography>
+					<Typography variant="h6">{t("personalInfo")}</Typography>
 					<Stack spacing={2}>
 						<Typography>
-							<strong>Username:</strong> {userData?.username || "N/A"}
+							<strong>{t("userName")}:</strong> {userData?.username || "N/A"}
 						</Typography>
 						<Typography>
-							<strong>Email:</strong> {userData?.email || "N/A"}
+							<strong>{t("email")}:</strong> {userData?.email || "N/A"}
 						</Typography>
 					</Stack>
 					<Button
@@ -118,7 +124,7 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 							},
 							alignSelf: "flex-start",
 						}}>
-						Edit Profile
+						{t("editProfile")}
 					</Button>
 				</Stack>
 			</StyledUserProfileContainer>
@@ -126,7 +132,9 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 			<Dialog
 				open={isEditDialogOpen}
 				onClose={() => setIsEditDialogOpen(false)}>
-				<DialogTitle sx={{ textAlign: "center" }}>Edit Profile</DialogTitle>
+				<DialogTitle sx={{ textAlign: "center" }}>
+					{t("editProfile")}
+				</DialogTitle>
 				<DialogContent>
 					<Stack spacing={3} sx={{ marginTop: 2 }}>
 						{(formError || apiError) && (
@@ -135,32 +143,32 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 							</Typography>
 						)}
 						<Stack spacing={1}>
-							<Typography variant="body1">Username</Typography>
+							<Typography variant="body1">{t("userName")}</Typography>
 							<FormField<FormFields>
 								name="username"
-								placeholder={userData?.username || "Username"}
+								placeholder={userData?.username || t("userName")}
 								register={register}
 								icon={<PersonIcon sx={{ color: theme.colors.green }} />}
 								validation={{
 									minLength: {
 										value: 3,
-										message: "Username must be at least 3 characters",
+										message: t("usernameMinChar"),
 									},
 								}}
 								error={errors.username?.message}
 							/>
 						</Stack>
 						<Stack spacing={1}>
-							<Typography variant="body1">Email</Typography>
+							<Typography variant="body1">{t("email")}</Typography>
 							<FormField<FormFields>
 								name="email"
-								placeholder={userData?.email || "Email Address"}
+								placeholder={userData?.email || t("email")}
 								register={register}
 								icon={<EmailIcon sx={{ color: theme.colors.green }} />}
 								validation={{
 									pattern: {
 										value: /\S+@\S+\.\S+/,
-										message: "Email address is not correct",
+										message: t("invalidEmail"),
 									},
 								}}
 								error={errors.email?.message}
@@ -178,14 +186,14 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 						variant="outlined"
 						onClick={() => setIsEditDialogOpen(false)}
 						sx={{ minWidth: "120px" }}>
-						Cancel
+						{t("cancel")}
 					</Button>
 					<Button
 						variant="primary"
 						onClick={handleSubmit(onSubmit)}
 						isLoading={isLoading}
 						sx={{ minWidth: "120px" }}>
-						Save Changes
+						{t("saveChanges")}
 					</Button>
 				</DialogActions>
 			</Dialog>

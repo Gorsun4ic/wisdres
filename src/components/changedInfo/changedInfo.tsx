@@ -1,6 +1,10 @@
 import { Stack } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
+
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
+
 
 interface Change {
 	from: string | number;
@@ -53,6 +57,8 @@ const handleNestedObject = (differences: Changes) => {
 
 const ChangedInfo = ({ differences }: { differences: Changes }) => {
 	const changes = handleNestedObject(differences);
+	const { t } = useTranslation();
+
 
 	return (
 		<div className="edit-property">
@@ -63,10 +69,10 @@ const ChangedInfo = ({ differences }: { differences: Changes }) => {
 							{upperCaseFirstLetter(field)}
 						</p>
 						<p className="edit-property__old">
-							Old version: {formatValue(change.from)}
+							{t("oldVersion")}: {formatValue(change.from)}
 						</p>
 						<p className="edit-property__new">
-							New version: {formatValue(change.to)}
+							{t("newVersion")}: {formatValue(change.to)}
 						</p>
 					</div>
 				))}

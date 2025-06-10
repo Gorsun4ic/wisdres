@@ -20,14 +20,26 @@ const GlobalStyle = createGlobalStyle`
 
   h1 {
     font-size: ${theme?.fontSizes?.h1};
+    @media (max-width: 1200px) {
+      font-size: ${theme?.fontSizes?.h2};
+
+    }
   }
 
   h2 {
     font-size: ${theme?.fontSizes?.h2};
+    @media (max-width: 1200px) {
+      font-size: ${theme?.fontSizes?.h3};
+
+    }
   }
 
   h3 {
     font-size: ${theme?.fontSizes?.h3};
+    @media (max-width: 1200px) {
+      font-size: ${theme?.fontSizes?.h4};
+
+    }
   }
 
     h4 {

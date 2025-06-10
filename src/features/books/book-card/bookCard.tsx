@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import { Stack } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
 import { IAuthor } from "@custom-types/author";
 
 import Button from "@components/button";
@@ -24,6 +26,9 @@ interface BookCardProps {
 
 const BookCard = ({ data }: BookCardProps) => {
 
+	const { t } = useTranslation();
+
+
 	const { info, _id } = data;
 	const { img, rating, title, author } = info;
 
@@ -34,7 +39,6 @@ const BookCard = ({ data }: BookCardProps) => {
 	return (
 		<Link to={`/book/${_id}`}>
 			<StyledCard
-				className="book-card"
 				sx={{
 					boxShadow: "none",
 					border: `1px solid ${theme?.colors?.darkGrey}`,
@@ -54,7 +58,7 @@ const BookCard = ({ data }: BookCardProps) => {
 							{author.map((auth: { title: string }) => auth.title).join(", ")}
 						</p>
 					</Stack>
-					<Button size="small">Read</Button>
+					<Button size="small">{t("read")}</Button>
 				</StyledCardContent>
 			</StyledCard>
 		</Link>

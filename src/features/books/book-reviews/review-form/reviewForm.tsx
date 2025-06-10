@@ -4,6 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { Rating, Stack, Alert } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
+
 import { useCheckAuthQuery } from "@api/apiUsersSlice";
 import { useAddNewReviewMutation } from "@api/apiBooksSlice";
 import containsBadWords from "@utils/badWordsValidator";
@@ -20,6 +23,7 @@ type FormFields = {
 
 const ReviewForm = () => {
 	const { data: userData } = useCheckAuthQuery(null);
+	const { t } = useTranslation();
 	const { bookId } = useParams();
 	const [addNewReview, { isLoading, error: addNewReviewError }] =
 		useAddNewReviewMutation();
@@ -46,14 +50,7 @@ const ReviewForm = () => {
 		if (isAuth) {
 			setIsAuthenticated(true);
 		}
-		console.log(userData);
 	}, [userData]);
-
-	useEffect(() => {
-		if (addNewReviewError) {
-			console.log(addNewReviewError);
-		}
-	}, [addNewReviewError]);
 
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
 		if (bookId && userData) {
@@ -74,9 +71,9 @@ const ReviewForm = () => {
 	if (!isAuthenticated) {
 		return (
 			<StyledForm>
-				<p>For writing a review, you need to be authenticated</p>
+				<p>{t("reviewNotAuthenticated")}</p>
 				<Button size="big" onClick={() => navigate("/sign-in")}>
-					Login
+					{t("login")}
 				</Button>
 			</StyledForm>
 		);
@@ -85,10 +82,10 @@ const ReviewForm = () => {
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)} className="rating-form">
 			<Stack>
-				<h3>Write your review</h3>
+				<h3>{t("writeReview")}</h3>
 				{addNewReviewError && (
 					<Alert severity="error">
-						{addNewReviewError?.data?.message || "Failed to submit review"}
+						{addNewReviewError?.data?.message || t("failedReview")}
 					</Alert>
 				)}
 				<Controller
@@ -107,28 +104,27 @@ const ReviewForm = () => {
 				/>
 				<FormField<FormFields>
 					name="text"
-					placeholder="Your review"
+					placeholder={t("yourReview")}
 					register={register}
 					validation={{
-						required: "Review is required",
+						required: t("reviewRequired"),
 						minLength: {
 							value: 4,
-							message: "Review must have at least 4 characters",
+							message: t("reviewMinChars"),
 						},
 						maxLength: {
 							value: 3000,
-							message: "Review must have at most 1000 characters",
+							message: t("reviewMaxChars"),
 						},
 						validate: (value: string) =>
-							!containsBadWords(value) ||
-							"Your input contains inappropriate words",
+							!containsBadWords(value) || t("reviewSwear"),
 					}}
 					error={errors.text?.message}
 					multiline
 					rows={4}
 				/>
 				<Button size="big" isLoading={isLoading} type="submit">
-					Publish
+					{t("publish")}
 				</Button>
 			</Stack>
 		</StyledForm>

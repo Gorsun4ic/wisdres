@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 
 // React Hook Form
 import { useForm } from "react-hook-form";
@@ -38,6 +40,8 @@ const UserForgotPasswordPage = () => {
 	const [verifyEmail, { error: verificationError, data }] =
 		useForgotPasswordMutation();
 
+	const { t } = useTranslation();
+
 	const navigate = useNavigate();
 	const [invalidFieldValue, setInvalidFieldValue] = useState<string>("");
 	const [disabledSubmit, setDisabledSubmit] = useState<boolean>(false);
@@ -59,10 +63,6 @@ const UserForgotPasswordPage = () => {
 			setInvalidFieldValue(currentFieldValue);
 		}
 	}, [verificationError]);
-
-	useEffect(() => {
-		console.log(data)
-	}, [data]);
 
 	useEffect(() => {
 		if (verificationError) {
@@ -90,12 +90,9 @@ const UserForgotPasswordPage = () => {
 
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)}>
-			<h2 className="form-title">Forgot Password</h2>
+			<h2 className="form-title">{t("forgotPassword")}</h2>
 			{!success && (
-				<p className="form-description">
-					Enter your email address and we will send you a link to reset your
-					password.
-				</p>
+				<p className="form-description">{t("forgotPasswordDescription")}</p>
 			)}
 			<Stack
 				direction="column"
@@ -108,10 +105,10 @@ const UserForgotPasswordPage = () => {
 						register={register}
 						icon={<EmailIcon />}
 						validation={{
-							required: "Email address is required",
+							required: t("emailRequired"),
 							pattern: {
 								value: /\S+@\S+\.\S+/,
-								message: "Email address is not correct",
+								message: t("invalidEmail"),
 							},
 						}}
 						error={errors.email?.message}
@@ -120,7 +117,7 @@ const UserForgotPasswordPage = () => {
 				{success && <p className="success">{data?.message}</p>}
 				{!success && (
 					<Button size="big" type="submit" disabled={disabledSubmit}>
-						Send reset Link
+						{t("sendResetLink")}
 					</Button>
 				)}
 			</Stack>
@@ -130,7 +127,7 @@ const UserForgotPasswordPage = () => {
 						direction="row"
 						sx={{ alignItems: "center", justifyContent: "center" }}>
 						<ArrowBackIcon />
-						<p>Back to Login</p>
+						<p>{t("backToLogin")}</p>
 					</Stack>
 				</Link>
 			</Box>

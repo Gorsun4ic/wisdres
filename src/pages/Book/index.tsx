@@ -57,7 +57,7 @@ const BookPage = () => {
 			<BookOverview />
 			<BookDescription />
 			<BookReviews />
-			<BookCollection title="Similar books" />
+			<BookCollection title="Similar books" number={6} />
 		</div>
 	);
 };

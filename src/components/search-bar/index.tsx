@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { TextField, Box, Typography, ClickAwayListener } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
+import { useTranslation } from "react-i18next";
+
 import { StyledSearchBar, StyledSearchResults } from "./style";
 import { useDebounce } from "@hooks/useDebounce";
 import { useSearchQuery } from "@api/apiSearchSlice";
@@ -21,21 +23,16 @@ const SearchBar = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isOpen, setIsOpen] = useState(false);
 	const debouncedSearch = useDebounce(searchTerm, 300);
+	const { t } = useTranslation();
+
 
 	const { data: searchResults, isLoading } = useSearchQuery(debouncedSearch, {
 		skip: !debouncedSearch,
 	});
 
-	useEffect(() => {
-		if (searchResults) {
-			console.log("Search results", searchResults);
-		}
-	}, [searchResults]);
-
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 		setIsOpen(true);
-		console.log(searchResults);
 	};
 
 	const handleClickAway = () => {
@@ -49,10 +46,10 @@ const SearchBar = () => {
 					value={searchTerm}
 					autoComplete="off"
 					onChange={handleSearch}
-					placeholder="Search books, authors, publishers..."
+					placeholder={t("searchBarPlaceholder")}
 					slotProps={{
 						input: {
-							startAdornment: <SearchIcon />
+							startAdornment: <SearchIcon />,
 						},
 					}}
 					fullWidth
@@ -83,7 +80,9 @@ const SearchBar = () => {
 												<Typography variant="body1">{result.title}</Typography>
 												<Typography variant="caption" color="textSecondary">
 													{result.type === "book" && result.author
-														? `by ${result.author.map((author: string) => author?.title).join(", ")}`
+														? `by ${result.author
+																.map((author: string) => author?.title)
+																.join(", ")}`
 														: result.type}
 												</Typography>
 											</Box>
@@ -93,7 +92,7 @@ const SearchBar = () => {
 							</>
 						) : (
 							<Box p={2}>
-								<Typography>No results found</Typography>
+								<Typography>{t("noResultsFound")}</Typography>
 							</Box>
 						)}
 					</StyledSearchResults>

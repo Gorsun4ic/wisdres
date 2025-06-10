@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-	Typography,
 	Dialog,
 	DialogTitle,
 	DialogContent,
@@ -9,6 +8,8 @@ import {
 	Tab,
 	Tabs,
 } from "@mui/material";
+
+import { useTranslation } from "react-i18next";
 
 // Icons
 import PersonIcon from "@mui/icons-material/Person";
@@ -43,6 +44,8 @@ function TabPanel({ children, value, index }: TabPanelProps) {
 }
 
 const UserProfile = () => {
+	const { t } = useTranslation();
+
 	// Get activeTab from localStorage or default to 0
 	const [activeTab, setActiveTab] = useState(() => {
 		const savedTab = localStorage.getItem("userProfileActiveTab");
@@ -88,11 +91,6 @@ const UserProfile = () => {
 						label="Personal Info"
 					/>
 					<Tab
-						icon={<HistoryIcon />}
-						iconPosition="start"
-						label="Recently Viewed"
-					/>
-					<Tab
 						icon={<LogoutIcon />}
 						iconPosition="start"
 						label="Logout"
@@ -114,33 +112,26 @@ const UserProfile = () => {
 				<TabPanel value={activeTab} index={1}>
 					<UserPersonalInfoTab userData={data?.user} />
 				</TabPanel>
-				<TabPanel value={activeTab} index={2}>
-					<BookCollection
-						filterBy="recent"
-						number={6}
-						title="Your recently viewed"
-					/>
-				</TabPanel>
 			</StyledMainContent>
 
 			<Dialog
 				open={isLogoutDialogOpen}
 				onClose={() => setIsLogoutDialogOpen(false)}>
-				<DialogTitle>Confirm Logout</DialogTitle>
-				<DialogContent>Are you sure you want to log out?</DialogContent>
+				<DialogTitle>{t("confirmLogout")}</DialogTitle>
+				<DialogContent>{t("sureLogout")}</DialogContent>
 				<DialogActions>
 					<Button
 						variant="outlined"
 						onClick={() => setIsLogoutDialogOpen(false)}
 						sx={{ minWidth: "120px" }}>
-						Cancel
+						{t("cancel")}
 					</Button>
 					<Button
 						variant="primary"
 						onClick={handleLogout}
 						isLoading={isLoading}
 						sx={{ minWidth: "120px" }}>
-						Logout
+						{t("logout")}
 					</Button>
 				</DialogActions>
 			</Dialog>

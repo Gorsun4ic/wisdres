@@ -27,12 +27,6 @@ const ScrolledFilter = ({
 	const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
 	useEffect(() => {
-		if (data) {
-			console.log("Data:", data);
-		}
-	}, [data]);
-
-	useEffect(() => {
 		switch (type) {
 			case "languages":
 				dispatch(filterLanguages(checkedItems));

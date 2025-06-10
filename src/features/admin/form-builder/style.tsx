@@ -4,6 +4,8 @@ export const StyledForm = styled.form`
 	&& {
 		background-color: ${({ theme }) => theme?.colors?.white};
 		padding: 32px;
+		height: 600px;
+		overflow-y: scroll;
 		border-radius: ${({ theme }) => theme?.borders?.borderRadius};
 		.form-title {
 			text-align: center;

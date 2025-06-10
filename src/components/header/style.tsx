@@ -8,12 +8,28 @@ export const StyledHeader = styled.header`
 		z-index: 4;
 		background-color: ${({ theme }) => theme?.colors?.white};
 
+		.logo {
+			@media (max-width: 565px) {
+				display: block;
+				margin: 0 auto;
+			}
+		}
+
 		.header__nav {
 			position: absolute;
 			top: 28px;
 			left: 50%;
 			transform: translateX(-50%);
 			z-index: 4;
+			@media (max-width: 1200px) {
+				transform: translateX(0%);
+				position: relative;
+				left: 0;
+				top: 0;
+			}
+			@media (max-width: 565px) {
+				width: 100%;
+			}
 		}
 		a {
 			font-size: ${({ theme }) => theme?.fontSizes?.h4};
@@ -39,6 +55,17 @@ export const StyledHeader = styled.header`
 			border-radius: ${({ theme }) => theme?.borders?.borderRadius};
 			background-color: ${({ theme }) => theme?.colors?.white};
 			pointer-events: auto;
+		}
+		.search-input {
+			@media (max-width: 992px){
+				width: 100%;
+				justify-content: center;
+			}
+		}
+		.header__container {
+			@media (max-width: 992px){
+				gap: 12px;
+			}
 		}
 	}
 `;

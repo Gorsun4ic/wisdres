@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // React Hook Form
 import { useForm } from "react-hook-form";
 
+import { useTranslation } from "react-i18next";
+
+
 // MUI Components
 import { Stack } from "@mui/material";
 // Custom API
@@ -25,6 +28,8 @@ type FormFields = {
 
 const UserResetPasswordPage = () => {
 	const { token } = useParams();
+	const { t } = useTranslation();
+
 	// RTK Query Add function, error
 	const [resetPassword, { error: resetError }] =
 		useResetPasswordMutation();
@@ -67,7 +72,7 @@ const UserResetPasswordPage = () => {
 
 	return (
 		<StyledForm onSubmit={handleSubmit(onSubmit)}>
-			<h2 className="form-title">Reset Password</h2>
+			<h2 className="form-title">{t("resetPassword")}</h2>
 			<Stack
 				direction="column"
 				spacing={2}
@@ -77,17 +82,17 @@ const UserResetPasswordPage = () => {
 						<PasswordField<FormFields>
 							name="password"
 							register={register}
-							validation={{ required: "The password is required" }}
+							validation={{ required: t("enterCurrentPassword") }}
 							error={errors.password?.message}
 						/>
 						<PasswordField
 							name="passwordConfirm"
 							register={register}
 							validation={{
-								required: "Password is required",
+								required: t("enterCurrentPassword"),
 								validate: (value: string) => {
 									if (watch("password") !== value) {
-										return "Passwords are different";
+										return t("passwordIncorrect");
 									}
 								},
 							}}
@@ -96,7 +101,7 @@ const UserResetPasswordPage = () => {
 					</>
 				)}
 				<Button size="big" type="submit">
-					Set New Password
+					{t("setNewPassword")}
 				</Button>
 			</Stack>
 		</StyledForm>

@@ -7,6 +7,8 @@ import { UseFormRegister, FieldValues, Path } from "react-hook-form";
 // MUI Components
 import { Tooltip, IconButton } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
 // Icons
 import LockIcon from "@mui/icons-material/Lock";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -26,20 +28,20 @@ interface PasswordFieldProps<T extends FieldValues> {
 
 const PasswordField = <T extends FieldValues> ({ register, error, validation, name, placeholder }: PasswordFieldProps<T>) => {
 	const [showPassword, setShowPassword] = useState(false);
+	const { t } = useTranslation();
 	const theme = useTheme();
 
 	return (
 		<>
 			<StyledField
 				type={showPassword ? "text" : "password"}
-				placeholder={placeholder || "Password"}
+				placeholder={placeholder || t("password")}
 				{...register(name, {
 					...validation,
 					pattern: {
 						value:
 							/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/,
-						message:
-							"Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&).",
+						message: t("passwordValidationMessage"),
 					},
 				})}
 				error={!!error}
@@ -48,7 +50,7 @@ const PasswordField = <T extends FieldValues> ({ register, error, validation, na
 					input: {
 						startAdornment: <LockIcon sx={{ color: theme.colors.green }} />,
 						endAdornment: (
-							<Tooltip title="Show password">
+							<Tooltip title={t("showPassword")}>
 								<IconButton
 									className={`show-password ${showPassword ? "active" : null}`}
 									onClick={() => {

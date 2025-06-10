@@ -19,8 +19,8 @@ export const apiBooksSlice = createApi({
 				providesTags: ["Books"],
 			}),
 		}),
-		getBooksByGenres: builder.query<IBook[], string>({
-			query: (genre) => `/books/genre/${genre}`,
+		getBooksByGenres: builder.query<IBook[], {genre: string, page?: number, limit?: number}>({
+			query: ({genre, page = 1, limit = 25}) => page && limit ? `/books/genre/${genre}?page=${page}&limit=${limit}` : `/books/genre/${genre}`,
 			providesTags: ["Books"],
 		}),
 		getBookReviews: builder.query<IReview[], { id: string; page?: number; limit?: number }>({

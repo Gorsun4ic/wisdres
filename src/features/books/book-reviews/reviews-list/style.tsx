@@ -3,6 +3,11 @@ import styled from "styled-components";
 export const StyledReviewsList = styled.div`
 	&& {
 		max-width: 550px;
+
+		@media (max-width: 768px) {
+			max-width: none;
+		}
+
 		h3 {
 			margin-bottom: 24px;
 		}

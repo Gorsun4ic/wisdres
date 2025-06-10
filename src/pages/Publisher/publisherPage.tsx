@@ -19,12 +19,6 @@ const PublisherPage = () => {
 	);
 
 	useEffect(() => {
-		if(data) {
-			console.log(publisherData);
-		}
-	}, [data]);
-
-	useEffect(() => {
 		if (publisherId) {
 			getPublisherById(publisherId);
 		}

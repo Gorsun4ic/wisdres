@@ -10,13 +10,26 @@ export const StyledAuthorsPage = styled.div`
 			max-width: 600px;
 			width: 100%;
 			margin: 0 auto 60px;
-			.MuiFormControl-root{
+			.MuiFormControl-root {
 				width: 100%;
 			}
 		}
 
 		.authors-list {
 			margin: 0 auto;
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 12px;
+			@media (max-width: 992px) {
+				grid-template-columns: repeat(3, 1fr);
+			}
+			@media (max-width: 550px) {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			@media (max-width: 390px) {
+				grid-template-columns: repeat(1, 1fr);
+				text-align: center;
+			}
 		}
 	}
-`
+`;

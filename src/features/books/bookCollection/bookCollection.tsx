@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 // MUI Components
 import { Stack, Link, CircularProgress } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // API Queries
 import { useGetBooksQuery } from "@api/apiBooksSlice";
@@ -72,7 +71,7 @@ const BookCollection = ({
 					justifyContent: "space-between",
 					marginBottom: 2.5,
 				}}
-				spacing={2}>
+				spacing={2}> 
 				<h2>{title}</h2>
 				<Link
 					href="#"
@@ -81,12 +80,6 @@ const BookCollection = ({
 						color: theme?.colors?.green,
 						fontWeight: theme?.fontWeights?.medium,
 					}}>
-					<Stack
-						direction="row"
-						sx={{ alignItems: "center", justifyContent: "space-between" }}>
-						Watch all
-						<ArrowForwardIcon />
-					</Stack>
 				</Link>
 			</Stack>
 			<BookList data={list} />

@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { Stack, CircularProgress } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
+
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
 import { useGetBooksQuery } from "@api/apiBooksSlice";
@@ -14,6 +17,8 @@ const AuthorPage = () => {
 		useLazyGetAuthorByIdQuery();
 	const { data } = useGetBooksQuery();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
+
 	const books = data?.filter((book) =>
 		authorData?.bookIds?.includes(book?._id)
 	);
@@ -68,7 +73,7 @@ const AuthorPage = () => {
 					<p>{authorData?.about}</p>
 				</Stack>
 			</Stack>
-			<BookCollection title="Author's books" booksArr={books} />
+			<BookCollection title={t("authorsBook")} booksArr={books} />
 		</Stack>
 	);
 };

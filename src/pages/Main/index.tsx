@@ -1,20 +1,21 @@
+import { useTranslation } from "react-i18next";
+
 import Hero from "@features/hero";
 import GenresCollection from "@features/genres/genres-collection";
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
+import { useGetGenresQuery } from "@api/apiGenresSlice";
+
 const MainPage = () => {
+	const { t } = useTranslation();
+	const { data } = useGetGenresQuery(null);
 
 	return (
 		<div className="main-page">
 			<Hero />
-			<GenresCollection />
-			<BookCollection filterBy="recent" number={5} title="You recent viewed" />
-			<BookCollection
-				filterBy="popularity"
-				number={5}
-				title="The most popular"
-			/>
-			<BookCollection filterBy="date" number={5} title="New Arrivals" />
+			<GenresCollection data={data} />
+			<BookCollection filterBy="popularity" number={6} title={t("topBooks")} />
+			<BookCollection filterBy="date" number={6} title={t("newArrivals")} />
 		</div>
 	);
 };
