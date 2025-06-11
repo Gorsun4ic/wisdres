@@ -11,7 +11,7 @@ import { StyledAuthorsPage } from "./style";
 
 const AuthorsPage = () => {
 	const {data: authors} = useGetAuthorsQuery(null);
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 
 
 	const authorsList = authors?.map(item => {

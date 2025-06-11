@@ -109,7 +109,7 @@ const ReviewsList = () => {
 	return (
 		<StyledReviewsList>
 			<h3>{t("reviewsNumber")} ({data?.totalReviews || 0 })</h3>
-			{reviews.length === 0 && <p>Write the first review</p>}
+			{reviews.length === 0 && <p>{t("firstReview")}</p>}
 			<List>{list}</List>
 			{reviews.length !== 0 && (
 				<Pagination

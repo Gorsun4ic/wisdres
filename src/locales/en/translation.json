@@ -39,6 +39,7 @@
 	"reviewMaxChars": "Review must not exceed 3000 characters",
 	"reviewSwear": "Your review contains inappropriate language",
 	"reviewDelete": "Delete this review",
+	"firstReview": "Write the first review",
 	"reviewDeleteAdmin": "Because you are an administrator",
 	"sort": "Sort by:",
 	"heroFull": "Explore a world of books selected especially for you",

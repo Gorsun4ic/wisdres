@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 // MUI Components
 import { CircularProgress } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
 // API Queries
 import { useLazyGetBookByIdQuery } from "@api/apiBooksSlice";
 
@@ -19,6 +21,7 @@ import BookCollection from "@features/books/bookCollection/bookCollection";
 const BookPage = () => {
 	const { bookId } = useParams();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const [getBookById, {data, isLoading }] = useLazyGetBookByIdQuery();
 
 	// Functionality to show recently viewed books
@@ -57,7 +60,7 @@ const BookPage = () => {
 			<BookOverview />
 			<BookDescription />
 			<BookReviews />
-			<BookCollection title="Similar books" number={6} />
+			<BookCollection title={t("similarBooks")} number={6} />
 		</div>
 	);
 };

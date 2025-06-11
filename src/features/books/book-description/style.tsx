@@ -15,5 +15,8 @@ export const StyledBookDescription = styled.div`
 			color: ${({theme}) => theme?.colors?.grey};
 			word-break: break-word;
 		}
+		div {
+			margin-bottom: 12px;
+		}
 	}
 `

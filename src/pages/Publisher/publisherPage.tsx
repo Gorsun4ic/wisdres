@@ -3,12 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { Stack, CircularProgress } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
+
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
 import { useGetBooksQuery } from "@api/apiBooksSlice";
 import { useLazyGetPublisherByIdQuery } from "@api/apiPublishersSlice";
 
 const PublisherPage = () => {
+	const { t } = useTranslation();
+
 	const { publisherId } = useParams();
 	const [getPublisherById, { data: publisherData, isLoading }] =
 		useLazyGetPublisherByIdQuery();
@@ -61,7 +66,7 @@ const PublisherPage = () => {
 					<p>{publisherData?.about}</p>
 				</Stack>
 			</Stack>
-			<BookCollection title="Publisher's books" booksArr={books} />
+			<BookCollection title={t("publisherBooks")} booksArr={books} />
 		</Stack>
 	);
 };

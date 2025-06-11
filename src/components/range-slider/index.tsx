@@ -45,7 +45,7 @@ const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
 
 	return (
 		<StyledSlider>
-			<span>Page count</span>
+			<span>{t("pageCount")}</span>
 			<Slider
 				getAriaLabel={() => t("pageCountRange")}
 				defaultValue={maxPage}

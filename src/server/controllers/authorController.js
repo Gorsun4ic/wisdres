@@ -40,6 +40,7 @@ export const createAuthor = async (req, res) => {
 		await newAuthor.save();
 		res.status(201).json(newAuthor);
 	} catch (error) {
+		console.error(" ERROR:", error);
 		res.status(500).json({ error: "Failed to add author" });
 	}
 };
@@ -71,6 +72,7 @@ export const updateAuthor = async (req, res) => {
 		}
 		res.json(updatedAuthor);
 	} catch (error) {
+		console.error("UPDATE ERROR:", error);
 		res.status(500).json({ error: "Failed to update author" });
 	}
 };

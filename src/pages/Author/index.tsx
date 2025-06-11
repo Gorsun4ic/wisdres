@@ -17,17 +17,11 @@ const AuthorPage = () => {
 		useLazyGetAuthorByIdQuery();
 	const { data } = useGetBooksQuery();
 	const navigate = useNavigate();
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 
 	const books = data?.filter((book) =>
 		authorData?.bookIds?.includes(book?._id)
 	);
-
-	useEffect(() => {
-		if (data) {
-			console.log(books)
-		}
-	}, [data]);
 
 	useEffect(() => {
 		if (authorId) {
