@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
+import i18n from "../../../i18n.js";
+
 import { AdminConfig } from "@custom-types/adminFormConfig";
 import { IAuthor } from "@custom-types/author";
 
@@ -16,33 +18,66 @@ import {
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 import { IGenre } from "@custom-types/genre";
 
-export const booksConfig: AdminConfig = {
+export const booksConfig = {
 	entityName: "books",
 	icon: <LibraryBooksIcon />,
 	fields: [
-		{
-			name: "info.img",
-			placeholder: "Image link",
-			type: "text",
-			validation: {
-				required: "Image is required",
-				validate: (value: string) => {
-					if (value && validateImageType(value)) {
-						return true;
-					}
-					return `Image must have one of these types: ${imageTypes.join(", ")}`;
+		[
+			i18n.t("image"),
+			{
+				name: "info.img.en",
+				placeholder: "Image link",
+				type: "text",
+				validation: {
+					required: "Image is required",
+					validate: (value: string) => {
+						if (value && validateImageType(value)) {
+							return true;
+						}
+						return `Image must have one of these types: ${imageTypes.join(
+							", "
+						)}`;
+					},
 				},
 			},
-		},
-		{
-			name: "info.title",
-			placeholder: "Books title",
-			type: "text",
-			validation: {
-				required: "Title is required",
-				minLength: 1,
+			{
+				name: "info.img.ua",
+				placeholder: "Посилання на зображення",
+				type: "text",
+				validation: {
+					required: "Вкажіть зображення",
+					validate: (value: string) => {
+						if (value && validateImageType(value)) {
+							return true;
+						}
+						return `Зображення повинно мати одне з наступних зображень: ${imageTypes.join(
+							", "
+						)}`;
+					},
+				},
 			},
-		},
+		],
+		[
+			i18n.t("title"),
+			{
+				name: "info.title.en",
+				placeholder: "Book's title",
+				type: "text",
+				validation: {
+					required: "Title is required",
+					minLength: 1,
+				},
+			},
+			{
+				name: "info.title.ua",
+				placeholder: "Назва книжки",
+				type: "text",
+				validation: {
+					required: "Вкажіть назву",
+					minLength: 1,
+				},
+			},
+		],
 		{
 			name: "info.genre",
 			label: "Genres",
@@ -107,68 +142,119 @@ export const booksConfig: AdminConfig = {
 				},
 			},
 		},
-		{
-			name: "info.link",
-			label: "Link",
-			placeholder: "Link",
-			type: "text",
-			rules: {
-				required: "Link is required"
-			}
-		},
-		{
-			name: "details.book",
-			placeholder: "About the book",
-			type: "textarea",
-			rows: 4,
-			validation: {
-				required: "Information about the book is required",
-				minLength: {
-					value: 30,
-					message:
-						"Information about the book must have at least 30 characters",
+		[
+			i18n.t("link"),
+			{
+				name: "info.link.en",
+				label: "Link",
+				placeholder: "Link",
+				type: "text",
+				rules: {
+					required: "Link is required",
 				},
 			},
-		},
-		{
-			name: "details.auditory",
-			placeholder: "About the auditory",
-			type: "textarea",
-			rows: 4,
-			validation: {
-				minLength: {
-					value: 30,
-					message:
-						"Information about the auditory must have at least 30 characters",
+			{
+				name: "info.link.ua",
+				label: "Посилання",
+				placeholder: "Посилання",
+				type: "text",
+				rules: {
+					required: "Вкажіть посилання",
 				},
 			},
-		},
+		],
+		[
+			i18n.t("aboutBooks"),
+			{
+				name: "details.book.en",
+				placeholder: "About the book",
+				type: "textarea",
+				rows: 4,
+				validation: {
+					required: "Information about the book is required",
+					minLength: {
+						value: 30,
+						message:
+							"Information about the book must have at least 30 characters",
+					},
+				},
+			},
+			{
+				name: "details.book.ua",
+				placeholder: "Про книжку",
+				type: "textarea",
+				rows: 4,
+				validation: {
+					required: "Вкажіть інформацію про книжку",
+					minLength: {
+						value: 30,
+						message: "Опис повинен містити, щонайменше, 30 символів",
+					},
+				},
+			},
+		],
+		[
+			"About the auditory",
+			{
+				name: "details.auditory.en",
+				placeholder: "About the auditory",
+				type: "textarea",
+				rows: 4,
+				validation: {
+					minLength: {
+						value: 30,
+						message:
+							"Information about the auditory must have at least 30 characters",
+					},
+				},
+			},
+			{
+				name: "details.auditory.ua",
+				placeholder: "Для кого ця книжка",
+				type: "textarea",
+				rows: 4,
+				validation: {
+					minLength: {
+						value: 30,
+						message: "Опис аудиторії повинен містити, щонайменше, 30 символів",
+					},
+				},
+			},
+		],
 	],
 	columns: [
 		{
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params) => (
-				<img src={params.value} width="40" />
-			),
+			renderCell: (params) => <img src={params.value[i18n.language] ? params.value[i18n.language] : params.value} width="40" />,
 		},
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
 			renderCell: (params) => {
-				return <Link to={`/book/${params.row.id}`}>{params.value}</Link>;
-			}
+				return <Link to={`/book/${params.row.id}`}>{params.value[i18n.language] ? params.value[i18n.language] : params.value}</Link>;
+			},
 		},
 		{
 			field: "author",
 			headerName: "Author",
 			width: 150,
 			renderCell: (params) => {
-				return params.value.map((author: IAuthor, index:number, arr: IAuthor[]) => {
-					return params.value && <Link to={`/author/${author._id}`}>{author.title}{index < arr.length - 1 ? ", " : ""}</Link> || "Unknown Author";
-				});
+				return params.value.map(
+					(author: IAuthor, index: number, arr: IAuthor[]) => {
+						return (
+							(params.value && (
+								<Link to={`/author/${author._id}`}>
+									{author.title[i18n.language]}
+									{index < arr.length - 1 ? ", " : ""}
+								</Link>
+							)) ||
+							"Unknown Author"
+						);
+					}
+				);
 			},
 		},
 		{
@@ -176,7 +262,14 @@ export const booksConfig: AdminConfig = {
 			headerName: "Publisher",
 			width: 150,
 			renderCell: (params) => {
-				return params.value && <Link to={`/publisher/${params.value?._id}`}>{params.value?.title}</Link> || "Unknown Publisher";
+				return (
+					(params.value && (
+						<Link to={`/publisher/${params.value?._id}`}>
+							{params.value?.title}
+						</Link>
+					)) ||
+					"Unknown Publisher"
+				);
 			},
 		},
 		{
@@ -184,9 +277,19 @@ export const booksConfig: AdminConfig = {
 			headerName: "Genres",
 			width: 150,
 			renderCell: (params) => {
-				return params.value.map((genre: IGenre, index:number, arr: IGenre[]) => {
-					return params.value && <Link to={`/genre/${genre._id}`}>{genre.title}{index < arr.length - 1 ? ", " : ""}</Link> || "Unknown Genre";
-				});
+				return params.value.map(
+					(genre: IGenre, index: number, arr: IGenre[]) => {
+						return (
+							(params.value && (
+								<Link to={`/genre/${genre._id}`}>
+									{genre.title[i18n.language]}
+									{index < arr.length - 1 ? ", " : ""}
+								</Link>
+							)) ||
+							"Unknown Genre"
+						);
+					}
+				);
 			},
 		},
 		{
@@ -194,9 +297,8 @@ export const booksConfig: AdminConfig = {
 			headerName: "Language",
 			width: 80,
 			renderCell: (params) => {
-				return params.value && params.value.title || "Unknown Language";
-			}
-
+				return (params.value && params.value.title[i18n.language]) || "Unknown Language";
+			},
 		},
 		{
 			field: "year",
@@ -204,8 +306,8 @@ export const booksConfig: AdminConfig = {
 			width: 60,
 			type: "number",
 			renderCell: (params) => {
-				return params.value
-			}
+				return params.value;
+			},
 		},
 		{
 			field: "pages",
@@ -213,8 +315,8 @@ export const booksConfig: AdminConfig = {
 			width: 60,
 			type: "number",
 			renderCell: (params) => {
-				return params.value
-			}
+				return params.value;
+			},
 		},
 		{
 			field: "reviews",
@@ -223,7 +325,7 @@ export const booksConfig: AdminConfig = {
 			type: "number",
 			renderCell: (params) => {
 				return params.value.length;
-			}
+			},
 		},
 	],
 	mutations: {

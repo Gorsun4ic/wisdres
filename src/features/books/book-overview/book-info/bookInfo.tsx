@@ -16,6 +16,7 @@ const BookInfo = () => {
 	const { bookId } = useParams();
 
 	const { t, i18n } = useTranslation();
+	const lang = i18n.language;
 
 	const [getInfoById, { data: bookInfo }] = useLazyGetBookInfoQuery();
 
@@ -27,9 +28,9 @@ const BookInfo = () => {
 
 	return (
 		<StyledBookInfo>
-			<img src={bookInfo?.img} alt={bookInfo?.title} width="350" height="500" />
+			<img src={bookInfo?.img[lang]} alt={bookInfo?.title[lang]} width="350" height="500" />
 			<div>
-				<h1 className="book-title">{bookInfo?.title}</h1>
+				<h1 className="book-title">{bookInfo?.title[lang]}</h1>
 				<List>
 					<ListItem>
 						{t("author")}
@@ -38,7 +39,9 @@ const BookInfo = () => {
 							<Stack direction="row" gap={1}>
 								{bookInfo.author.map((author, index) => (
 									<span key={author._id}>
-										<Link to={`/author/${author._id}`}>{author.title}</Link>
+										<Link to={`/author/${author._id}`}>
+											{author.title[lang]}
+										</Link>
 										{index < bookInfo.author.length - 1 ? ", " : " "}
 									</span>
 								))}
@@ -60,14 +63,14 @@ const BookInfo = () => {
 						{Array.isArray(bookInfo?.genre)
 							? bookInfo.genre.map((genre, index) => (
 									<span key={genre._id}>
-										{genre.title}
+										{genre.title[lang]}
 										{index < bookInfo.genre.length - 1 ? ", " : ""}
 									</span>
 							  ))
 							: t("unknownGenre")}
 					</ListItem>
 					<ListItem>
-						{t("language")}: {bookInfo?.language?.title || t("unknownLanguage")}
+						{t("language")}: {bookInfo?.language?.title[lang] || t("unknownLanguage")}
 					</ListItem>
 					<ListItem>
 						{t("yearOfPublishing")}: {bookInfo?.year}
@@ -82,7 +85,7 @@ const BookInfo = () => {
 						</ListItem>
 					)}
 				</List>
-				<Link to={bookInfo?.link}>
+				<Link to={bookInfo?.link[lang]}>
 					<Button size="big">{t("download")}</Button>
 				</Link>
 			</div>

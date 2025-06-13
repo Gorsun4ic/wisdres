@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
 
 const GenreSchema = new mongoose.Schema({
-	img: String,
-	title: String
+	img: {
+		en: String,
+		ua: String,
+	},
+	title: {
+		en: String,
+		ua: String,
+	},
 });
 
 const Genre = mongoose.model("Genre", GenreSchema);

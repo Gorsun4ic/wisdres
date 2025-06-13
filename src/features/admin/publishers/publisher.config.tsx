@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 
+import i18n from "../../../i18n.js";
+
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
 import {
@@ -14,7 +16,7 @@ import {
 
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 
-export const publisherConfig: AdminConfig = {
+export const publisherConfig = {
 	entityName: "publisher",
 	icon: <NewspaperIcon />,
 	fields: [
@@ -41,16 +43,29 @@ export const publisherConfig: AdminConfig = {
 				minLength: 1,
 			},
 		},
-		{
-			name: "about",
-			placeholder: "About publisher",
-			type: "textarea",
-			rows: 4,
-			validation: {
-				required: "Publisher's info is required",
-				minLength: 3,
+		[
+			i18n.t("about"),
+			{
+				name: "about.en",
+				placeholder: "About publisher",
+				type: "textarea",
+				rows: 4,
+				validation: {
+					required: "Publisher's info is required",
+					minLength: 3,
+				},
 			},
-		},
+			{
+				name: "about.ua",
+				placeholder: "Про видавництво",
+				type: "textarea",
+				rows: 4,
+				validation: {
+					required: "Вкажіть інформацію про видавництво",
+					minLength: 3,
+				},
+			},
+		],
 	],
 	columns: [
 		{
@@ -64,22 +79,23 @@ export const publisherConfig: AdminConfig = {
 			headerName: "Title",
 			width: 150,
 			renderCell: (params) => (
-				<Link to={`/publisher/${params.row._id}`}>{params.value}</Link>
+				<Link to={`/publisher/${params.row._id}`}>
+					{params.value}
+				</Link>
 			),
 		},
 		{
 			field: "about",
 			headerName: "About",
 			width: 150,
+			renderCell: (params) => params.value[i18n.language],
 		},
 		{
 			field: "books",
 			headerName: "Books",
 			width: 80,
-			renderCell: (params) => (
-				params.row.bookIds.length
-			)
-		}
+			renderCell: (params) => params.row.bookIds.length,
+		},
 	],
 	mutations: {
 		add: useAddPublisherMutation,

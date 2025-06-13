@@ -45,6 +45,30 @@ export const createAuthor = async (req, res) => {
 	}
 };
 
+export const createAuthorsBatch = async (req, res) => {
+	const authors = req.body;
+
+	if (!Array.isArray(authors) || authors.length === 0) {
+		return res.status(400).json({ error: "No authors provided" });
+	}
+
+	const isValid = authors.every(
+		(author) => author.img && author.title.en && author.title.ua && author.about.en && author.about.ua
+	);
+
+	if (!isValid) {
+		return res.status(400).json({ error: "Invalid author data format" });
+	}
+
+	try {
+		const newAuthors = await Author.insertMany(authors);
+		res.status(201).json({ message: "Authors added successfully", newAuthors });
+	} catch (error) {
+		console.error("Batch error:", error);
+		res.status(500).json({ error: "Failed to add authors" });
+	}
+};
+
 // Delete an author by ID
 export const deleteAuthor = async (req, res) => {
 	const { id } = req.params;

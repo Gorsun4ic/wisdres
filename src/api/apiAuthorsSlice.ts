@@ -23,6 +23,13 @@ export const apiAuthorsSlice = createApi({
 			}),
 			invalidatesTags: ["Authors"],
 		}),
+		addAuthors: builder.mutation({
+			query: (authors) => ({
+				url: "/authors/batch",
+				method: "POST",
+				body: authors
+			})
+		}),
 		deleteAuthor: builder.mutation({
 			query: (id) => ({
 				url: `/authors/${id}`,
@@ -41,4 +48,4 @@ export const apiAuthorsSlice = createApi({
 	}),
 });
 
-export const {useGetAuthorsQuery, useAddAuthorMutation, useDeleteAuthorMutation, useUpdateAuthorMutation, useLazyGetAuthorByIdQuery} = apiAuthorsSlice;
+export const {useGetAuthorsQuery, useAddAuthorMutation, useDeleteAuthorMutation, useUpdateAuthorMutation, useLazyGetAuthorByIdQuery, useAddAuthorsMutation} = apiAuthorsSlice;

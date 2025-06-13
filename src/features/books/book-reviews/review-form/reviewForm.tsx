@@ -30,12 +30,6 @@ const ReviewForm = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		if (bookId) {
-			console.log(bookId);
-		}
-	}, [bookId]);
-
 	// RHF
 	const {
 		register,
@@ -62,7 +56,6 @@ const ReviewForm = () => {
 					rating: data.rating,
 				},
 			};
-			console.log(review);
 			addNewReview(review);
 			reset();
 		}

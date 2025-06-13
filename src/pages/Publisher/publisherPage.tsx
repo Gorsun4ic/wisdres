@@ -12,7 +12,8 @@ import { useGetBooksQuery } from "@api/apiBooksSlice";
 import { useLazyGetPublisherByIdQuery } from "@api/apiPublishersSlice";
 
 const PublisherPage = () => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const lang = i18n.language;
 
 	const { publisherId } = useParams();
 	const [getPublisherById, { data: publisherData, isLoading }] =
@@ -63,7 +64,7 @@ const PublisherPage = () => {
 				/>
 				<Stack gap={2}>
 					<h1>{publisherData?.title}</h1>
-					<p>{publisherData?.about}</p>
+					<p>{publisherData?.about[lang]}</p>
 				</Stack>
 			</Stack>
 			<BookCollection title={t("publisherBooks")} booksArr={books} />

@@ -79,7 +79,6 @@ const UserSignUpPage = () => {
 				localStorage.setItem("isAuthenticated", "false");
 			}, 2000);
 		} catch (error) {
-			console.log("error", error);
 			setIsLoading(false);
 		}
 	};

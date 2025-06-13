@@ -1,4 +1,7 @@
 import LanguageIcon from "@mui/icons-material/Language";
+
+import i18n from "../../../i18n.js"
+
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
 import {
@@ -13,21 +16,34 @@ export const languageConfig: AdminConfig = {
 	entityName: "language",
 	icon: <LanguageIcon />,
 	fields: [
-		{
-			name: "title",
-			placeholder: "Language name",
-			type: "text",
-			validation: {
-				required: "Name is required",
-				minLength: 1,
+		[
+			"Title",
+			{
+				name: "title.en",
+				placeholder: "Language ",
+				type: "text",
+				validation: {
+					required: "Language name is required",
+					minLength: 1,
+				},
 			},
-		},
+			{
+				name: "title.ua",
+				placeholder: "Назва мови",
+				type: "text",
+				validation: {
+					required: "Вкажіть назву мови",
+					minLength: 1,
+				},
+			},
+		],
 	],
 	columns: [
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
+			renderCell: (params) => params.value[i18n.language] 
 		},
 	],
 	mutations: {

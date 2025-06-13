@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { ErrorBoundary } from "react-error-boundary";
 import { Stack, Alert } from "@mui/material";
 
@@ -9,20 +11,22 @@ import FormBuilder from "./form-builder/formBuilder";
 import Modal from "@components/modal";
 import Button from "@components/button";
 import ErrorMessage from "@components/error";
+import InputFileUpload from "@components/uploadFile/uploadFile";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
+import File from "@custom-types/file";
+
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
+import readJSON from "@utils/readJSONfile";
 
 interface BaseSheetProps<T> {
 	config: AdminConfig;
 	fieldData?: T[];
 }
 
-const Sheet = ({
-	config,
-	fieldData,
-}: BaseSheetProps<T>) => {
+
+const Sheet = ({ config, fieldData }: BaseSheetProps<T>) => {
 	const {
 		open,
 		data,
@@ -35,6 +39,15 @@ const Sheet = ({
 		handleClose,
 		handleDelete,
 	} = useAdminSheet(config);
+
+	const { i18n } = useTranslation();
+	const [addManyMutation, { isLoading: isAdding, error: addError }] =
+		config.mutations.addMany();
+	const onFileAttachment = async (file) => {
+		const data = await readJSON(file);
+		addManyMutation(data);
+		console.log(data);
+	}
 
 	return (
 		<>
@@ -50,6 +63,7 @@ const Sheet = ({
 				<Button size="small" onClick={() => handleOpen("add")}>
 					Add new {config.entityName.toLowerCase()}
 				</Button>
+				<InputFileUpload onAttachment={onFileAttachment}/>
 			</Stack>
 
 			<ErrorBoundary fallback={<ErrorMessage />}>
@@ -63,7 +77,9 @@ const Sheet = ({
 						/>
 					</Modal>
 				)}
+			</ErrorBoundary>
 
+			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
 					handleEdit={handleOpen}
 					data={data}
@@ -76,11 +92,13 @@ const Sheet = ({
 				/>
 			</ErrorBoundary>
 
-			{alert?.place === "sheet" && (
-				<Alert severity={alert.color}>{alert.title}</Alert>
-			)}
+			<ErrorBoundary fallback={<ErrorMessage />}>
+				{alert?.place === "sheet" && (
+					<Alert severity={alert.color}>{alert.title}</Alert>
+				)}
+			</ErrorBoundary>
 		</>
 	);
-}
+};
 
 export default Sheet;

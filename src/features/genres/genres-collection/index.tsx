@@ -10,21 +10,20 @@ import GenreCard from "../genre-card";
 
 import { StyledGenresCollection } from "./style";
 
-const GenresCollection = ({ data }: {data: IGenre[]}) => {
-
-	const { t } = useTranslation();
-
+const GenresCollection = ({ data }: { data: IGenre[] }) => {
+	const { t, i18n } = useTranslation();
+	const lang = i18n.language;
 	const location = useLocation();
 	const { pathname } = location;
 
 	const genreList = data?.map((item) => {
 		const linkPath = pathname.includes("books")
-			? item?.title.toLowerCase()
-			: `books/${item?.title.toLowerCase()}`;
+			? item?.title["en"].toLowerCase()
+			: `books/${item?.title["en"].toLowerCase()}`;
 		return (
 			<Grid2 size={2} key={item?._id}>
 				<Link to={linkPath}>
-					<GenreCard img={item?.img} genreName={item?.title} />
+					<GenreCard img={item?.img[lang]} genreName={item?.title[lang]} />
 				</Link>
 			</Grid2>
 		);

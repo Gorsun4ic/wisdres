@@ -25,10 +25,6 @@ const Hero = () => {
 		slidesPerView = 6;
 	}
 
-	useEffect(() => {
-		console.log(sizes);
-	}, [sizes]);
-
 	return (
 		<StyledHero>
 			<h1 className="visually-hidden">{t("heroFull")}</h1>

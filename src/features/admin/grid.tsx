@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
 import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -105,7 +103,7 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 
 			{openDialog && selectedItem && (
 				<ConfirmAction
-					title={`Delete ${selectedItem.title}?`}
+					title={`Delete ${selectedItem.title[lang] ? selectedItem.title[lang] : selectedItem.title }?`}
 					openDialog={openDialog}
 					onConfirm={() => handleDialogAction(true)}
 					onCancel={() => handleDialogAction(false)}

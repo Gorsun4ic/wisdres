@@ -24,7 +24,7 @@
 	"writeLanguageName": "Напишіть назву мову",
 	"languages": "Мови",
 	"author": "Автор",
-	"publisher": "Видвацнивто",
+	"publisher": "Видавництво",
 	"genres": "Жанри",
 	"yearOfPublishing": "Рік видавництва",
 	"pagesCount": "Кількість сторінок",
@@ -105,5 +105,11 @@
 	"reviewsNumber": "Відгуки",
 	"downloads": "Завантаженнями",
 	"ratings": "Рейтингами",
-	"language": "Мова"
+	"language": "Мова",
+	"title": "Заголовок",
+	"imageLink": "Посилання на зображення",
+	"aboutAuthor": "Про автора",
+	"image": "Зображення",
+	"about": "Про",
+	"link": "Посилання"
 }

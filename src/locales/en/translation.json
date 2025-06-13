@@ -105,5 +105,11 @@
 	"reviewsNumber": "Reviews",
 	"downloads": "Downloads",
 	"ratings": "Ratings",
-	"language": "Language"
+	"language": "Language",
+	"title": "Title",
+	"imageLink": "Image link",
+	"aboutAuthor": "About author",
+	"image": "Image",
+	"about": "About",
+	"link": "Link"
 }

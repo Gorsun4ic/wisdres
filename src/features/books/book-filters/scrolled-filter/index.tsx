@@ -7,6 +7,8 @@ import {
 import { useDispatch } from "react-redux";
 
 import { TextField, List, ListItem } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
 
 import Checkbox from "@components/checkbox";
 
@@ -23,6 +25,8 @@ const ScrolledFilter = ({
 	placeholder: string;
 	type: "languages" | "authors" | "publishers";
 }) => {
+	const {t, i18n} = useTranslation();
+	const lang = i18n.language;
 	const dispatch = useDispatch();
 	const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
@@ -38,7 +42,6 @@ const ScrolledFilter = ({
 				dispatch(filterPublishers(checkedItems));
 				break;
 			default:
-				console.log("Type is wrong");
 				break;
 		}
 	}, [checkedItems]);
@@ -58,7 +61,7 @@ const ScrolledFilter = ({
 		return (
 			<ListItem key={item[0]}>
 				<Checkbox
-					label={item[1]}
+					label={item[1][lang] ? item[1][lang] : item[1]}
 					checked={checkedItems.includes(item)}
 					onChange={() => handleCheckboxChange(item)}
 				/>

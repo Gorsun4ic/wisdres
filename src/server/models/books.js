@@ -2,12 +2,18 @@
 
 	const BookSchema = new mongoose.Schema({
 		info: {
-			img: String,
+			img: {
+				en: String,
+				ua: String,
+			},
 			rating: {
 				type: Number,
 				default: 0,
 			},
-			title: String,
+			title: {
+				en: String,
+				ua: String,
+			},
 			genre: [{ type: mongoose.Schema.Types.ObjectId, ref: "Genre" }],
 			author: [{ type: mongoose.Schema.Types.ObjectId, ref: "Author" }],
 			publisher: { type: mongoose.Schema.Types.ObjectId, ref: "Publisher" },
@@ -15,11 +21,20 @@
 			year: Number,
 			pages: Number,
 			arrived: Date,
-			link: String,
+			link: {
+				en: String,
+				ua: String,
+			},
 		},
 		details: {
-			book: String,
-			auditory: String,
+			book: {
+				en: String,
+				ua: String,
+			},
+			auditory: {
+				en: String,
+				ua: String,
+			},
 		},
 		reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
 	});

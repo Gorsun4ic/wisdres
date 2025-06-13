@@ -2,8 +2,14 @@ import mongoose from "mongoose";
 
 const AuthorSchema = new mongoose.Schema({
 	img: String,
-	title: String,
-	about: String,
+	title: {
+		en: String,
+		ua: String,
+	},
+	about: {
+		en: String,
+		ua: String,
+	},
 	bookIds: [
 		{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }, // References to books
 	],

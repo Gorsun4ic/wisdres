@@ -10,6 +10,8 @@ import { styled } from "@mui/material/styles";
 import { autocompleteClasses } from "@mui/material/Autocomplete";
 import { TextField, Box } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
 interface AutoCompleteFieldProps {
 	name: string;
 	control: Control<FieldValues>;
@@ -131,6 +133,8 @@ const AutocompleteInput = ({
 	multiple,
 	error
 }: AutocompleteInputProps) => {
+	const {i18n} = useTranslation();
+	const lang = i18n.language;
 	const {
 		getRootProps,
 		getInputProps,
@@ -145,8 +149,17 @@ const AutocompleteInput = ({
 		id: field.name,
 		multiple,
 		options,
-		getOptionLabel: (option: {title: string}) => option.title,
-		isOptionEqualToValue: (option: {title: string}, value: {title: string}) => option.title === value.title,
+		getOptionLabel: (option: { title: string }) =>
+			option.title[lang] ? option.title[lang] : option.title,
+		isOptionEqualToValue: (
+			option: { title: string },
+			value: { title: string }
+		) =>
+			option.title[lang]
+				? option.title[lang]
+				: option.title === value.title[lang]
+				? value.title[lang]
+				: value.title,
 		onChange: (_, newValue) => field.onChange(newValue),
 	});
 
@@ -167,7 +180,7 @@ const AutocompleteInput = ({
 								{value.map((option: {title: string}, index: number) => {
 									const { key, ...tagProps } = getTagProps({ index });
 									return (
-										<StyledTag key={key} {...tagProps} label={option.title} />
+										<StyledTag key={key} {...tagProps} label={option.title[lang] ? option.title[lang] : option.title} />
 									);
 								})}
 							</Box>

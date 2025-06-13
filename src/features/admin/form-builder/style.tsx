@@ -22,5 +22,8 @@ export const StyledForm = styled.form`
 				margin-bottom: 16px;
 			}
 		}
+		.MuiAccordion-root {
+			width: 100%;
+		}
 	}
 `;

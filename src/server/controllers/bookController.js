@@ -78,14 +78,13 @@ export const getBookById = async (req, res) => {
 
 export const getBooksByGenre = async (req, res) => {
 	const genreInput = req.params.genre; // Trim the genre input to avoid issues with spaces
-	console.log(req.params);
 	const {page = 1, limit = 25} = req.query;
 	const skip = (page - 1) * limit;
 
 	// Use case-insensitive search to ensure we handle different cases
 	try {
 		const foundGenre = await Genre.findOne({
-			title: new RegExp(genreInput.trim(), "i"),
+			"title.en": new RegExp(genreInput.trim(), "i"),
 		});
 
 		if (!foundGenre) {

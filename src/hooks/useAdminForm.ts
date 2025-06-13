@@ -47,9 +47,6 @@ export const useAdminForm = (
 	}, [isSubmitSuccessful, addError]);
 
 	useEffect(() => {
-		if (id) {
-			console.log("id", id);
-		}
 		if (id && mode === "edit") {
 			getById(id);
 		}
@@ -57,7 +54,6 @@ export const useAdminForm = (
 
 	useEffect(() => {
 		if (dataById) {
-			console.log("dataById", dataById);
 			form.reset(dataById);
 		}
 	}, [dataById]);
@@ -66,7 +62,6 @@ export const useAdminForm = (
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":
-				console.log("data", data);
 				addMutation(data);
 				break;
 			case "edit":
@@ -101,7 +96,6 @@ export const useAdminForm = (
 		const parts = fieldName.split(".");
 
 		if (errors[fieldName]?.message) {
-			console.log("direct error", errors[fieldName].message);
 			return errors[fieldName]?.message;
 		}
 

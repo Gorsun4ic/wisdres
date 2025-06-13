@@ -18,6 +18,7 @@ const AuthorPage = () => {
 	const { data } = useGetBooksQuery();
 	const navigate = useNavigate();
 	const { t, i18n } = useTranslation();
+	const lang = i18n.language;
 
 	const books = data?.filter((book) =>
 		authorData?.bookIds?.includes(book?._id)
@@ -63,8 +64,8 @@ const AuthorPage = () => {
 					alt={`Picture of ${authorData?.title}`}
 				/>
 				<Stack gap={2}>
-					<h1>{authorData?.title}</h1>
-					<p>{authorData?.about}</p>
+					<h1>{authorData?.title[lang]}</h1>
+					<p>{authorData?.about[lang]}</p>
 				</Stack>
 			</Stack>
 			<BookCollection title={t("authorsBook")} booksArr={books} />

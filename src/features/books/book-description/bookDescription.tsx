@@ -19,7 +19,8 @@ import { StyledBookDescription } from "./style";
 
 const BookDescription = () => {
 	const { bookId } = useParams();
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const lang = i18n.language;
 
 
 	const [
@@ -60,13 +61,13 @@ const BookDescription = () => {
 				{bookInfo.details.book && (
 					<div>
 						<h3>{t("aboutBooks")}</h3>
-						<p>{bookInfo.details.book}</p>
+						<p>{bookInfo.details.book[lang]}</p>
 					</div>
 				)}
 				{bookInfo.details.auditory && (
 					<div>
 						<h3>{t("bookAuditory")}</h3>
-						<p>{bookInfo.details.auditory}</p>
+						<p>{bookInfo.details.auditory[lang]}</p>
 					</div>
 				)}
 			</Stack>

@@ -47,7 +47,6 @@ const UserVerifyEmail = () => {
 	useEffect(() => {
 		if (verificationToken) {
 			verifyEmail(verificationToken);
-			console.log("verificationToken", verificationToken);
 		}
 	}, [verifyEmail, verificationToken]);
 
@@ -55,7 +54,6 @@ const UserVerifyEmail = () => {
 		if (verificationError) {
 			const errorMessage = (verificationError as IError)?.data?.error?.message;
 			setError(errorMessage);
-			console.log("verificationError", verificationError);
 		}
 	}, [verificationError]);
 

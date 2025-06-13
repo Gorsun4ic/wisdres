@@ -12,13 +12,14 @@ import { StyledAuthorsPage } from "./style";
 const AuthorsPage = () => {
 	const {data: authors} = useGetAuthorsQuery(null);
 	const { t, i18n } = useTranslation();
+	const lang = i18n.language;
 
 
 	const authorsList = authors?.map(item => {
 		return (
 			<Grid2 size={3}>
 				<Link to={`/author/${item?._id}`}>
-					{item?.title}
+					{item?.title[lang]}
 					{` (${item?.bookIds?.length})`}
 				</Link>
 			</Grid2>
