@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 export const useChangeUserStatus = (config: AdminConfig) => {
-	const [changeUserStatus, {data, isLoading: isChanging, error: changeError }] =
-		config.mutations.changeUserStatus();
+	const [
+		changeUserStatus,
+		{ data, isLoading: isChanging, error: changeError },
+	] = config.mutations.changeUserStatus();
 	const [isChangeDialogOpen, setIsChangeDialogOpen] = useState(false);
 	const [changeUserId, setChangeUserId] = useState<string | null>(null);
 	const [changeStatus, setChangeStatus] = useState<{

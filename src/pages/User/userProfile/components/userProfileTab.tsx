@@ -11,7 +11,6 @@ import {
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-
 import { useUpdateUserMutation } from "@api/apiUsersSlice";
 
 import EditIcon from "@mui/icons-material/Edit";

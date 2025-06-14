@@ -1,4 +1,4 @@
-import { IBook } from "@custom-types/book";
+import { IBook } from "@custom-types//book";
 
 export default function sortBooksByNumericProperty(
 	books: IBook[],

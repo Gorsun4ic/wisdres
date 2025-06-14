@@ -15,6 +15,8 @@ export interface IFilterExpanded extends IFilter {
 	pages: [number, number];
 }
 
+export type SortType = "rating" | "date" | "recent";
+
 export interface IFilterParams {
 	authors: string[];
 	publishers: string[];

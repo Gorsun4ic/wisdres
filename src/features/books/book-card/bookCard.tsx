@@ -25,7 +25,6 @@ interface BookCardProps {
 }
 
 const BookCard = ({ data }: BookCardProps) => {
-
 	const { t, i18n } = useTranslation();
 	const lang = i18n.language;
 
@@ -43,7 +42,12 @@ const BookCard = ({ data }: BookCardProps) => {
 					boxShadow: "none",
 					border: `1px solid ${theme?.colors?.darkGrey}`,
 				}}>
-				<img src={img[lang] ? img[lang] : img} className="book-card__img" width="200" height="300" />
+				<img
+					src={img[lang] ? img[lang] : img}
+					className="book-card__img"
+					width="200"
+					height="300"
+				/>
 				<StyledCardContent>
 					<Stack>
 						{rating ? (
@@ -55,10 +59,14 @@ const BookCard = ({ data }: BookCardProps) => {
 								<p>{rating && rating > 0 ? rating : null}</p>
 							</Stack>
 						) : null}
-						<h3 className="book-card__name">{title[lang] ? title[lang] : title}</h3>
+						<h3 className="book-card__name">
+							{title[lang] ? title[lang] : title}
+						</h3>
 						<p className="book-card__author">
 							{author
-								.map((auth: { title: string }) => auth.title[lang] ? auth.title[lang] : auth.title)
+								.map((auth: { title: string }) =>
+									auth.title[lang] ? auth.title[lang] : auth.title
+								)
 								.join(", ")}
 						</p>
 					</Stack>

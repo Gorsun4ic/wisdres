@@ -4,7 +4,11 @@ import { IBook } from "@custom-types/book";
 import { IAuthor } from "@custom-types/author";
 import { ILanguage } from "@src/types/language";
 import { IPublisher } from "@src/types/publisher";
-import { stringTuple, IFilterParams, IFilterExpanded } from "@custom-types/filter";
+import {
+	stringTuple,
+	IFilterParams,
+	IFilterExpanded,
+} from "@custom-types/filter";
 
 type allowedKeys = "author" | "publisher" | "language";
 

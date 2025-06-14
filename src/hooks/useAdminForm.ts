@@ -58,7 +58,6 @@ export const useAdminForm = (
 		}
 	}, [dataById]);
 
-
 	const onSubmit = (data) => {
 		switch (mode) {
 			case "add":

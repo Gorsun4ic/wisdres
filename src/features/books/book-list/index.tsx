@@ -6,9 +6,14 @@ import BookCard from "@features/books/book-card/bookCard";
 
 import { StyledList } from "./style";
 
-const BookList = ({ data, isLoading }: { data: IBook[], isLoading: boolean }) => {
-
-	if (!data) return
+const BookList = ({
+	data,
+	isLoading,
+}: {
+	data: IBook[];
+	isLoading: boolean;
+}) => {
+	if (!data) return;
 
 	if (isLoading) {
 		return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;

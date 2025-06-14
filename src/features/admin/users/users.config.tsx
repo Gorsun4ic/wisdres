@@ -2,10 +2,7 @@ import RecentActorsIcon from "@mui/icons-material/RecentActors";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
-import {
-	useDeleteUserMutation,
-	useGetUsersQuery,
-} from "@api/apiUsersSlice";
+import { useDeleteUserMutation, useGetUsersQuery } from "@api/apiUsersSlice";
 
 import { usePromoteToAdminMutation } from "@api/apiAdminsSlice";
 

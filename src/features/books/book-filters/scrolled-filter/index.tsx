@@ -49,7 +49,6 @@ const ScrolledFilter = ({
 			prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
 		);
 	};
-	
 
 	if (!data) return null;
 

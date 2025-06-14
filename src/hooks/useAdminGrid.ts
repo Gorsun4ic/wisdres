@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-
-import useAlert from "@hooks/useAlert";
-
 interface UseAdminGridProps<T> {
 	data: T[] | undefined;
 	onDelete: (id: string, title: string) => Promise<void>;

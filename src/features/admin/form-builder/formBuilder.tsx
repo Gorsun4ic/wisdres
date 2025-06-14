@@ -15,7 +15,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { RootState } from "@store/index";
 
 // Custom types
-import { FormFieldConfig } from "@custom-types/adminFormConfig";
 import { IGenre } from "@custom-types/genre";
 import { IAuthor } from "@custom-types/author";
 import { IPublisher } from "@custom-types/publisher";
@@ -23,8 +22,6 @@ import { ILanguage } from "@custom-types/language";
 
 // Custom hooks
 import { useAdminForm } from "@hooks/useAdminForm";
-import useWatchImg from "@hooks/useWatchImg";
-
 // Custom components
 import FormField from "@components/formField";
 import Button from "@components/button";
@@ -41,7 +38,7 @@ const FormBuilder = ({
 	id,
 	fieldData,
 }: {
-	config: AdminConfig;
+	config;
 	mode: "add" | "edit";
 	fieldData?: IGenre[] | IAuthor[] | IPublisher[] | ILanguage[];
 	id?: string;

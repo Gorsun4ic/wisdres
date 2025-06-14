@@ -8,7 +8,7 @@ interface activeBookPage {
 }
 
 const initialState: activeBookPage = {
-	activeBook: null
+	activeBook: null,
 };
 
 const activeBookPageSlice = createSlice({
@@ -16,10 +16,10 @@ const activeBookPageSlice = createSlice({
 	initialState,
 	reducers: {
 		showBook: (state, action: PayloadAction<IBookInfo>) => {
-			state.activeBook = action.payload
-		}
-	}
-})
+			state.activeBook = action.payload;
+		},
+	},
+});
 
-export const {showBook} = activeBookPageSlice.actions;
+export const { showBook } = activeBookPageSlice.actions;
 export default activeBookPageSlice.reducer;

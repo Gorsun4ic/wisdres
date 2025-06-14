@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-
 // React Hook Form
 import { useForm } from "react-hook-form";
 
@@ -84,7 +83,7 @@ const UserForgotPasswordPage = () => {
 
 	const onSubmit = (data: FormFields) => {
 		if (disabledSubmit) return;
-		setSuccess(true)
+		setSuccess(true);
 		verifyEmail(data);
 	};
 

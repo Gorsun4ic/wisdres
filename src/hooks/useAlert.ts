@@ -4,19 +4,19 @@ import { IAlert } from "@custom-types/alert";
 
 // Custom hook to trigger alert
 const useAlert = () => {
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  // Trigger an alert with title and color
-  const triggerAlert = (alert: IAlert) => {
-    dispatch(showAlert(alert));
+	// Trigger an alert with title and color
+	const triggerAlert = (alert: IAlert) => {
+		dispatch(showAlert(alert));
 
-    // Hide the alert after a timeout
-    setTimeout(() => {
-      dispatch(hideAlert());
-    }, 2000);
-  };
+		// Hide the alert after a timeout
+		setTimeout(() => {
+			dispatch(hideAlert());
+		}, 2000);
+	};
 
-  return triggerAlert;
-}
+	return triggerAlert;
+};
 
 export default useAlert;

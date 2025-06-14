@@ -10,11 +10,7 @@ import { Link } from "react-router-dom";
 import { useAddUserMutation } from "@api/apiUsersSlice";
 
 // MUI Components
-import {
-	Stack,
-	Box,
-	CircularProgress,
-} from "@mui/material";
+import { Stack, Box, CircularProgress } from "@mui/material";
 
 // MUI Icons
 import EmailIcon from "@mui/icons-material/Email";
@@ -82,7 +78,6 @@ const UserSignUpPage = () => {
 			setIsLoading(false);
 		}
 	};
-
 
 	if (isSubmitSuccessful && !registrationError) {
 		return (

@@ -130,8 +130,6 @@ const AdminGrid = ({
 				rows={info}
 				columns={columnsInfo}
 				columnVisibilityModel={columnVisibilityModel}
-
-
 				initialState={{
 					pagination: {
 						paginationModel: {

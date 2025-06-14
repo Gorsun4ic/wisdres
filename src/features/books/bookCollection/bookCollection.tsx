@@ -10,7 +10,7 @@ import { useGetBooksQuery } from "@api/apiBooksSlice";
 import { IBook } from "@custom-types/book";
 
 // Custom hooks
-import useFilterArr from "@hooks/useFilterArr";
+import useSortedBooks from "@src/hooks/useSortedBooks";
 
 // Custom features
 import BookList from "@features/books/book-list";
@@ -53,7 +53,7 @@ const BookCollection = ({
 		}
 	}, [data, booksArr]);
 
-	const list = useFilterArr(books, filterBy, number);
+	const list = useSortedBooks(books, filterBy, number);
 
 	if (isLoading) {
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
@@ -84,7 +84,7 @@ const BookCollection = ({
 						fontWeight: theme?.fontWeights?.medium,
 					}}></Link>
 			</Stack>
-			<BookList data={list} />
+			<BookList data={list} isLoading={isLoading} />
 		</StyledBookCollection>
 	);
 };

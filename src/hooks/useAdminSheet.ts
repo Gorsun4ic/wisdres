@@ -12,7 +12,7 @@ export const useAdminSheet = <T extends { id: string }>(
 	config: AdminConfig
 ) => {
 	const [deleteMutation] = config.mutations.delete();
-	const {data, isLoading, error} = config.mutations.getAll();
+	const { data, isLoading, error } = config.mutations.getAll();
 
 	const { alert } = useSelector((state: RootState) => state.alert);
 	const triggerAlert = useAlert();
@@ -21,22 +21,22 @@ export const useAdminSheet = <T extends { id: string }>(
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
 	const [toEditId, setToEditId] = useState<string | null>(null);
 
-  const handleDelete = async (id: string, title: string) => {
-    try {
-      await deleteMutation(id);
-      triggerAlert({
-        title: `The ${config.entityName} was successfully deleted`,
-        color: 'success',
-        place: 'sheet',
-      });
-    } catch (error) {
-      triggerAlert({
-        title: `Failed to delete ${config.entityName}`,
-        color: 'error',
-        place: 'sheet',
-      });
-    }
-  };
+	const handleDelete = async (id: string, title: string) => {
+		try {
+			await deleteMutation(id);
+			triggerAlert({
+				title: `The ${config.entityName} was successfully deleted`,
+				color: "success",
+				place: "sheet",
+			});
+		} catch (error) {
+			triggerAlert({
+				title: `Failed to delete ${config.entityName}`,
+				color: "error",
+				place: "sheet",
+			});
+		}
+	};
 
 	const handleOpen = (mode: "add" | "edit", id?: string) => {
 		setOpen(true);
@@ -44,13 +44,12 @@ export const useAdminSheet = <T extends { id: string }>(
 		if (id) setToEditId(id);
 	};
 
-	  const handleClose = () => {
-			setOpen(false);
-			setToEditId(null);
-			setFormMode("add");
-		};
+	const handleClose = () => {
+		setOpen(false);
+		setToEditId(null);
+		setFormMode("add");
+	};
 
-	
 	return {
 		open,
 		data,

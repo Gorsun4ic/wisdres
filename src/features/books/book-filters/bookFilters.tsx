@@ -8,7 +8,6 @@ import ScrolledFilter from "./scrolled-filter";
 
 import { IFilterExpanded } from "@custom-types/filter";
 
-
 // Custom styles
 import { StyledBookFilters } from "./style";
 

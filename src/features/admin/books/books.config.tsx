@@ -226,14 +226,29 @@ export const booksConfig = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params) => <img src={params.value[i18n.language] ? params.value[i18n.language] : params.value} width="40" />,
+			renderCell: (params) => (
+				<img
+					src={
+						params.value[i18n.language]
+							? params.value[i18n.language]
+							: params.value
+					}
+					width="40"
+				/>
+			),
 		},
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
 			renderCell: (params) => {
-				return <Link to={`/book/${params.row.id}`}>{params.value[i18n.language] ? params.value[i18n.language] : params.value}</Link>;
+				return (
+					<Link to={`/book/${params.row.id}`}>
+						{params.value[i18n.language]
+							? params.value[i18n.language]
+							: params.value}
+					</Link>
+				);
 			},
 		},
 		{
@@ -296,7 +311,10 @@ export const booksConfig = {
 			headerName: "Language",
 			width: 80,
 			renderCell: (params) => {
-				return (params.value && params.value.title[i18n.language]) || "Unknown Language";
+				return (
+					(params.value && params.value.title[i18n.language]) ||
+					"Unknown Language"
+				);
 			},
 		},
 		{
