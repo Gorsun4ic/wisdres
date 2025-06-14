@@ -4,9 +4,19 @@ import Author from "../models/Author.js";
 export const getAllAuthors = async (req, res) => {
 	try {
 		const authors = await Author.find();
-		res.json(authors);
+		res.json({
+			success: true,
+			message: "Received all authors",
+			data: authors,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch authors" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch authors",
+				error: 500,
+			},
+		});
 	}
 };
 
@@ -16,21 +26,33 @@ export const getAuthorById = async (req, res) => {
 	try {
 		const author = await Author.findById(id);
 		if (!author) {
-			return res.status(404).json({ error: "Author not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Author not found",
+					code: 404,
+				},
+			});
 		}
-		res.json(author);
+		res.json({
+			success: true,
+			message: "Found requested author",
+			data: author,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch author" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch author",
+				code: 500,
+			},
+		});
 	}
 };
 
 // Create a new author
 export const createAuthor = async (req, res) => {
-	const {
-		img,
-		title,
-		about
-	} = req.body;
+	const { img, title, about } = req.body;
 	try {
 		const newAuthor = new Author({
 			img,
@@ -38,10 +60,19 @@ export const createAuthor = async (req, res) => {
 			about,
 		});
 		await newAuthor.save();
-		res.status(201).json(newAuthor);
+		res.status(201).json({
+			success: true,
+			message: "Author was successfully added!",
+			data: newAuthor,
+		});
 	} catch (error) {
-		console.error(" ERROR:", error);
-		res.status(500).json({ error: "Failed to add author" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to add author",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -49,23 +80,49 @@ export const createAuthorsBatch = async (req, res) => {
 	const authors = req.body;
 
 	if (!Array.isArray(authors) || authors.length === 0) {
-		return res.status(400).json({ error: "No authors provided" });
+		return res.status(400).json({
+			success: false,
+			error: {
+				message: "No authors provided",
+				code: 400,
+			},
+		});
 	}
 
 	const isValid = authors.every(
-		(author) => author.img && author.title.en && author.title.ua && author.about.en && author.about.ua
+		(author) =>
+			author.img &&
+			author.title.en &&
+			author.title.ua &&
+			author.about.en &&
+			author.about.ua
 	);
 
 	if (!isValid) {
-		return res.status(400).json({ error: "Invalid author data format" });
+		return res.status(400).json({
+			success: false,
+			error: {
+				message: "Invalid author data format",
+				code: 400,
+			},
+		});
 	}
 
 	try {
 		const newAuthors = await Author.insertMany(authors);
-		res.status(201).json({ message: "Authors added successfully", newAuthors });
+		res.status(201).json({
+			success: true,
+			message: "Authors added successfully",
+			data: newAuthors,
+		});
 	} catch (error) {
-		console.error("Batch error:", error);
-		res.status(500).json({ error: "Failed to add authors" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to add authors",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -75,11 +132,27 @@ export const deleteAuthor = async (req, res) => {
 	try {
 		const deletedAuthor = await Author.findByIdAndDelete(id);
 		if (!deletedAuthor) {
-			return res.status(404).json({ error: "Author not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Author not found",
+					code: 404,
+				},
+			});
 		}
-		res.json({ message: "Author deleted successfully", author: deletedAuthor });
+		res.json({
+			success: true,
+			message: "Author deleted successfully",
+			data: deletedAuthor,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to delete author" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to delete author",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -92,11 +165,26 @@ export const updateAuthor = async (req, res) => {
 			runValidators: true,
 		});
 		if (!updatedAuthor) {
-			return res.status(404).json({ error: "Author not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Author not found",
+					code: 404
+				},
+			});
 		}
-		res.json(updatedAuthor);
+		res.json({
+			success: true,
+			message: "Author was successfully updated!",
+			data: updatedAuthor,
+		});
 	} catch (error) {
-		console.error("UPDATE ERROR:", error);
-		res.status(500).json({ error: "Failed to update author" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to update author",
+				code: 500
+			},
+		});
 	}
 };

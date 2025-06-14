@@ -111,5 +111,6 @@
 	"aboutAuthor": "About author",
 	"image": "Image",
 	"about": "About",
-	"link": "Link"
+	"link": "Link",
+	"failedToLoadGenres": "Unfortunately, we could not loaded genres. Please, try again later!"
 }

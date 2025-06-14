@@ -7,7 +7,13 @@ export const transformFilterIdsToTitles = async (req, res) => {
 		const { authorsIds, publishersIds, languagesIds } = req.body;
 
 		if (!authorsIds && !publishersIds && !languagesIds) {
-			return res.status(400).json({ message: "No filters provided" });
+			return res.status(400).json({
+				success: false,
+				error: {
+					message: "No filters provided",
+					code: 400,
+				},
+			});
 		}
 
 		if (!authorsIds) {
@@ -27,15 +33,31 @@ export const transformFilterIdsToTitles = async (req, res) => {
 		const languages = await Language.find({ _id: { $in: languagesIds } });
 
 		const authorsTitles = authors.map((author) => [author._id, author.title]);
-		const publishersTitles = publishers.map((publisher) => [publisher._id, publisher.title]);
-		const languagesTitles = languages.map((language) => [language._id, language.title]);
+		const publishersTitles = publishers.map((publisher) => [
+			publisher._id,
+			publisher.title,
+		]);
+		const languagesTitles = languages.map((language) => [
+			language._id,
+			language.title,
+		]);
 
 		res.status(200).json({
-			authors: authorsTitles,
-			publishers: publishersTitles,
-			languages: languagesTitles,
+			success: true,
+			message: "Filter was successfully received!",
+			data: {
+				authors: authorsTitles,
+				publishers: publishersTitles,
+				languages: languagesTitles,
+			},
 		});
 	} catch (error) {
-		res.status(500).json({ message: "Server error", error: error.message });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: error.message,
+				code: 500,
+			},
+		});
 	}
 };

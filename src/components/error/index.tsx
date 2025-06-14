@@ -2,10 +2,9 @@ import { useTranslation } from "react-i18next";
 
 import { StyledError } from "./style";
 
-const ErrorMessage = () => {
+const ErrorMessage = ({children}: {children?: string}) => {
 
   const { t } = useTranslation();
-
 
 	return (
 		<StyledError>
@@ -15,7 +14,7 @@ const ErrorMessage = () => {
 				width="300"
 				height="250"
 			/>
-			<p>{t("error")}</p>
+			<p>{children ? children : t("error")}</p>
 		</StyledError>
 	);
 };

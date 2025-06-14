@@ -1,45 +1,62 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IBook } from "@custom-types/book";
-import { IBookInfo } from "@custom-types/bookInfo";
-import IReview from "@custom-types/review";
-import { IBookDetails } from "@custom-types/bookDetails";
+import {
+	GetBooksResponse,
+	GetBookResponse,
+	GetBooksByGenreResponse,
+	GetBookReviewsResponse,
+	GetBookDetailsResponse,
+	GetBookInfoResponse,
+	AddBookResponse,
+	AddBooksResponse,
+	DeleteBookResponse,
+	AddReviewResponse,
+	UpdateBookResponse,
+	DeleteReviewResponse,
+	IBookInput,
+	IBookPatch,
+} from "@custom-types/book";
+import { IReviewInput } from "@custom-types/review";
 
 export const apiBooksSlice = createApi({
 	reducerPath: "booksApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
 	tagTypes: ["Books", "Reviews"],
 	endpoints: (builder) => ({
-		getBooks: builder.query<IBook[], void>({
+		getBooks: builder.query<GetBooksResponse, void>({
 			query: () => "/books",
 			providesTags: ["Books"],
 		}),
-		getBookById: builder.query<IBook, string>({
-			query: (id) => ({
-				url: `/books/${id}`,
-				providesTags: ["Books"],
-			}),
-		}),
-		getBooksByGenres: builder.query<IBook[], {genre: string, page?: number, limit?: number}>({
-			query: ({genre, page = 1, limit = 25}) => page && limit ? `/books/genre/${genre}?page=${page}&limit=${limit}` : `/books/genre/${genre}`,
+		getBookById: builder.query<GetBookResponse, string>({
+			query: (id) => ({ url: `/books/${id}` }),
 			providesTags: ["Books"],
 		}),
-		getBookReviews: builder.query<IReview[], { id: string; page?: number; limit?: number }>({
-			query: ({id, page = 1, limit = 3}) => `/books/${id}/reviews?page=${page}&limit=${limit}`,
-			providesTags: ["Reviews", "Books"]
+		getBooksByGenres: builder.query<
+			GetBooksByGenreResponse,
+			{ genre: string; page?: number; limit?: number }
+		>({
+			query: ({ genre, page = 1, limit = 25 }) =>
+				page && limit
+					? `/books/genre/${genre}?page=${page}&limit=${limit}`
+					: `/books/genre/${genre}`,
+			providesTags: ["Books"],
 		}),
-		getBookInfo: builder.query<IBookInfo, string>({
-			query: (id) => ({
-				url: `/books/${id}/info`,
-				providesTags: ["Books"],
-			}),
+		getBookReviews: builder.query<
+			GetBookReviewsResponse,
+			{ id: string; page?: number; limit?: number }
+		>({
+			query: ({ id, page = 1, limit = 3 }) =>
+				`/books/${id}/reviews?page=${page}&limit=${limit}`,
+			providesTags: ["Reviews", "Books"],
 		}),
-		getBookDetails: builder.query<IBookDetails, void>({
-			query: (id) => ({
-				url: `/books/${id}/details`,
-				providesTags: ["Books"],
-			}),
+		getBookInfo: builder.query<GetBookInfoResponse, string>({
+			query: (id) => ({ url: `/books/${id}/info` }),
+			providesTags: ["Books"],
 		}),
-		addBook: builder.mutation({
+		getBookDetails: builder.query<GetBookDetailsResponse, string>({
+			query: (id) => ({ url: `/books/${id}/details` }),
+			providesTags: ["Books"],
+		}),
+		addBook: builder.mutation<AddBookResponse, IBookInput>({
 			query: (book) => ({
 				url: "/books",
 				method: "POST",
@@ -47,29 +64,46 @@ export const apiBooksSlice = createApi({
 			}),
 			invalidatesTags: ["Books"],
 		}),
-		deleteBook: builder.mutation({
+		addBooks: builder.mutation<AddBooksResponse, IBookInput[]>({
+			query: (books) => ({
+				url: "/books/batch",
+				method: "POST",
+				body: books,
+			}),
+			invalidatesTags: ["Books"],
+		}),
+		deleteBook: builder.mutation<DeleteBookResponse, string>({
 			query: (id) => ({
 				url: `/books/${id}`,
 				method: "DELETE",
 			}),
 			invalidatesTags: ["Books"],
 		}),
-		addNewReview: builder.mutation({
-			query: ({ bookId, review }: { bookId: string; review: IReview }) => ({
+		addNewReview: builder.mutation<
+			AddReviewResponse,
+			{ bookId: string; review: IReviewInput }
+		>({
+			query: ({ bookId, review }) => ({
 				url: `/books/${bookId}/reviews`, // Correct URL
 				method: "POST",
 				body: review,
 			}),
 			invalidatesTags: ["Reviews", "Books"],
 		}),
-		deleteReview: builder.mutation<void, { bookId: string; reviewId: string }>({
+		deleteReview: builder.mutation<
+			DeleteReviewResponse,
+			{ bookId: string; reviewId: string }
+		>({
 			query: ({ bookId, reviewId }) => ({
 				url: `/books/${bookId}/reviews/${reviewId}`,
 				method: "DELETE",
 			}),
 			invalidatesTags: ["Reviews", "Books"],
 		}),
-		updateBook: builder.mutation({
+		updateBook: builder.mutation<
+			UpdateBookResponse,
+			{ id: string; updates: IBookPatch }
+		>({
 			query: ({ id, updates }) => ({
 				url: `/books/${id}`,
 				method: "PATCH",
@@ -84,6 +118,7 @@ export const {
 	useGetBooksQuery,
 	useGetBooksByGenresQuery,
 	useAddBookMutation,
+	useAddBooksMutation,
 	useDeleteBookMutation,
 	useUpdateBookMutation,
 	useLazyGetBookByIdQuery,

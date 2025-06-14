@@ -25,7 +25,7 @@ const GenrePage = () => {
 	const { genre = "" } = useParams<{ genre: string }>();
 	const { t } = useTranslation();
 	const [page, setPage] = useState(1);
-	const { data } = useGetBooksByGenresQuery({ genre: genre, limit: 25, page: page });
+	const { data, isLoading, error } = useGetBooksByGenresQuery({ genre: genre, limit: 25, page: page });
 	const { sortBy, filters } = useSelector(
 		(state: { filters: IFilter }) => state.filters
 	);

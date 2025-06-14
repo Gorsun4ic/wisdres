@@ -1,13 +1,22 @@
 import Language from "../models/Language.js";
 
 // Get all languages
-
 export const getAllLanguages = async (req, res) => {
 	try {
 		const language = await Language.find();
-		res.json(language);
+		res.json({
+			success: true,
+			message: "Received all languages!",
+			data: language,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch languages" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch languages",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -17,11 +26,27 @@ export const getLanguageById = async (req, res) => {
 	try {
 		const language = await Language.findById(id);
 		if (!language) {
-			return res.status(404).json({ error: "language not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Language not found",
+					code: 404
+				},
+			});
 		}
-		res.json(language);
+		res.json({
+			success: true,
+			message: "Found requested language!",
+			data: language,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch language" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch language",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -34,9 +59,67 @@ export const createLanguage = async (req, res) => {
 			title,
 		});
 		await newLanguage.save();
-		res.status(201).json(newLanguage);
+		res.status(201).json({
+			success: true,
+			message: "Successfully added new language",
+			data: newLanguage,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to add language" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to add language",
+				code: 500
+			},
+		});
+	}
+};
+
+// Create multiple languages at once
+export const createLanguagesBatch = async (req, res) => {
+	const languages = req.body;
+
+	if (!Array.isArray(languages) || languages.length === 0) {
+		return res.status(400).json({
+			success: false,
+			error: {
+				message: "No languages provided",
+				code: 400,
+			},
+		});
+	}
+
+	const isValid = languages.every(
+		(language) =>
+			language.title.en &&
+			language.title.ua
+	);
+
+	if (!isValid) {
+		return res.status(400).json({
+			success: false,
+			error: {
+				message: "Invalid language data format",
+				code: 400,
+			},
+		});
+	}
+
+	try {
+		const newLanguages = await Language.insertMany(languages);
+		res.status(201).json({
+			success: true,
+			message: "Languages added successfully",
+			data: newLanguages,
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to add languages",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -46,14 +129,27 @@ export const deleteLanguage = async (req, res) => {
 	try {
 		const deleteLanguage = await Language.findByIdAndDelete(id);
 		if (!deleteLanguage) {
-			return res.status(404).json({ error: "language not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Language not found",
+					code: 404
+				},
+			});
 		}
 		res.json({
+			success: true,
 			message: "language deleted successfully",
-			language: deleteLanguage,
+			data: deleteLanguage,
 		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to delete language" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to delete language",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -66,10 +162,26 @@ export const updateLanguage = async (req, res) => {
 			runValidators: true,
 		});
 		if (!updatedLanguage) {
-			return res.status(404).json({ error: "language not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Language not found",
+					code: 404
+				},
+			});
 		}
-		res.json(updateLanguage);
+		res.json({
+			success: true,
+			message: "Language was successfully updated",
+			data: updateLanguage,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to update language" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to update language",
+				code: 500
+			},
+		});
 	}
 };

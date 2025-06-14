@@ -39,11 +39,14 @@ const BookCollection = ({
 	booksArr?: IBook[];
 }) => {
 	const { data, isLoading, error } = useGetBooksQuery();
+
 	const [books, setBooks] = useState<IBook[] | []>([]);
 
 	useEffect(() => {
-		if (data) {
-			setBooks(data);
+		const booksData = data?.success && data.data ? data.data : [];
+
+		if (booksData) {
+			setBooks(booksData);
 		}
 		if (booksArr) {
 			setBooks(booksArr);
@@ -71,7 +74,7 @@ const BookCollection = ({
 					justifyContent: "space-between",
 					marginBottom: 2.5,
 				}}
-				spacing={2}> 
+				spacing={2}>
 				<h2>{title}</h2>
 				<Link
 					href="#"
@@ -79,8 +82,7 @@ const BookCollection = ({
 					sx={{
 						color: theme?.colors?.green,
 						fontWeight: theme?.fontWeights?.medium,
-					}}>
-				</Link>
+					}}></Link>
 			</Stack>
 			<BookList data={list} />
 		</StyledBookCollection>

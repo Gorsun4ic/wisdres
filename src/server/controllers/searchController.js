@@ -66,16 +66,19 @@ export const searchAll = async (req, res) => {
 			})),
 		];
 
-		// Debug logging
-		console.log("Search term:", searchTerm);
-		console.log("Found books:", books.length);
-		console.log("Found authors:", authors.length);
-		console.log("Found publishers:", publishers.length);
-
-		res.json(results);
+		res.json({
+			success: true,
+			message: "Found requested information",
+			data: results,
+		});
 	} catch (error) {
-		console.error("Search error:", error);
-		res.status(500).json({ error: "Internal server error" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Unfortunately, could not found requested information",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -89,9 +92,18 @@ export const searchByGenre = async (req, res) => {
 			.populate("info.language")
 			.limit(10);
 
-		res.json(books);
+		res.json({
+			success: true,
+			message: "Successfully found by genre",
+			data: books,
+		});
 	} catch (error) {
-		console.error("Genre search error:", error);
-		res.status(500).json({ error: "Internal server error" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Unfortunately, could not found requested information",
+				code: 500,
+			},
+		});
 	}
 };

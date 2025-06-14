@@ -1,8 +1,10 @@
-interface IReview {
+export interface IReview {
+	_id: string;
 	user: string;
-	book?: string;
+	book: string;
 	rating: number;
 	text: string;
+	date: Date;
 }
 
-export default IReview;
+export type IReviewInput = Omit<IReview, "_id" | "date">;

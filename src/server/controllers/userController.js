@@ -15,9 +15,19 @@ import {
 export const getAllUsers = async (req, res) => {
 	try {
 		const users = await User.find();
-		res.json(users);
+		res.json({
+			success: true,
+			message: "Received all users!",
+			data: users,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch users" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch users",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -27,11 +37,24 @@ export const getUserById = async (req, res) => {
 	try {
 		const user = await User.findById(id);
 		if (!user) {
-			return res.status(404).json({ error: "User not found" });
+			return res.status(404).json({
+				success: false,
+				error: { message: "User not found", code: 404 },
+			});
 		}
-		res.json(user);
+		res.json({
+			success: true,
+			message: "Found requested user!",
+			data: user,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch user" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch user",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -41,7 +64,13 @@ export const createUser = async (req, res) => {
 
 	try {
 		if (!email || !password || !username) {
-			throw new Error("All fields are required");
+			res.status(400).json({
+				success: false,
+				error: {
+					message: "Some fields are missing. All fields are required!",
+					code: 400,
+				},
+			});
 		}
 
 		const userAlreadyExists = await User.findOne({ email });
@@ -53,6 +82,7 @@ export const createUser = async (req, res) => {
 					field: "email",
 					message:
 						"An account with this email address already exists. Please log in or use a different email to register.",
+					code: 400,
 				},
 			});
 		}
@@ -80,9 +110,19 @@ export const createUser = async (req, res) => {
 			`${process.env.CLIENT_URL}/email-verification/${user.emailVerificationCode}`
 		);
 
-		res.status(201).json(user);
+		res.status(201).json({
+			success: true,
+			message: "User was successfully created!",
+			data: user,
+		});
 	} catch (error) {
-		res.status(500).json({ error: `Failed to add user ${error}` });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: `Failed to add user ${error}`,
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -100,6 +140,7 @@ export const authorizeUser = async (req, res) => {
 					field: "email",
 					message:
 						"No account found with this email address. Please check your email or sign up for a new account.",
+					code: 400,
 				},
 			});
 		}
@@ -111,6 +152,7 @@ export const authorizeUser = async (req, res) => {
 					field: "email",
 					message:
 						"First, you have to verify your email. Please, check your email for letter, and follow the instructions.",
+					code: 400,
 				},
 			});
 		}
@@ -123,6 +165,7 @@ export const authorizeUser = async (req, res) => {
 				error: {
 					field: "password",
 					message: "The password you entered is incorrect. Please try again.",
+					code: 400,
 				},
 			});
 		}
@@ -135,14 +178,21 @@ export const authorizeUser = async (req, res) => {
 		res.status(201).json({
 			success: true,
 			message: "You successfully signed in your account",
-			user: {
-				...user._doc,
-				password: undefined,
+			data: {
+				user: {
+					...user._doc,
+					password: undefined,
+				},
 			},
 		});
 	} catch (error) {
-		console.log("Error in login ", error);
-		res.status(500).send("Failed to login user");
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to login user",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -151,7 +201,6 @@ export const verifyEmail = async (req, res) => {
 	const { token } = req.params;
 	try {
 		const user = await User.findOne({
-
 			emailVerificationCode: token,
 			emailVerificationCodeExpiresAt: { $gt: Date.now() },
 		});
@@ -161,6 +210,7 @@ export const verifyEmail = async (req, res) => {
 				success: false,
 				error: {
 					message: "Invalid or expired verification token",
+					code: 400,
 				},
 			});
 		}
@@ -174,14 +224,21 @@ export const verifyEmail = async (req, res) => {
 		res.status(200).json({
 			success: true,
 			message: "Email verified successfully",
-			user: {
-				...user._doc,
-				password: undefined,
+			data: {
+				user: {
+					...user._doc,
+					password: undefined,
+				},
 			},
 		});
 	} catch (error) {
-		console.log("error in verifyEmail ", error);
-		res.status(500).json({ success: false, message: "Server error" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Server error",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -196,15 +253,28 @@ export const checkAuth = async (req, res) => {
 	try {
 		const user = await User.findById(req.userId).select("-password");
 		if (!user) {
-			return res
-				.status(400)
-				.json({ success: false, message: "User not found" });
+			return res.status(400).json({
+				success: false,
+				error: {
+					message: "User not found",
+					code: 400,
+				},
+			});
 		}
 
-		res.status(200).json({ success: true, user });
+		res.status(200).json({
+			success: true,
+			message: "User is authorized",
+			data: user,
+		});
 	} catch (error) {
-		console.log("Error in checkAuth ", error);
-		res.status(400).json({ success: false, message: error.message });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: error.message,
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -218,7 +288,10 @@ export const forgotPassword = async (req, res) => {
 		if (!user) {
 			return res.status(400).json({
 				success: false,
-				error: { message: "No account associated with this email address." },
+				error: {
+					message: "No account associated with this email address.",
+					code: 400,
+				},
 			});
 		}
 
@@ -238,13 +311,12 @@ export const forgotPassword = async (req, res) => {
 			message: "A password reset link has been sent to your email address.",
 		});
 	} catch (error) {
-		console.error("Server Error:", error);
-
 		res.status(500).json({
-			status: "error",
-			code: 500,
-			message: "An unexpected error occurred. Please try again later.",
-			error: "INTERNAL_SERVER_ERROR",
+			success: false,
+			error: {
+				message: "An unexpected error occurred. Please try again later.",
+				code: 500,
+			},
 		});
 	}
 };
@@ -263,6 +335,7 @@ export const resetPassword = async (req, res) => {
 				success: false,
 				error: {
 					message: "Invalid or expired reset link",
+					code: 400,
 				},
 			});
 		}
@@ -280,13 +353,12 @@ export const resetPassword = async (req, res) => {
 			.status(200)
 			.json({ success: true, message: "Password reset successful" });
 	} catch (error) {
-		console.error("Server Error:", error);
-
 		res.status(500).json({
-			status: "error",
-			code: 500,
-			message: "An unexpected error occurred. Please try again later.",
-			error: "INTERNAL_SERVER_ERROR",
+			success: false,
+			error: {
+				message: "An unexpected error occurred. Please try again later.",
+				code: 500,
+			},
 		});
 	}
 };
@@ -300,12 +372,14 @@ export const deleteUser = async (req, res) => {
 		if (!user) {
 			return res.status(404).json({
 				success: false,
-				error: { message: "No account associated with this email address." },
+				error: {
+					message: "No account associated with this email address.",
+					code: 404,
+				},
 			});
 		}
 
 		await User.findByIdAndDelete(user._id);
-
 
 		return res.status(200).json({
 			success: true,
@@ -314,7 +388,7 @@ export const deleteUser = async (req, res) => {
 	} catch (error) {
 		return res.status(500).json({
 			success: false,
-			error: { message: "Failed to delete user account" },
+			error: { message: "Failed to delete user account", code: 500 },
 		});
 	}
 };
@@ -328,11 +402,27 @@ export const updateUser = async (req, res) => {
 			runValidators: true,
 		});
 		if (!updatedUser) {
-			return res.status(404).json({ error: "User not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "User not found",
+					code: 404
+				},
+			});
 		}
-		res.json(updatedUser);
+		res.json({
+			success: true,
+			message: "User was successfully updated",
+			data: updatedUser,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to update user" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to update user",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -347,6 +437,7 @@ export const resendVerification = async (req, res) => {
 				success: false,
 				error: {
 					message: "No account found with this email address.",
+					code: 400
 				},
 			});
 		}
@@ -356,6 +447,7 @@ export const resendVerification = async (req, res) => {
 				success: false,
 				error: {
 					message: "This email is already verified.",
+					code: 400
 				},
 			});
 		}
@@ -384,6 +476,7 @@ export const resendVerification = async (req, res) => {
 			success: false,
 			error: {
 				message: "Failed to resend verification email. Please try again later.",
+				code: 500
 			},
 		});
 	}

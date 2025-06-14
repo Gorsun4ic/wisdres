@@ -1,4 +1,10 @@
 export interface IBookDetails {
-	book: string;
-	auditory: string;
+	book: {
+		en: string;
+		ua: string;
+	};
+	auditory: {
+		en: string;
+		ua: string;
+	};
 }

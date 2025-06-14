@@ -48,9 +48,19 @@ export const getAllBooks = async (req, res) => {
 				},
 			});
 
-		res.json(books);
+		res.json({
+			success: true,
+			message: "Received all books",
+			data: books,
+		});
 	} catch (error) {
-		res.status(500).json({ error: `Failed to fetch books: ${error.message}` });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: `Failed to fetch books: ${error.message}`,
+				code: 500
+			},
+		});
 	}
 };
 
@@ -68,11 +78,27 @@ export const getBookById = async (req, res) => {
 				populate: { path: "user", select: "username" }, // Fetch user details
 			});
 		if (!book) {
-			return res.status(404).json({ error: "Book not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Book not found",
+					code: 404
+				},
+			});
 		}
-		res.json(book);
+		res.json({
+			success: true,
+			message: "Found requested book",
+			data: book,
+		});
 	} catch (error) {
-		res.status(500).json({ error: `Failed to fetch book: ${error.message}` });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: `Failed to fetch book: ${error.message}`,
+				code: 500
+			},
+		});
 	}
 };
 
@@ -88,7 +114,13 @@ export const getBooksByGenre = async (req, res) => {
 		});
 
 		if (!foundGenre) {
-			return res.status(404).json({ message: "Genre not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Genre not found",
+					code: 404
+				},
+			});
 		}
 
 		const totalBooks = await Book.countDocuments({"info.genre": foundGenre._id});
@@ -100,12 +132,21 @@ export const getBooksByGenre = async (req, res) => {
 		.skip(skip)
 		.limit(parseInt(limit))
 		res.status(200).json({
-			books,
-			totalBooks
+			success: true,
+			message: "Successfully found books for requested genre",
+			data: {
+				books,
+				totalBooks,
+			},
 		});
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Server error" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Server error",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -115,11 +156,27 @@ export const getBookDetails = async (req, res) => {
 	try {
 		const book = await Book.findById(id);
 		if (!book) {
-			return res.status(404).json({ error: "Book not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Book not found",
+					code: 404
+				},
+			});
 		}
-		res.json(book.details);
+		res.json({
+			success: true,
+			message: "Found details for requested book",
+			data: book.details,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch book" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch book details",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -133,11 +190,27 @@ export const getBookInfo = async (req, res) => {
 			.populate("info.genre")
 			.populate("info.language");
 		if (!book) {
-			return res.status(404).json({ error: "Book not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Book info not found",
+					code: 404
+				},
+			});
 		}
-		res.json(book.info);
+		res.json({
+			success: true,
+			message: "Found info for requested book",
+			data: book.info,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch book" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch book",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -181,10 +254,19 @@ export const createBook = async (req, res) => {
 		}
 
 		// 3. Respond with the newly created book
-		res.status(201).json(newBook);
+		res.status(201).json({
+			success: true,
+			message: "Book was successfully added",
+			data: newBook,
+		});
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ error: "Failed to add book" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to add book",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -206,9 +288,15 @@ export const deleteBook = async (req, res) => {
 			$pull: { bookIds: id },
 		});
 
-		res.json({ message: "Book deleted successfully", book: deletedBook });
+		res.json({ success: true, message: "Book deleted successfully", data: deletedBook });
 	} catch (error) {
-		res.status(500).json({ error: "Failed to delete book" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to delete book",
+				code: 500
+			},
+		});
 	}
 };
 
@@ -223,11 +311,26 @@ export const updateBook = async (req, res) => {
 		});
 
 		if (!updatedBook) {
-			return res.status(404).json({ error: "Book not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Book not found",
+				},
+			});
 		}
 
-		return res.json(updatedBook);
+		return res.json({
+			success: true,
+			message: "Book was successfully updated!",
+			data: updatedBook,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to update book" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to update book",
+				code: 500
+			},
+		});
 	}
 };

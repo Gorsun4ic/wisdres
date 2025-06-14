@@ -19,6 +19,7 @@ const BookInfo = () => {
 	const lang = i18n.language;
 
 	const [getInfoById, { data: bookInfo }] = useLazyGetBookInfoQuery();
+	const data = bookInfo?.data;
 
 	useEffect(() => {
 		if (bookId) {

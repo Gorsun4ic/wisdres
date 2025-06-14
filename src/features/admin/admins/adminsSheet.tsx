@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import {
@@ -32,7 +31,7 @@ import Button from "@components/button";
 
 
 const AdminsSheet = () => {
-	const { data: userData } = useCheckAuthQuery(null);
+	const { data: userData } = useCheckAuthQuery();
 
 	const { data, isLoading, error, handleDelete } =
 		useAdminSheet(adminsConfig);
@@ -81,7 +80,7 @@ const AdminsSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
-					data={data}
+					data={data.data}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

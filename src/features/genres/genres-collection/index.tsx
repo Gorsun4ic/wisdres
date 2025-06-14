@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Grid2 } from "@mui/material";
+import { Grid2, CircularProgress } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
@@ -10,13 +10,24 @@ import GenreCard from "../genre-card";
 
 import { StyledGenresCollection } from "./style";
 
-const GenresCollection = ({ data }: { data: IGenre[] }) => {
+const GenresCollection = ({
+	data,
+	isLoading,
+}: {
+	data: IGenre[];
+	isLoading: boolean;
+}) => {
 	const { t, i18n } = useTranslation();
-	const lang = i18n.language;
+	const lang = i18n.language as "en" | "ua";
+
 	const location = useLocation();
 	const { pathname } = location;
 
-	const genreList = data?.map((item) => {
+	if (isLoading) {
+		return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;
+	}
+
+	const genreList = data?.map((item: IGenre) => {
 		const linkPath = pathname.includes("books")
 			? item?.title["en"].toLowerCase()
 			: `books/${item?.title["en"].toLowerCase()}`;

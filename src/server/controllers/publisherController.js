@@ -1,12 +1,22 @@
-import Publisher from "../models/Publisher.js"
+import Publisher from "../models/Publisher.js";
 
 // Get all publishers
 export const getAllPublishers = async (req, res) => {
 	try {
 		const publisher = await Publisher.find();
-		res.json(publisher);
+		res.json({
+			success: true,
+			message: "Received all publishers",
+			data: publisher,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch publishers" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch publishers",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -16,11 +26,27 @@ export const getPublisherById = async (req, res) => {
 	try {
 		const publisher = await Publisher.findById(id);
 		if (!publisher) {
-			return res.status(404).json({ error: "Publisher not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Publisher not found",
+					code: 404,
+				},
+			});
 		}
-		res.json(publisher);
+		res.json({
+			success: true,
+			message: "Requested publisher was found!",
+			data: publisher,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to fetch publisher" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to fetch publisher",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -34,11 +60,72 @@ export const createPublisher = async (req, res) => {
 			about,
 		});
 		await newPublisher.save();
-		res.status(201).json(newPublisher);
+		res.status(201).json({
+			success: true,
+			message: "New publisher was successfully added",
+			data: newPublisher,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to add publisher" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to add publisher",
+				code: 500,
+			},
+		});
 	}
 };
+
+// Create multiple publishers at once
+export const createPublishersBatch = async (req, res) => {
+	const publishers = req.body;
+
+	if (!Array.isArray(publishers) || publishers.length === 0) {
+		return res.status(400).json({
+			success: false,
+			error: {
+				message: "No publishers provided",
+				code: 400,
+			},
+		});
+	}
+
+	const isValid = publishers.every(
+		(publisher) =>
+			publisher.img &&
+			publisher.title &&
+			publisher.about.en &&
+			publisher.about.ua
+	);
+
+	if (!isValid) {
+		return res.status(400).json({
+			success: false,
+			error: {
+				message: "Invalid publisher data format",
+				code: 400,
+			},
+		});
+	}
+
+	try {
+		const newPublishers = await Publisher.insertMany(publishers);
+		res.status(201).json({
+			success: true,
+			message: "Publishers added successfully",
+			data: newPublishers,
+		});
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to add Publishers",
+				code: 500,
+			},
+		});
+	}
+};
+
 
 // Delete a publisher by ID
 export const deletePublisher = async (req, res) => {
@@ -46,11 +133,27 @@ export const deletePublisher = async (req, res) => {
 	try {
 		const deletePublisher = await Publisher.findByIdAndDelete(id);
 		if (!deletePublisher) {
-			return res.status(404).json({ error: "Publisher not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Publisher not found",
+					code: 404,
+				},
+			});
 		}
-		res.json({ message: "Publisher deleted successfully", publisher: deletePublisher });
+		res.json({
+			success: true,
+			message: "Publisher deleted successfully",
+			data: deletePublisher,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to delete publisher" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to delete publisher",
+				code: 500,
+			},
+		});
 	}
 };
 
@@ -62,12 +165,27 @@ export const updatePublisher = async (req, res) => {
 			new: true,
 			runValidators: true,
 		});
-		console.log("Updated publisher", req.body);
 		if (!updatedPublisher) {
-			return res.status(404).json({ error: "Publisher not found" });
+			return res.status(404).json({
+				success: false,
+				error: {
+					message: "Publisher not found",
+					code: 404,
+				},
+			});
 		}
-		res.json(updatedPublisher);
+		res.json({
+			success: true,
+			message: "Publisher was successfully updated",
+			data: updatedPublisher,
+		});
 	} catch (error) {
-		res.status(500).json({ error: "Failed to update publisher" });
+		res.status(500).json({
+			success: false,
+			error: {
+				message: "Failed to update publisher",
+				code: 500,
+			},
+		});
 	}
 };
