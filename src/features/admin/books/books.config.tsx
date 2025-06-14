@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
-import i18n from "../../../i18n.js";
+import i18n from "@src/i18n";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
 import { IAuthor } from "@custom-types/author";
 
 import {

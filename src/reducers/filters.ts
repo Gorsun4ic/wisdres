@@ -1,14 +1,13 @@
 // filters.ts
 import { createSlice } from "@reduxjs/toolkit";
-
 export interface IFilter {
 	sortBy: string;
 	filters: {
-		authors: string[] | [];
-		publishers: string[] | [];
-		languages: string[] | [];
-		pages: [number, number] | null;
-	};
+		authors: string[];
+		publishers: string[];
+		languages: string[];
+		pages: [number, number];
+	}
 }
 
 const initialState: IFilter = {
@@ -17,7 +16,7 @@ const initialState: IFilter = {
 		authors: [],
 		publishers: [],
 		languages: [],
-		pages: null,
+		pages: [0, 1],
 	},
 };
 

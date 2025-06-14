@@ -14,7 +14,6 @@ import ErrorMessage from "@components/error";
 import InputFileUpload from "@components/uploadFile/uploadFile";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
-import File from "@custom-types/file";
 
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";

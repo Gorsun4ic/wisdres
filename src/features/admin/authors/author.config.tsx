@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
-import i18n from "../../../i18n.js"
+import { GridCellParams } from "@mui/x-data-grid";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
+import i18n from "@src/i18n";
 
 import {
 	useAddAuthorMutation,
@@ -84,13 +84,15 @@ export const authorConfig = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params) => <img src={params.value} width="40" />,
+			renderCell: (params: GridCellParams) => (
+				<img src={params.value} width="40" />
+			),
 		},
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
-			renderCell: (params) => (
+			renderCell: (params: GridCellParams) => (
 				<Link to={`/author/${params.row._id}`}>
 					{params.value[i18n.language]}
 				</Link>
@@ -100,13 +102,13 @@ export const authorConfig = {
 			field: "about",
 			headerName: "About",
 			width: 150,
-			renderCell: (params) => params.value[i18n.language],
+			renderCell: (params: GridCellParams) => params.value[i18n.language],
 		},
 		{
 			field: "books",
 			headerName: "Books",
 			width: 80,
-			renderCell: (params) => params.row.bookIds.length,
+			renderCell: (params: GridCellParams) => params.row.bookIds.length,
 		},
 	],
 	mutations: {

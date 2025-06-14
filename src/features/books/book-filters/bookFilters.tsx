@@ -1,24 +1,37 @@
 import { useTranslation } from "react-i18next";
 
+import { CircularProgress } from "@mui/material";
+
 // Custom components
 import RangeSlider from "@components/range-slider";
 import ScrolledFilter from "./scrolled-filter";
 
+import { IFilterExpanded } from "@custom-types/filter";
+
+
 // Custom styles
 import { StyledBookFilters } from "./style";
 
-interface IBookFilters {
-	authors: string[];
-	publishers: string[];
-	languages: string[];
-	pages: [number, number];
-}
-
-const BookFilters = ({ data }: { data: IBookFilters }) => {
-
+const BookFilters = ({
+	data,
+	isLoading,
+}: {
+	data: IFilterExpanded;
+	isLoading: boolean;
+}) => {
 	const { t } = useTranslation();
 
-	if (!data) return;
+	if (
+		!data ||
+		data.authors.length === 0 ||
+		data.publishers.length === 0 ||
+		data.languages.length === 0
+	)
+		return;
+
+	if (isLoading) {
+		return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;
+	}
 
 	return (
 		<StyledBookFilters>

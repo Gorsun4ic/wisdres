@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { Stack, Pagination } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -19,27 +20,28 @@ import BookFilters from "@features/books/book-filters/bookFilters";
 import BookList from "@features/books/book-list";
 import BookSort from "@features/books/book-sort";
 
+import ErrorMessage from "@components/error";
+
 import { StyledGenrePage } from "./style";
 
 const GenrePage = () => {
 	const { genre = "" } = useParams<{ genre: string }>();
 	const { t } = useTranslation();
 	const [page, setPage] = useState(1);
-	const { data, isLoading, error } = useGetBooksByGenresQuery({ genre: genre, limit: 25, page: page });
+	const { data, isLoading } = useGetBooksByGenresQuery({
+		genre: genre,
+		limit: 25,
+		page: page,
+	});
 	const { sortBy, filters } = useSelector(
 		(state: { filters: IFilter }) => state.filters
 	);
-	const { filterData, sortedBooks, updateFilterData } = useBookFilters(
-		data?.books || [],
-		sortBy,
-		filters
-	);
 
-	useEffect(() => {
-		if (data) {
-			updateFilterData();
-		}
-	}, [data, updateFilterData]);
+	const booksData = data?.success && data.data ? data.data : null;
+	const books = booksData?.books ?? [];
+	const totalBooks = booksData?.totalBooks ?? 0;
+
+	const { filterData, sortedBooks } = useBookFilters(books, sortBy, filters);
 
 	const genreTitle = upperCaseFirstLetter(genre);
 
@@ -51,7 +53,11 @@ const GenrePage = () => {
 				direction="row"
 				gap={2}
 				sx={{ alignItems: "flex-start" }}>
-				<BookFilters data={filterData} />
+				<ErrorBoundary
+					fallback={<ErrorMessage>{t("failedToLoadFilters")}</ErrorMessage>}>
+					<BookFilters data={filterData} isLoading={isLoading} />
+				</ErrorBoundary>
+
 				<Stack sx={{ width: "100%" }}>
 					<Link to=".." relative="path">
 						<Stack
@@ -72,21 +78,25 @@ const GenrePage = () => {
 						gap={2}
 						sx={{ justifyContent: "space-between", marginBottom: 3 }}>
 						<p className="book-amount">
-							{data?.length} {t("books")}
+							{books?.length} {t("books")}
 						</p>
-						{data?.books?.length > 0 && <BookSort />}
+						{books.length > 0 && <BookSort />}
 					</Stack>
 					<Stack>
-						<BookList data={sortedBooks} />
-						{data?.books?.length > 0 && (
+						<ErrorBoundary
+							fallback={<ErrorMessage>{t("failedToLoadBooks")}</ErrorMessage>}>
+							<BookList data={sortedBooks} isLoading={isLoading} />
+						</ErrorBoundary>
+
+						{books.length > 0 && (
 							<Pagination
 								sx={{ marginBottom: 4 }}
-								count={Math.ceil(data?.totalBooks / 25)}
+								count={Math.ceil(totalBooks / 25)}
 								page={page}
 								onChange={(_, value) => setPage(value)}
 							/>
 						)}
-						{data?.books?.length === 0 && <p>{t("noBooksFound")}</p>}
+						{books.length === 0 && <p>{t("noBooksFound")}</p>}
 					</Stack>
 				</Stack>
 			</Stack>

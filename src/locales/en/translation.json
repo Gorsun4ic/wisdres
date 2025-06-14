@@ -112,5 +112,7 @@
 	"image": "Image",
 	"about": "About",
 	"link": "Link",
-	"failedToLoadGenres": "Unfortunately, we could not loaded genres. Please, try again later!"
+	"failedToLoadGenres": "Unfortunately, we could not loaded genres. Please, try again later!",
+	"failedToLoadFilters": "Unfortunately, we could not loaded filters. Please, try again later!",
+	"failedToLoadBooks": "Unfortunately, we could not loaded books. Please, try again later"
 }

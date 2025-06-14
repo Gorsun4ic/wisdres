@@ -1,145 +1,71 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
-import { useGetFilterTitlesQuery } from "@api/apiFilters";
+import { useTranslation } from "react-i18next";
+
+import { filterBooks, sortBooks, createFilterData } from "@utils/filterHelpers";
 
 import { IBook } from "@custom-types/book";
-
-type allowedKeys = "author" | "publisher" | "language";
-
-interface IFilter {
-	authors: string[] | [];
-	publishers: string[] | [];
-	languages: string[] | [];
-	pages: [number, number] | null;
-}
+import { IFilterExpanded, IFilterParams } from "@custom-types/filter";
 
 export const useBookFilters = (
-	books: IBook[] | undefined,
+	books: IBook[],
 	sortBy: string,
-	filters: IFilter
+	filters: IFilterParams = {
+		authors: [],
+		publishers: [],
+		languages: [],
+		pages: [0, 1],
+	}
 ) => {
-	const [filterData, setFilterData] = useState<IFilter>({
+	const {
+		i18n: { language },
+	} = useTranslation();
+
+	const [filterData, setFilterData] = useState<IFilterExpanded>({
 		authors: [],
 		publishers: [],
 		languages: [],
-		pages: null,
-	});
-	const [filterTitles, setFilterTitles] = useState<IFilter>({
-		authors: [],
-		publishers: [],
-		languages: [],
-		pages: null,
+		pages: [0, 1],
 	});
 
-	const { data: filterTitlesData } = useGetFilterTitlesQuery({
-		authorsIds: filterData.authors,
-		publishersIds: filterData.publishers,
-		languagesIds: filterData.languages,
-	});
-
+	// Update filter data whenever books change
 	useEffect(() => {
-		if (filterData && filterTitlesData) {
-			setFilterTitles((prev) => ({
-				...prev,
-				pages: getMinMaxPages(),
-				...filterTitlesData,
-			}));
+		if (!books || books.length === 0) {
+			setFilterData({
+				authors: [],
+				publishers: [],
+				languages: [],
+				pages: [0, 1],
+			});
+			return;
 		}
-	}, [filterData, filterTitlesData]);
-
-	// Extract unique values for filters
-	const getBooksSpecificData = useCallback(
-		(data: IBook[], key: allowedKeys) => {
-			if (!Array.isArray(data)) return [];
-
-			const uniqueValues = new Set(
-				data
-					.flatMap((item) => {
-						if (Array.isArray(item?.info?.[key])) {
-							return item?.info?.[key];
-						}
-						return item?.info?.[key];
-					})
-					.filter(Boolean)
-			);
-			return Array.from(uniqueValues);
-		},
-		[]
-	);
-
-	// Get min and max pages
-	const getMinMaxPages = useCallback(() => {
-		if (!books || (Array.isArray(books) && books.length === 0)) return null;
-
-		const maxPages = Math.max(...books.map((book) => book?.info?.pages));
-		return [0, isFinite(maxPages) ? maxPages : 1];
-	}, [books]);
-
-	// Update filter data
-	const updateFilterData = useCallback(() => {
-		if (!books) return;
-		setFilterData({
-			authors: getBooksSpecificData(books, "author"),
-			publishers: getBooksSpecificData(books, "publisher"),
-			languages: getBooksSpecificData(books, "language"),
-			pages: getMinMaxPages(),
-		});
-	}, [books, getBooksSpecificData, getMinMaxPages]);
+		
+		setFilterData(createFilterData(books));
+	}, [books, language]);
 
 	// Filter books based on selected filters
-	const filteredBooks = useCallback(() => {
+	const filteredBooks = useMemo(() => {
 		if (!books) return [];
 
-		return books.filter((book) => {
-			const { authors, publishers, languages, pages } = filters;
-
-			const authorsIds = book.info.author.map((author) => author._id);
-
-			const authorMatch =
-				!authors.length ||
-				authors.some((author) => authorsIds.includes(author[0]));
-			const publisherMatch =
-				!publishers.length ||
-				publishers.some((publisher) =>
-					book?.info?.publisher.includes(publisher[0])
-				);
-			const languageMatch =
-				!languages.length ||
-				languages.some((language) =>
-					book?.info?.language.includes(language[0])
-				);
-
-			const pageMatch = pages
-				? !pages.length ||
-				  (book?.info?.pages >= pages[0] && book?.info?.pages <= pages[1])
-				: true;
-
-			return authorMatch && publisherMatch && languageMatch && pageMatch;
-		});
+		return filterBooks(books, filters);
 	}, [books, filters]);
 
-	// Sort filtered books
-	const sortBooks = useCallback(() => {
-		const filtered = filteredBooks();
-
-		if (!filtered.length) return [];
-
-		return [...filtered].sort((a, b) => {
-			switch (sortBy) {
-				case "reviews":
-					return b.reviews.length - a.reviews.length;
-				case "rating":
-					return b.info.rating - a.info.rating;
-				default:
-					return 0;
-			}
-		});
+	// Sort filtered getBooksSpecificData
+	const sortedBooks = useMemo(() => {
+		return sortBooks(filteredBooks, sortBy);
 	}, [filteredBooks, sortBy]);
 
 	return {
-		filterData: Array.isArray(books) && books.length > 0 ? filterTitles : null,
-		filteredBooks: filteredBooks(),
-		sortedBooks: sortBooks(),
-		updateFilterData,
+		filterData:
+			Array.isArray(books) && books.length > 0
+				? filterData
+				: ({
+						authors: [],
+						publishers: [],
+						languages: [],
+						pages: [0, 1],
+				  } as IFilterExpanded),
+		filteredBooks: filteredBooks,
+		sortedBooks: sortedBooks,
 	};
 };

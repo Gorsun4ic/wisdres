@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
-import i18n from "../../../i18n.js";
-
-import { AdminConfig } from "@custom-types/adminFormConfig";
+import i18n from "@src/i18n";
 
 import {
 	useAddGenreMutation,

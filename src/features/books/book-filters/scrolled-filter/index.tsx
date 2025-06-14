@@ -7,8 +7,8 @@ import {
 import { useDispatch } from "react-redux";
 
 import { TextField, List, ListItem } from "@mui/material";
-import { useTranslation } from "react-i18next";
 
+import { stringTuple } from "@custom-types/filter";
 
 import Checkbox from "@components/checkbox";
 
@@ -21,12 +21,10 @@ const ScrolledFilter = ({
 	type,
 }: {
 	title: string;
-	data: string[];
+	data: stringTuple[];
 	placeholder: string;
 	type: "languages" | "authors" | "publishers";
 }) => {
-	const {t, i18n} = useTranslation();
-	const lang = i18n.language;
 	const dispatch = useDispatch();
 	const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
@@ -44,26 +42,24 @@ const ScrolledFilter = ({
 			default:
 				break;
 		}
-	}, [checkedItems]);
+	}, [checkedItems, dispatch, type]);
 
-	const handleCheckboxChange = (label: string) => {
-		setCheckedItems(
-			(prev) =>
-				prev.includes(label)
-					? prev.filter((item) => item !== label) // Remove if checked
-					: [...prev, label] // Add if not checked
+	const handleCheckboxChange = (id: string) => {
+		setCheckedItems((prev) =>
+			prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
 		);
 	};
+	
 
-	if (!data) return;
+	if (!data) return null;
 
 	const checkboxesList = data.map((item) => {
 		return (
 			<ListItem key={item[0]}>
 				<Checkbox
-					label={item[1][lang] ? item[1][lang] : item[1]}
-					checked={checkedItems.includes(item)}
-					onChange={() => handleCheckboxChange(item)}
+					label={item[1]}
+					checked={checkedItems.includes(item[0])}
+					onChange={() => handleCheckboxChange(item[0])}
 				/>
 			</ListItem>
 		);

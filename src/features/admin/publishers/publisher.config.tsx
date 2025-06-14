@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 
 import NewspaperIcon from "@mui/icons-material/Newspaper";
-
-import i18n from "../../../i18n.js";
+import i18n from "@src/i18n";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
@@ -79,9 +78,7 @@ export const publisherConfig = {
 			headerName: "Title",
 			width: 150,
 			renderCell: (params) => (
-				<Link to={`/publisher/${params.row._id}`}>
-					{params.value}
-				</Link>
+				<Link to={`/publisher/${params.row._id}`}>{params.value}</Link>
 			),
 		},
 		{

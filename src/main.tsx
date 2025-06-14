@@ -1,4 +1,4 @@
-import "./i18n.js";
+import "@src/i18n.ts";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

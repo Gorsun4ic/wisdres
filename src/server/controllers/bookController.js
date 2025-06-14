@@ -58,7 +58,7 @@ export const getAllBooks = async (req, res) => {
 			success: false,
 			error: {
 				message: `Failed to fetch books: ${error.message}`,
-				code: 500
+				code: 500,
 			},
 		});
 	}
@@ -82,7 +82,7 @@ export const getBookById = async (req, res) => {
 				success: false,
 				error: {
 					message: "Book not found",
-					code: 404
+					code: 404,
 				},
 			});
 		}
@@ -96,7 +96,7 @@ export const getBookById = async (req, res) => {
 			success: false,
 			error: {
 				message: `Failed to fetch book: ${error.message}`,
-				code: 500
+				code: 500,
 			},
 		});
 	}
@@ -104,7 +104,7 @@ export const getBookById = async (req, res) => {
 
 export const getBooksByGenre = async (req, res) => {
 	const genreInput = req.params.genre; // Trim the genre input to avoid issues with spaces
-	const {page = 1, limit = 25} = req.query;
+	const { page = 1, limit = 25 } = req.query;
 	const skip = (page - 1) * limit;
 
 	// Use case-insensitive search to ensure we handle different cases
@@ -118,19 +118,29 @@ export const getBooksByGenre = async (req, res) => {
 				success: false,
 				error: {
 					message: "Genre not found",
-					code: 404
+					code: 404,
 				},
 			});
 		}
 
-		const totalBooks = await Book.countDocuments({"info.genre": foundGenre._id});
+		const totalBooks = await Book.countDocuments({
+			"info.genre": foundGenre._id,
+		});
 		const books = await Book.find({ "info.genre": foundGenre._id })
-		.populate({
-			path: "info.author",
-			select: "title",
-		})
-		.skip(skip)
-		.limit(parseInt(limit))
+			.populate({
+				path: "info.author",
+				select: "title",
+			})
+			.populate({
+				path: "info.publisher",
+				select: "title",
+			})
+			.populate({
+				path: "info.language",
+				select: "title",
+			})
+			.skip(skip)
+			.limit(parseInt(limit));
 		res.status(200).json({
 			success: true,
 			message: "Successfully found books for requested genre",
@@ -144,7 +154,7 @@ export const getBooksByGenre = async (req, res) => {
 			success: false,
 			error: {
 				message: "Server error",
-				code: 500
+				code: 500,
 			},
 		});
 	}
@@ -160,7 +170,7 @@ export const getBookDetails = async (req, res) => {
 				success: false,
 				error: {
 					message: "Book not found",
-					code: 404
+					code: 404,
 				},
 			});
 		}
@@ -174,7 +184,7 @@ export const getBookDetails = async (req, res) => {
 			success: false,
 			error: {
 				message: "Failed to fetch book details",
-				code: 500
+				code: 500,
 			},
 		});
 	}
@@ -194,7 +204,7 @@ export const getBookInfo = async (req, res) => {
 				success: false,
 				error: {
 					message: "Book info not found",
-					code: 404
+					code: 404,
 				},
 			});
 		}
@@ -208,7 +218,7 @@ export const getBookInfo = async (req, res) => {
 			success: false,
 			error: {
 				message: "Failed to fetch book",
-				code: 500
+				code: 500,
 			},
 		});
 	}
@@ -264,7 +274,7 @@ export const createBook = async (req, res) => {
 			success: false,
 			error: {
 				message: "Failed to add book",
-				code: 500
+				code: 500,
 			},
 		});
 	}
@@ -288,13 +298,17 @@ export const deleteBook = async (req, res) => {
 			$pull: { bookIds: id },
 		});
 
-		res.json({ success: true, message: "Book deleted successfully", data: deletedBook });
+		res.json({
+			success: true,
+			message: "Book deleted successfully",
+			data: deletedBook,
+		});
 	} catch (error) {
 		res.status(500).json({
 			success: false,
 			error: {
 				message: "Failed to delete book",
-				code: 500
+				code: 500,
 			},
 		});
 	}
@@ -329,7 +343,7 @@ export const updateBook = async (req, res) => {
 			success: false,
 			error: {
 				message: "Failed to update book",
-				code: 500
+				code: 500,
 			},
 		});
 	}

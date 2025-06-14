@@ -13,7 +13,14 @@ const Checkbox = ({
 }) => {
 	return (
 		<StyledFormControlLabel
-			control={<StyledCheckbox checked={checked} onChange={onChange} disabled={disabled}/>}
+			control={
+				<StyledCheckbox
+					checked={checked}
+					onChange={onChange}
+					disabled={disabled}
+					aria-label={label}
+				/>
+			}
 			label={label}
 		/>
 	);

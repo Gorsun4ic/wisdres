@@ -1,6 +1,5 @@
 import LanguageIcon from "@mui/icons-material/Language";
-
-import i18n from "../../../i18n.js"
+import i18n from "@src/i18n";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
@@ -12,7 +11,7 @@ import {
 	useGetLanguagesQuery,
 } from "@api/apiLanguagesSlice";
 
-export const languageConfig: AdminConfig = {
+export const languageConfig = {
 	entityName: "language",
 	icon: <LanguageIcon />,
 	fields: [
@@ -43,7 +42,7 @@ export const languageConfig: AdminConfig = {
 			field: "title",
 			headerName: "Title",
 			width: 150,
-			renderCell: (params) => params.value[i18n.language] 
+			renderCell: (params) => params.value[i18n.language],
 		},
 	],
 	mutations: {
