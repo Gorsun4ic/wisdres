@@ -4,13 +4,11 @@ import { useSelector } from "react-redux";
 
 import { RootState } from "@store/index";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
-
 import useAlert from "@hooks/useAlert";
 
-export const useAdminSheet = <T extends { id: string }>(
-	config: AdminConfig
-) => {
+import { AdminConfig, AllMutationTypes } from "@custom-types/adminFormConfig";
+
+export const useAdminSheet = (config: AdminConfig<AllMutationTypes>) => {
 	const [deleteMutation] = config.mutations.delete();
 	const { data, isLoading, error } = config.mutations.getAll();
 
@@ -21,7 +19,7 @@ export const useAdminSheet = <T extends { id: string }>(
 	const [formMode, setFormMode] = useState<"add" | "edit">("add");
 	const [toEditId, setToEditId] = useState<string | null>(null);
 
-	const handleDelete = async (id: string, title: string) => {
+	const handleDelete = async (id: string) => {
 		try {
 			await deleteMutation(id);
 			triggerAlert({
@@ -35,6 +33,7 @@ export const useAdminSheet = <T extends { id: string }>(
 				color: "error",
 				place: "sheet",
 			});
+			console.error(error);
 		}
 	};
 

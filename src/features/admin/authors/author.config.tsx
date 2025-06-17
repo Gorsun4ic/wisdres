@@ -1,22 +1,40 @@
 import { Link } from "react-router-dom";
 
+// MUI Components
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import { GridCellParams } from "@mui/x-data-grid";
 
+// Get language
 import i18n from "@src/i18n";
+import { lang, LangType} from "@src/i18n";
 
+// API Call
 import {
 	useAddAuthorMutation,
 	useUpdateAuthorMutation,
 	useLazyGetAuthorByIdQuery,
 	useDeleteAuthorMutation,
 	useGetAuthorsQuery,
-	useAddAuthorsMutation
+	useAddAuthorsMutation,
+	apiAuthorsSlice
 } from "@api/apiAuthorsSlice";
 
+// Types
+import { AdminConfig, InferHook } from "@src/types/adminFormConfig";
+
+// Utils
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 
-export const authorConfig = {
+export type AuthorMutations = {
+	add: InferHook<typeof apiAuthorsSlice, "addAuthor", "useMutation">;
+	addMany: InferHook<typeof apiAuthorsSlice, "addAuthors", "useMutation">;
+	update: InferHook<typeof apiAuthorsSlice, "updateAuthor", "useMutation">;
+	getById: InferHook<typeof apiAuthorsSlice, "getAuthorById", "useLazyQuery">;
+	delete: InferHook<typeof apiAuthorsSlice, "deleteAuthor", "useMutation">;
+	getAll: InferHook<typeof apiAuthorsSlice, "getAuthors", "useQuery">;
+};
+
+export const authorConfig: AdminConfig<AuthorMutations> = {
 	entityName: "author",
 	icon: <RecentActorsIcon />,
 	fields: [
@@ -85,7 +103,7 @@ export const authorConfig = {
 			headerName: "Image",
 			width: 80,
 			renderCell: (params: GridCellParams) => (
-				<img src={params.value} width="40" />
+				<img src={params.value as string} width="40" />
 			),
 		},
 		{
@@ -94,7 +112,7 @@ export const authorConfig = {
 			width: 150,
 			renderCell: (params: GridCellParams) => (
 				<Link to={`/author/${params.row._id}`}>
-					{params.value[i18n.language]}
+					{(params.value as Record<LangType, string>)[lang]}
 				</Link>
 			),
 		},
@@ -102,7 +120,8 @@ export const authorConfig = {
 			field: "about",
 			headerName: "About",
 			width: 150,
-			renderCell: (params: GridCellParams) => params.value[i18n.language],
+			renderCell: (params: GridCellParams) =>
+				(params.value as Record<LangType, string>)[lang],
 		},
 		{
 			field: "books",

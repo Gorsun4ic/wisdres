@@ -7,13 +7,13 @@ import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 import { useGetLanguagesQuery } from "@api/apiLanguagesSlice";
 
 const BookFormData = () => {
-  const { data: genres, isLoading: isLoadingGenres } = useGetGenresQuery(null);
+  const { data: genres, isLoading: isLoadingGenres } = useGetGenresQuery();
 	const { data: authors, isLoading: isLoadingAuthors } =
-		useGetAuthorsQuery(null);
+		useGetAuthorsQuery();
 	const { data: publishers, isLoading: isLoadingPublishers } =
-		useGetPublishersQuery(null);
+		useGetPublishersQuery();
 	const { data: languages, isLoading: isLoadingLanguages } =
-		useGetLanguagesQuery(null);
+		useGetLanguagesQuery();
 
 	const fieldData = {
 		"info.genre": {

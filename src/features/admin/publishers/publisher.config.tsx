@@ -1,21 +1,39 @@
 import { Link } from "react-router-dom";
 
+// MUI
 import NewspaperIcon from "@mui/icons-material/Newspaper";
+
+// Get language
 import i18n from "@src/i18n";
+import { lang } from "@src/i18n";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
-
+// API
 import {
 	useAddPublisherMutation,
 	useUpdatePublisherMutation,
 	useLazyGetPublisherByIdQuery,
 	useDeletePublisherMutation,
 	useGetPublishersQuery,
+	apiPublishersSlice
 } from "@api/apiPublishersSlice";
 
+// Utils
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 
-export const publisherConfig = {
+// Types
+import { AdminConfig, InferHook } from "@custom-types/adminFormConfig";
+
+
+export type PublisherMutations = {
+	add: InferHook<typeof apiPublishersSlice, "addPublisher", "useMutation">;
+	update: InferHook<typeof apiPublishersSlice, "updatePublisher", "useMutation">;
+	getById: InferHook<typeof apiPublishersSlice, "getPublisherById", "useLazyQuery">;
+	delete: InferHook<typeof apiPublishersSlice, "deletePublisher", "useMutation">;
+	getAll: InferHook<typeof apiPublishersSlice, "getPublishers", "useQuery">;
+};
+
+
+export const publisherConfig: AdminConfig<PublisherMutations> = {
 	entityName: "publisher",
 	icon: <NewspaperIcon />,
 	fields: [
@@ -85,7 +103,7 @@ export const publisherConfig = {
 			field: "about",
 			headerName: "About",
 			width: 150,
-			renderCell: (params) => params.value[i18n.language],
+			renderCell: (params) => params.value[lang],
 		},
 		{
 			field: "books",

@@ -5,6 +5,8 @@ import Backend from "i18next-http-backend"; // <-- You missed this line
 import translationEN from "./locales/en/translation.json";
 import translationUA from "./locales/ua/translation.json";
 
+export type LangType = "en" | "ua";
+export const lang = i18n.language as LangType;
 
 i18n
 	.use(Backend) // loads translations from /locales/{{lng}}/translation.json

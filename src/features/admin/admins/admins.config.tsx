@@ -1,12 +1,21 @@
+// MUI
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
+// API 
+import { useDemoteFromAdminMutation, useGetAllAdminsQuery, apiAdminsSlice } from "@api/apiAdminsSlice";
+import { useDeleteUserMutation, apiUsersSlice } from "@api/apiUsersSlice";
 
-import { useDeleteUserMutation } from "@api/apiUsersSlice";
+// Types
+import { AdminConfig, InferHook } from "@custom-types/adminFormConfig";
 
-import { useDemoteFromAdminMutation, useGetAllAdminsQuery } from "@api/apiAdminsSlice";
+export type AdminMutations = {
+	delete: InferHook<typeof apiUsersSlice, "deleteUser", "useMutation">;
+	getAll: InferHook<typeof apiAdminsSlice, "getAllAdmins", "useQuery">;
+	changeUserStatus: InferHook<typeof apiAdminsSlice, "demoteFromAdmin", "useMutation">;
+}
 
-export const adminsConfig: AdminConfig = {
+
+export const adminsConfig: AdminConfig<AdminMutations> = {
 	entityName: "admins",
 	icon: <AdminPanelSettingsIcon />,
 	columns: [

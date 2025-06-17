@@ -1,12 +1,20 @@
+// MUI
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
+// API
+import { useDeleteUserMutation, useGetUsersQuery, apiUsersSlice } from "@api/apiUsersSlice";
+import { usePromoteToAdminMutation, apiAdminsSlice } from "@api/apiAdminsSlice";
 
-import { useDeleteUserMutation, useGetUsersQuery } from "@api/apiUsersSlice";
+// Types
+import { AdminConfig, InferHook } from "@custom-types/adminFormConfig";
 
-import { usePromoteToAdminMutation } from "@api/apiAdminsSlice";
+export type UserMutations = {
+	delete: InferHook<typeof apiUsersSlice, "deleteUser", "useMutation">;
+	getAll: InferHook<typeof apiUsersSlice, "getUsers", "useQuery">;
+	changeUserStatus: InferHook<typeof apiAdminsSlice, "promoteToAdmin", "useMutation">;
+};
 
-export const usersConfig: AdminConfig = {
+export const usersConfig: AdminConfig<UserMutations> = {
 	entityName: "users",
 	icon: <RecentActorsIcon />,
 	columns: [

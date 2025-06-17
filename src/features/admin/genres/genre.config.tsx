@@ -1,19 +1,37 @@
 import { Link } from "react-router-dom";
 
+// MUI
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
-import i18n from "@src/i18n";
 
+// Get language
+import i18n from "@src/i18n";
+import { lang } from "@src/i18n";
+
+// API
 import {
 	useAddGenreMutation,
 	useUpdateGenreMutation,
 	useLazyGetGenreByIdQuery,
 	useDeleteGenreMutation,
 	useGetGenresQuery,
+	apiGenresSlice
 } from "@api/apiGenresSlice";
 
+// Types
+import { AdminConfig, InferHook } from "@src/types/adminFormConfig";
+
+// Utils
 import { validateImageType, imageTypes } from "@utils/imgValidation";
 
-export const genreConfig = {
+export type GenreMutations = {
+	add: InferHook<typeof apiGenresSlice, "addGenre", "useMutation">;
+	update: InferHook<typeof apiGenresSlice, "updateGenre", "useMutation">;
+	getById: InferHook<typeof apiGenresSlice, "getGenreById", "useLazyQuery">;
+	delete: InferHook<typeof apiGenresSlice, "deleteGenre", "useMutation">;
+	getAll: InferHook<typeof apiGenresSlice, "getGenres", "useQuery">;
+};
+
+export const genreConfig: AdminConfig<GenreMutations> = {
 	entityName: "genre",
 	icon: <TheaterComedyIcon />,
 	fields: [
@@ -80,7 +98,7 @@ export const genreConfig = {
 			headerName: "Image",
 			width: 80,
 			renderCell: (params) => (
-				<img src={params.value[i18n.language]} width="40" />
+				<img src={params.value[lang]} width="40" />
 			),
 		},
 		{
@@ -89,7 +107,7 @@ export const genreConfig = {
 			width: 150,
 			renderCell: (params) => (
 				<Link to={`/books/${params.value["en"].toLowerCase()}`}>
-					{params.value[i18n.language]}
+					{params.value[lang]}
 				</Link>
 			),
 		},

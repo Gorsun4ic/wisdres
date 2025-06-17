@@ -1,17 +1,31 @@
+// MUI
 import LanguageIcon from "@mui/icons-material/Language";
-import i18n from "@src/i18n";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
+// Get language 
+import { lang } from "@src/i18n";
 
+// API
 import {
 	useAddLanguageMutation,
 	useUpdateLanguageMutation,
 	useLazyGetLanguageByIdQuery,
 	useDeleteLanguageMutation,
 	useGetLanguagesQuery,
+	apiLanguagesSlice
 } from "@api/apiLanguagesSlice";
 
-export const languageConfig = {
+// Types
+import { AdminConfig, InferHook } from "@custom-types/adminFormConfig";
+
+export type LanguageMutations = {
+	add: InferHook<typeof apiLanguagesSlice, "addLanguage", "useMutation">;
+	update: InferHook<typeof apiLanguagesSlice, "updateLanguage", "useMutation">;
+	getById: InferHook<typeof apiLanguagesSlice, "getLanguageById", "useLazyQuery">;
+	delete: InferHook<typeof apiLanguagesSlice, "deleteLanguage", "useMutation">;
+	getAll: InferHook<typeof apiLanguagesSlice, "getLanguages", "useQuery">;
+};
+
+export const languageConfig: AdminConfig<LanguageMutations> = {
 	entityName: "language",
 	icon: <LanguageIcon />,
 	fields: [
@@ -42,7 +56,7 @@ export const languageConfig = {
 			field: "title",
 			headerName: "Title",
 			width: 150,
-			renderCell: (params) => params.value[i18n.language],
+			renderCell: (params) => params.value[lang],
 		},
 	],
 	mutations: {

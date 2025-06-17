@@ -1,23 +1,44 @@
 import { Link } from "react-router-dom";
 
+// MUI
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import { GridCellParams } from "@mui/x-data-grid";
 
+// Get language
 import i18n from "@src/i18n";
+import { LangType, lang } from "@src/i18n";
 
-import { IAuthor } from "@custom-types/author";
-
+// API
 import {
 	useAddBookMutation,
 	useUpdateBookMutation,
 	useLazyGetBookByIdQuery,
 	useDeleteBookMutation,
 	useGetBooksQuery,
+	apiBooksSlice
 } from "@api/apiBooksSlice";
 
-import { validateImageType, imageTypes } from "@utils/imgValidation";
-import { IGenre } from "@custom-types/genre";
 
-export const booksConfig = {
+// Utils
+import { validateImageType, imageTypes } from "@utils/imgValidation";
+
+// Types
+import { AdminConfig, InferHook } from "@src/types/adminFormConfig";
+import { IAuthor } from "@custom-types/author";
+import { IPublisher } from "@custom-types/publisher";
+import { IGenre } from "@custom-types/genre";
+import { ILanguage } from "@custom-types/language";
+
+export type BookMutations = {
+	add: InferHook<typeof apiBooksSlice, "addBook", "useMutation">;
+	update: InferHook<typeof apiBooksSlice, "updateBook", "useMutation">;
+	getById: InferHook<typeof apiBooksSlice, "getBookById", "useLazyQuery">;
+	delete: InferHook<typeof apiBooksSlice, "deleteBook", "useMutation">;
+	getAll: InferHook<typeof apiBooksSlice, "getBooks", "useQuery">;
+};
+
+
+export const booksConfig: AdminConfig<BookMutations> = {
 	entityName: "books",
 	icon: <LibraryBooksIcon />,
 	fields: [
@@ -226,13 +247,9 @@ export const booksConfig = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params) => (
+			renderCell: (params: GridCellParams) => (
 				<img
-					src={
-						params.value[i18n.language]
-							? params.value[i18n.language]
-							: params.value
-					}
+					src={(params.value as Record<LangType, string>)[lang]}
 					width="40"
 				/>
 			),
@@ -241,12 +258,10 @@ export const booksConfig = {
 			field: "title",
 			headerName: "Title",
 			width: 150,
-			renderCell: (params) => {
+			renderCell: (params: GridCellParams) => {
 				return (
 					<Link to={`/book/${params.row.id}`}>
-						{params.value[i18n.language]
-							? params.value[i18n.language]
-							: params.value}
+						{(params.value as Record<LangType, string>)[lang]}
 					</Link>
 				);
 			},
@@ -255,33 +270,31 @@ export const booksConfig = {
 			field: "author",
 			headerName: "Author",
 			width: 150,
-			renderCell: (params) => {
-				return params.value.map(
-					(author: IAuthor, index: number, arr: IAuthor[]) => {
-						return (
-							(params.value && (
-								<Link to={`/author/${author._id}`}>
-									{author.title[i18n.language]}
-									{index < arr.length - 1 ? ", " : ""}
-								</Link>
-							)) ||
-							"Unknown Author"
-						);
-					}
-				);
+			renderCell: (params: GridCellParams) => {
+				const value = params.value as IAuthor[];
+				return value.map((author: IAuthor, index: number, arr: IAuthor[]) => {
+					return (
+						(value && (
+							<Link to={`/author/${author._id}`}>
+								{author.title[lang]}
+								{index < arr.length - 1 ? ", " : ""}
+							</Link>
+						)) ||
+						"Unknown Author"
+					);
+				});
 			},
 		},
 		{
 			field: "publisher",
 			headerName: "Publisher",
 			width: 150,
-			renderCell: (params) => {
-				return (
-					(params.value && (
-						<Link to={`/publisher/${params.value?._id}`}>
-							{params.value?.title}
-						</Link>
-					)) ||
+			renderCell: (params: GridCellParams) => {
+				const publisher = params.value as IPublisher | undefined;
+
+				return publisher ? (
+					<Link to={`/publisher/${publisher._id}`}>{publisher.title}</Link>
+				) : (
 					"Unknown Publisher"
 				);
 			},
@@ -290,31 +303,28 @@ export const booksConfig = {
 			field: "genre",
 			headerName: "Genres",
 			width: 150,
-			renderCell: (params) => {
-				return params.value.map(
-					(genre: IGenre, index: number, arr: IGenre[]) => {
-						return (
-							(params.value && (
-								<Link to={`/genre/${genre._id}`}>
-									{genre.title[i18n.language]}
-									{index < arr.length - 1 ? ", " : ""}
-								</Link>
-							)) ||
-							"Unknown Genre"
-						);
-					}
-				);
+			renderCell: (params: GridCellParams) => {
+				const value = params.value as IGenre[];
+				return value.map((genre: IGenre, index: number, arr: IGenre[]) => {
+					return (
+						(value && (
+							<Link to={`/genre/${genre._id}`}>
+								{(genre.title as Record<LangType, string>)[lang]}
+								{index < arr.length - 1 ? ", " : ""}
+							</Link>
+						)) ||
+						"Unknown Genre"
+					);
+				});
 			},
 		},
 		{
 			field: "language",
 			headerName: "Language",
 			width: 80,
-			renderCell: (params) => {
-				return (
-					(params.value && params.value.title[i18n.language]) ||
-					"Unknown Language"
-				);
+			renderCell: (params: GridCellParams) => {
+				const value = params.value as ILanguage | undefined;
+				return (value && value.title[lang]) || "Unknown Language";
 			},
 		},
 		{
@@ -322,8 +332,8 @@ export const booksConfig = {
 			headerName: "Year",
 			width: 60,
 			type: "number",
-			renderCell: (params) => {
-				return params.value;
+			renderCell: (params: GridCellParams) => {
+				return params.value as string;
 			},
 		},
 		{
@@ -331,8 +341,8 @@ export const booksConfig = {
 			headerName: "Pages",
 			width: 60,
 			type: "number",
-			renderCell: (params) => {
-				return params.value;
+			renderCell: (params: GridCellParams) => {
+				return params.value as string;
 			},
 		},
 		{
@@ -340,8 +350,8 @@ export const booksConfig = {
 			headerName: "Reviews",
 			width: 80,
 			type: "number",
-			renderCell: (params) => {
-				return params.value.length;
+			renderCell: (params: GridCellParams) => {
+				return (params.value as string[]).length;
 			},
 		},
 	],

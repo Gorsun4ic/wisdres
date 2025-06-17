@@ -1,7 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
-export const useChangeUserStatus = (config: AdminConfig) => {
+import { AdminMutations } from "@src/features/admin/admins/admins.config";
+import { UserMutations } from "@src/features/admin/users/users.config";
+
+import { AdminConfig } from "@src/types/adminFormConfig";
+
+export const useChangeUserStatus = (
+	config: AdminConfig<AdminMutations | UserMutations>
+) => {
 	const [
 		changeUserStatus,
 		{ data, isLoading: isChanging, error: changeError },
@@ -14,35 +20,61 @@ export const useChangeUserStatus = (config: AdminConfig) => {
 		severity: "success" | "error";
 	}>({ show: false, message: "", severity: "success" });
 
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
 	useEffect(() => {
-		if (data && !changeError && !isChanging) {
+		if (data && !changeError && !isChanging && config.successChangeUserStatus) {
 			setChangeStatus({
 				show: true,
 				message: config.successChangeUserStatus,
 				severity: "success",
 			});
-			setTimeout(() => {
+			timeoutRef.current = setTimeout(() => {
 				setChangeStatus({ show: false, message: "", severity: "success" });
 			}, 3000);
 		}
-	}, [data]);
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+				timeoutRef.current = null;
+			}
+		};
+	}, [data, changeError, isChanging, config.successChangeUserStatus]);
 
 	useEffect(() => {
-		if (changeError) {
+		if (changeError && config.failChangeUserStatus) {
 			setChangeStatus({
 				show: true,
-				message: changeError?.data?.error || config.failChangeUserStatus,
+				message: config.failChangeUserStatus,
 				severity: "error",
 			});
-			setTimeout(() => {
+			timeoutRef.current = setTimeout(() => {
 				setChangeStatus({ show: false, message: "", severity: "error" });
 			}, 3000);
 		}
-	}, [changeError]);
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+				timeoutRef.current = null;
+			}
+		};
+	}, [changeError, config.failChangeUserStatus]);
+
+	const closeDialog = () => {
+		setIsChangeDialogOpen(false);
+		setChangeUserId(null);
+	};
 
 	const handleChange = async () => {
-		changeUserStatus(changeUserId);
-		setIsChangeDialogOpen(false);
+		if (changeUserId) {
+			try {
+				await changeUserStatus(changeUserId);
+				
+				closeDialog()
+			} catch (e) {
+				console.error(e)
+			}
+		}
 	};
 
 	return {

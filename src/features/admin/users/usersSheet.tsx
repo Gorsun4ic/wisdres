@@ -33,10 +33,10 @@ import Button from "@components/button";
 
 
 const UsersSheet = () => {
-	const { data: userData } = useCheckAuthQuery(null);
+	const { data: userData } = useCheckAuthQuery();
 
 
-	const { data, isLoading, error, alert, handleDelete } =
+	const { data, isLoading, error, handleDelete } =
 		useAdminSheet(usersConfig);
 
 	const {
@@ -60,7 +60,7 @@ const UsersSheet = () => {
 						onClick={() => {
 							setIsChangeDialogOpen(true);
 							setChangeUserId(params.row.id);
-						}} // Pass the row data
+						}} 
 					>
 						<KeyboardDoubleArrowUpIcon color="success" />
 					</IconButton>

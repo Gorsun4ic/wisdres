@@ -1,27 +1,38 @@
-import { fetchBaseQuery  } from "@reduxjs/toolkit/query";
 import { GridColDef } from "@mui/x-data-grid";
 
+
+import { BookMutations } from "@src/features/admin/books/books.config";
+import { AuthorMutations } from "@src/features/admin/authors/author.config";
+import { PublisherMutations } from "@src/features/admin/publishers/publisher.config";
+import { LanguageMutations } from "@src/features/admin/languages/languages.config";
+import { GenreMutations } from "@src/features/admin/genres/genre.config";
+import { AdminMutations } from "@src/features/admin/admins/admins.config";
+import { UserMutations } from "@src/features/admin/users/users.config";
 interface Validation {
 	required?: string;
-	minLength?: number | {
-		value: number,
-		message: string
-	};
-	maxLength?: number | {
-		value: number,
-		message: string
-	};
+	minLength?:
+		| number
+		| {
+				value: number;
+				message: string;
+		  };
+	maxLength?:
+		| number
+		| {
+				value: number;
+				message: string;
+		  };
 	validate?: (value: string) => boolean | string;
 }
 
 export interface FormFieldConfig {
-  name: string;
+	name: string;
 	label?: string;
-  placeholder: string;
-  type: 'text' | 'textarea' | 'image' | 'number';
-  validation?: Validation;
+	placeholder: string;
+	type: "text" | "textarea" | "image" | "number";
+	validation?: Validation;
 	rules?: Validation;
-  rows?: number; // for textarea
+	rows?: number; // for textarea
 }
 
 interface SelectCheckboxesConfig {
@@ -38,22 +49,41 @@ interface AutoCompleteConfig {
 	rules: Validation;
 }
 
+export type InferHook<
+	Api extends { endpoints: Record<string, unknown> },
+	Endpoint extends keyof Api["endpoints"],
+	HookName extends string
+> = Api["endpoints"][Endpoint] extends Record<HookName, infer Hook>
+	? Hook
+	: never;
 
-export interface AdminConfig {
+type FieldTypes = FormFieldConfig | SelectCheckboxesConfig | AutoCompleteConfig;
+type GroupedFields = [string, ...FieldTypes];
+
+export type AllMutationTypes =
+	| BookMutations
+	| AuthorMutations
+	| PublisherMutations
+	| LanguageMutations
+	| GenreMutations
+	| AdminMutations
+	| UserMutations;
+
+export type ContentMutationTypes = 
+	| BookMutations
+	| AuthorMutations
+	| PublisherMutations
+	| LanguageMutations
+	| GenreMutations;
+
+export interface AdminConfig<T> {
 	entityName: string; // 'publisher', 'author', 'book'
-	fields?: (FormFieldConfig | SelectCheckboxesConfig | AutoCompleteConfig)[];
+	fields?: (FieldTypes | GroupedFields)[];
 	icon: React.ReactNode;
 	columns: GridColDef[];
 	deleteButton?: boolean;
 	changeButton?: boolean;
 	successChangeUserStatus?: string;
 	failChangeUserStatus?: string;
-	mutations: {
-		add?: typeof fetchBaseQuery; // RTK Query mutation
-		update?: typeof fetchBaseQuery; // RTK Query mutation
-		getById?: typeof fetchBaseQuery; // RTK Query query
-		delete?: typeof fetchBaseQuery; // RTK Query mutation
-		getAll: typeof fetchBaseQuery; // RTK Query query
-		changeUserStatus?: typeof fetchBaseQuery; // RTK Query mutation
-	};
+	mutations: T;
 }

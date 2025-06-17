@@ -1,15 +1,34 @@
 import { useState, useEffect } from "react";
 
+// RHF
 import { useForm, FieldErrors, FieldValues } from "react-hook-form";
 
-import { AdminConfig } from "@custom-types/adminFormConfig";
-
-import { findDifferenceObjs } from "@utils/findDiffObjs";
-
+// Hooks
 import useAlert from "./useAlert";
 
-export const useAdminForm = (
-	config: AdminConfig,
+// Utils
+import { findDifferenceObjs } from "@utils/findDiffObjs";
+
+// Types
+import {
+	AdminConfig,
+	ContentMutationTypes,
+} from "@custom-types/adminFormConfig";
+import { IAuthorInput } from "@src/types/author";
+import { IBookInput } from "@src/types/book";
+import { IGenreInput } from "@src/types/genre";
+import { ILanguageInput } from "@src/types/language";
+import { IPublisherInput } from "@src/types/publisher";
+
+type ContentInterfaces =
+	| IAuthorInput
+	| IBookInput
+	| IGenreInput
+	| ILanguageInput
+	| IPublisherInput;
+
+export const useAdminForm = <T extends FieldValues>(
+	config: AdminConfig<ContentMutationTypes>,
 	mode: "add" | "edit",
 	id?: string
 ) => {
@@ -24,7 +43,7 @@ export const useAdminForm = (
 
 	const [dataToEdit, setDataToEdit] = useState(null);
 
-	const form = useForm();
+	const form = useForm<T>();
 	const triggerAlert = useAlert();
 
 	const {
@@ -44,7 +63,7 @@ export const useAdminForm = (
 				place: "form",
 			});
 		}
-	}, [isSubmitSuccessful, addError]);
+	}, [isSubmitSuccessful, addError, config.entityName, form, triggerAlert]);
 
 	useEffect(() => {
 		if (id && mode === "edit") {
@@ -58,7 +77,7 @@ export const useAdminForm = (
 		}
 	}, [dataById]);
 
-	const onSubmit = (data) => {
+	const onSubmit = (data: T) => {
 		switch (mode) {
 			case "add":
 				addMutation(data);
@@ -77,7 +96,7 @@ export const useAdminForm = (
 		if (confirm) {
 			updateMutation({
 				id,
-				updates: dataToEdit,
+				updates: dataToEdit as T,
 			});
 			form.reset(dataToEdit);
 		}
