@@ -20,7 +20,7 @@ import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 import readJSON from "@utils/readJSONfile";
 
 interface BaseSheetProps<T> {
-	config: AdminConfig;
+	config: AdminConfig<T>;
 	fieldData?: T[];
 }
 
@@ -39,13 +39,12 @@ const Sheet = ({ config, fieldData }: BaseSheetProps<T>) => {
 		handleDelete,
 	} = useAdminSheet(config);
 
-	const { i18n } = useTranslation();
 	const [addManyMutation, { isLoading: isAdding, error: addError }] =
 		config.mutations.addMany();
+		
 	const onFileAttachment = async (file) => {
 		const data = await readJSON(file);
 		addManyMutation(data);
-		console.log(data);
 	}
 
 	return (
@@ -81,7 +80,7 @@ const Sheet = ({ config, fieldData }: BaseSheetProps<T>) => {
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
 					handleEdit={handleOpen}
-					data={data}
+					data={data?.data}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

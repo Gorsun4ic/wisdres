@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // React Router DOM
 import { useNavigate, Outlet } from "react-router-dom";
@@ -22,29 +22,30 @@ const AdminRoute = () => {
 	const [hasAdminAccess, setHasAdminAccess] = useState(false);
 	const navigate = useNavigate();
 
-	const userData: IUser | null =  data?.success && data.data ? data.data : null;
+	const userData: IUser | null = data?.success && data.data ? data.data : null;
 
-	const checkingUserPermission = (user: IUser) => {
-		const hasAccess = hasPermission(user, "view:admin_panel");
-		setHasAdminAccess(hasAccess);
-		setAccessChecked(true);
+	const checkingUserPermission = useCallback(
+		(user: IUser) => {
+			const hasAccess = hasPermission(user, "view:admin_panel");
+			setHasAdminAccess(hasAccess);
+			setAccessChecked(true);
 
-		if (!hasAccess) {
-			navigate("/");
-		}
-	}
+			if (!hasAccess) {
+				navigate("/");
+			}
+		},
+		[navigate]
+	);
 
 	useEffect(() => {
-		if (!isLoading && !userData || error) {
+		if ((!isLoading && !userData) || error) {
 			navigate("/");
 		}
 
 		if (userData) {
 			checkingUserPermission(userData);
 		}
-	}, [userData, isLoading, navigate]);
-
-
+	}, [userData, isLoading, navigate, checkingUserPermission, error]);
 
 	if (isLoading || !accessChecked) {
 		return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;

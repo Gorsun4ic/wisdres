@@ -5,8 +5,7 @@ import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import { GridCellParams } from "@mui/x-data-grid";
 
 // Get language
-import i18n from "@src/i18n";
-import { lang, LangType} from "@src/i18n";
+import i18n, { LangType } from "@src/i18n";
 
 // API Call
 import {
@@ -33,6 +32,8 @@ export type AuthorMutations = {
 	delete: InferHook<typeof apiAuthorsSlice, "deleteAuthor", "useMutation">;
 	getAll: InferHook<typeof apiAuthorsSlice, "getAuthors", "useQuery">;
 };
+
+const lang = i18n.language as LangType;
 
 export const authorConfig: AdminConfig<AuthorMutations> = {
 	entityName: "author",

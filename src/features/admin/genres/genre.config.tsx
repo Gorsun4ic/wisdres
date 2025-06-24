@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 
 // Get language
-import i18n from "@src/i18n";
-import { lang } from "@src/i18n";
+import i18n, {LangType} from "@src/i18n";
 
 // API
 import {
@@ -14,6 +13,7 @@ import {
 	useLazyGetGenreByIdQuery,
 	useDeleteGenreMutation,
 	useGetGenresQuery,
+	useAddGenresMutation,
 	apiGenresSlice
 } from "@api/apiGenresSlice";
 
@@ -25,11 +25,14 @@ import { validateImageType, imageTypes } from "@utils/imgValidation";
 
 export type GenreMutations = {
 	add: InferHook<typeof apiGenresSlice, "addGenre", "useMutation">;
+	addMany: InferHook<typeof apiGenresSlice, "addGenres", "useMutation">;
 	update: InferHook<typeof apiGenresSlice, "updateGenre", "useMutation">;
 	getById: InferHook<typeof apiGenresSlice, "getGenreById", "useLazyQuery">;
 	delete: InferHook<typeof apiGenresSlice, "deleteGenre", "useMutation">;
 	getAll: InferHook<typeof apiGenresSlice, "getGenres", "useQuery">;
 };
+
+const lang = i18n.language as LangType;
 
 export const genreConfig: AdminConfig<GenreMutations> = {
 	entityName: "genre",
@@ -114,6 +117,7 @@ export const genreConfig: AdminConfig<GenreMutations> = {
 	],
 	mutations: {
 		add: useAddGenreMutation,
+		addMany: useAddGenresMutation,
 		update: useUpdateGenreMutation,
 		getById: useLazyGetGenreByIdQuery,
 		delete: useDeleteGenreMutation,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 interface UseAdminGridProps<T> {
 	data: T[] | undefined;
 	onDelete: (id: string, title: string) => Promise<void>;
@@ -11,21 +11,22 @@ export function useAdminGrid<
 	const [selectedItem, setSelectedItem] = useState<T | null>(null);
 	const [openDialog, setOpenDialog] = useState(false);
 
-
-	useEffect(() => {
-		if (data) {
-			const formattedData = formatGridData(data);
-			setItems(formattedData);
-		}
-	}, [data]);
-
-	const formatGridData = (data: T[]) => {
+	const formatGridData = useCallback((data: T[]) => {
 		return data.map((item) => ({
 			...item,
 			id: item._id,
 			...(item.info || {}),
 		}));
-	};
+	}, []);
+
+	useEffect(() => {
+		if (Array.isArray(data)) {
+			const formattedData = formatGridData(data);
+			setItems(formattedData);
+		}
+		console.log(data)
+	}, [data, formatGridData]);
+	
 
 	const handleDeleteDialog = (item: T) => {
 		setSelectedItem(item);

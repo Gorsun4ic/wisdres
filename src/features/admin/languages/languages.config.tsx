@@ -2,11 +2,12 @@
 import LanguageIcon from "@mui/icons-material/Language";
 
 // Get language 
-import { lang } from "@src/i18n";
+import i18n, { LangType } from "@src/i18n";
 
 // API
 import {
 	useAddLanguageMutation,
+	useAddLanguagesMutation,
 	useUpdateLanguageMutation,
 	useLazyGetLanguageByIdQuery,
 	useDeleteLanguageMutation,
@@ -19,11 +20,18 @@ import { AdminConfig, InferHook } from "@custom-types/adminFormConfig";
 
 export type LanguageMutations = {
 	add: InferHook<typeof apiLanguagesSlice, "addLanguage", "useMutation">;
+	addMany: InferHook<typeof apiLanguagesSlice, "addLanguages", "useMutation">;
 	update: InferHook<typeof apiLanguagesSlice, "updateLanguage", "useMutation">;
-	getById: InferHook<typeof apiLanguagesSlice, "getLanguageById", "useLazyQuery">;
+	getById: InferHook<
+		typeof apiLanguagesSlice,
+		"getLanguageById",
+		"useLazyQuery"
+	>;
 	delete: InferHook<typeof apiLanguagesSlice, "deleteLanguage", "useMutation">;
 	getAll: InferHook<typeof apiLanguagesSlice, "getLanguages", "useQuery">;
 };
+
+const lang = i18n.language as LangType;
 
 export const languageConfig: AdminConfig<LanguageMutations> = {
 	entityName: "language",
@@ -61,6 +69,7 @@ export const languageConfig: AdminConfig<LanguageMutations> = {
 	],
 	mutations: {
 		add: useAddLanguageMutation,
+		addMany: useAddLanguagesMutation,
 		update: useUpdateLanguageMutation,
 		getById: useLazyGetLanguageByIdQuery,
 		delete: useDeleteLanguageMutation,

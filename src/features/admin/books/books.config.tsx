@@ -5,19 +5,18 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { GridCellParams } from "@mui/x-data-grid";
 
 // Get language
-import i18n from "@src/i18n";
-import { LangType, lang } from "@src/i18n";
+import i18n, { LangType } from "@src/i18n";
 
 // API
 import {
 	useAddBookMutation,
+	useAddBooksMutation,
 	useUpdateBookMutation,
 	useLazyGetBookByIdQuery,
 	useDeleteBookMutation,
 	useGetBooksQuery,
-	apiBooksSlice
+	apiBooksSlice,
 } from "@api/apiBooksSlice";
-
 
 // Utils
 import { validateImageType, imageTypes } from "@utils/imgValidation";
@@ -31,12 +30,14 @@ import { ILanguage } from "@custom-types/language";
 
 export type BookMutations = {
 	add: InferHook<typeof apiBooksSlice, "addBook", "useMutation">;
+	addMany: InferHook<typeof apiBooksSlice, "addBooks", "useMutation">;
 	update: InferHook<typeof apiBooksSlice, "updateBook", "useMutation">;
 	getById: InferHook<typeof apiBooksSlice, "getBookById", "useLazyQuery">;
 	delete: InferHook<typeof apiBooksSlice, "deleteBook", "useMutation">;
 	getAll: InferHook<typeof apiBooksSlice, "getBooks", "useQuery">;
 };
 
+const lang = i18n.language as LangType;
 
 export const booksConfig: AdminConfig<BookMutations> = {
 	entityName: "books",
@@ -357,6 +358,7 @@ export const booksConfig: AdminConfig<BookMutations> = {
 	],
 	mutations: {
 		add: useAddBookMutation,
+		addMany: useAddBooksMutation,
 		update: useUpdateBookMutation,
 		getById: useLazyGetBookByIdQuery,
 		delete: useDeleteBookMutation,

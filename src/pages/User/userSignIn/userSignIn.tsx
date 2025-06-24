@@ -46,7 +46,7 @@ const UserSignInPage = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isSubmitSuccessful },
+		formState: { errors },
 		setError,
 		watch,
 	} = useForm<FormFields>();
@@ -76,7 +76,7 @@ const UserSignInPage = () => {
 				});
 			}
 		}
-	}, [authorizationError]);
+	}, [authorizationError, setError, currentFieldsValue]);
 
 	const onSubmit = (data: FormFields) => {
 		// Check if the field with error has been modified

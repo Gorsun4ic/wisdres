@@ -273,7 +273,7 @@ export const createBook = async (req, res) => {
 		res.status(500).json({
 			success: false,
 			error: {
-				message: "Failed to add book",
+				message: `Failed to add book. ${error}`,
 				code: 500,
 			},
 		});

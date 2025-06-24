@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 
 // Get language
-import i18n from "@src/i18n";
-import { lang } from "@src/i18n";
+import i18n, {LangType} from "@src/i18n";
 
 // API
 import {
 	useAddPublisherMutation,
+	useAddPublishersMutation,
 	useUpdatePublisherMutation,
 	useLazyGetPublisherByIdQuery,
 	useDeletePublisherMutation,
@@ -26,12 +26,26 @@ import { AdminConfig, InferHook } from "@custom-types/adminFormConfig";
 
 export type PublisherMutations = {
 	add: InferHook<typeof apiPublishersSlice, "addPublisher", "useMutation">;
-	update: InferHook<typeof apiPublishersSlice, "updatePublisher", "useMutation">;
-	getById: InferHook<typeof apiPublishersSlice, "getPublisherById", "useLazyQuery">;
-	delete: InferHook<typeof apiPublishersSlice, "deletePublisher", "useMutation">;
+	addMany: InferHook<typeof apiPublishersSlice, "addPublishers", "useMutation">;
+	update: InferHook<
+		typeof apiPublishersSlice,
+		"updatePublisher",
+		"useMutation"
+	>;
+	getById: InferHook<
+		typeof apiPublishersSlice,
+		"getPublisherById",
+		"useLazyQuery"
+	>;
+	delete: InferHook<
+		typeof apiPublishersSlice,
+		"deletePublisher",
+		"useMutation"
+	>;
 	getAll: InferHook<typeof apiPublishersSlice, "getPublishers", "useQuery">;
 };
 
+const lang = i18n.language as LangType;
 
 export const publisherConfig: AdminConfig<PublisherMutations> = {
 	entityName: "publisher",
@@ -114,6 +128,7 @@ export const publisherConfig: AdminConfig<PublisherMutations> = {
 	],
 	mutations: {
 		add: useAddPublisherMutation,
+		addMany: useAddPublishersMutation,
 		update: useUpdatePublisherMutation,
 		getById: useLazyGetPublisherByIdQuery,
 		delete: useDeletePublisherMutation,

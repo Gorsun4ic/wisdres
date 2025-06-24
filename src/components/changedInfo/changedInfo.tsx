@@ -2,9 +2,9 @@ import { Stack } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
-
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
+import { Difference } from "@src/utils/findDiffObjs";
 
 interface Change {
 	from: string | number;
@@ -31,12 +31,12 @@ const formatValue = (value: string | number): string => {
 	return String(value);
 };
 
-const handleNestedObject = (differences: Changes) => {
+const handleNestedObject = <T extends object>(differences: Difference<T>) => {
 	if (!differences) return [];
 
 	const changes: { field: string; change: Change }[] = [];
 
-	const traverse = (obj: Changes, path: string[] = []) => {
+	const traverse = (obj: Difference<T>, path: string[] = []) => {
 		for (const [key, value] of Object.entries(obj)) {
 			if (value && typeof value === "object") {
 				if ("from" in value && "to" in value) {
@@ -45,7 +45,7 @@ const handleNestedObject = (differences: Changes) => {
 						change: value as Change,
 					});
 				} else {
-					traverse(value as Changes, [...path, key]);
+					traverse(value as Difference<T>, [...path, key]);
 				}
 			}
 		}
@@ -55,10 +55,13 @@ const handleNestedObject = (differences: Changes) => {
 	return changes;
 };
 
-const ChangedInfo = ({ differences }: { differences: Changes }) => {
+const ChangedInfo = <T extends object>({
+	differences,
+}: {
+	differences: Difference<T>;
+}) => {
 	const changes = handleNestedObject(differences);
 	const { t } = useTranslation();
-
 
 	return (
 		<div className="edit-property">

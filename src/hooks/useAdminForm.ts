@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-
-// RHF
 import { useForm, FieldErrors, FieldValues } from "react-hook-form";
 
 // Hooks
@@ -8,116 +6,129 @@ import useAlert from "./useAlert";
 
 // Utils
 import { findDifferenceObjs } from "@utils/findDiffObjs";
+import { normalizeSubmission } from "@utils/normilizeBookIncome";
 
 // Types
-import {
-	AdminConfig,
-	ContentMutationTypes,
-} from "@custom-types/adminFormConfig";
-import { IAuthorInput } from "@src/types/author";
-import { IBookInput } from "@src/types/book";
-import { IGenreInput } from "@src/types/genre";
-import { ILanguageInput } from "@src/types/language";
-import { IPublisherInput } from "@src/types/publisher";
+import { AdminConfig } from "@custom-types/adminFormConfig";
 
-type ContentInterfaces =
-	| IAuthorInput
-	| IBookInput
-	| IGenreInput
-	| ILanguageInput
-	| IPublisherInput;
+type AddMutation<Data> = [
+	(data: Data) => Promise<{ data?: unknown; error?: unknown }>,
+	{ isLoading: boolean; error?: unknown }
+];
+type UpdateMutation<Data> = [
+	(args: { id?: string; updates: Data }) => void,
+	{ isLoading: boolean; error?: unknown }
+];
+type GetByIdMutation<Data> = [
+	(id: string) => void,
+	{ data?: Data; isLoading: boolean; error?: unknown }
+];
 
-export const useAdminForm = <T extends FieldValues>(
-	config: AdminConfig<ContentMutationTypes>,
+export const useAdminForm = <
+	TData extends FieldValues,
+	TMutations extends {
+		add: () => AddMutation<TData>;
+		update: () => UpdateMutation<TData>;
+		getById: () => GetByIdMutation<TData>;
+	}
+>(
+	config: AdminConfig<TMutations>,
 	mode: "add" | "edit",
 	id?: string
 ) => {
-	const [addMutation, { isLoading: isAdding, error: addError }] =
-		config.mutations.add();
-	const [updateMutation, { isLoading: isUpdating, error: updateError }] =
-		config.mutations.update();
-	const [
-		getById,
-		{ data: dataById, isLoading: isGettingById, error: getByIdError },
-	] = config.mutations.getById();
+	const [addMutation] = config.mutations.add();
+	const [updateMutation] = config.mutations.update();
+	const [getById, { data: dataById }] = config.mutations.getById();
 
-	const [dataToEdit, setDataToEdit] = useState(null);
+	const [dataToEdit, setDataToEdit] = useState<TData | null>(null);
+	const [openDialog, setOpenDialog] = useState(false);
+	const [differences, setDifferences] = useState<Partial<TData> | null>(null);
 
-	const form = useForm<T>();
+	const form = useForm<TData>();
 	const triggerAlert = useAlert();
-
-	const {
-		formState: { isSubmitSuccessful },
-	} = form;
-
-	// Dialog state
-	const [openDialog, setOpenDialog] = useState<boolean>(false);
-	const [differences, setDifferences] = useState(null);
-
-	useEffect(() => {
-		if (isSubmitSuccessful && !addError) {
-			form.reset();
-			triggerAlert({
-				title: `The ${config.entityName} was successfully added`,
-				color: "success",
-				place: "form",
-			});
-		}
-	}, [isSubmitSuccessful, addError, config.entityName, form, triggerAlert]);
 
 	useEffect(() => {
 		if (id && mode === "edit") {
 			getById(id);
 		}
-	}, [id]);
+	}, [id, mode, getById]);
 
 	useEffect(() => {
 		if (dataById) {
 			form.reset(dataById);
 		}
-	}, [dataById]);
+	}, [dataById, form]);
 
-	const onSubmit = (data: T) => {
+	const onSubmit = async (data: TData) => {
+
 		switch (mode) {
-			case "add":
-				addMutation(data);
+			case "add": {
+				const payload = data?.info
+					? (normalizeSubmission(data) as unknown as TData)
+					: data;
+			
+				const result = await addMutation(payload);
+
+				if ("data" in result) {
+					triggerAlert({
+						title: `The ${config.entityName} was successfully added`,
+						color: "success",
+						place: "form",
+					});
+					form.reset();
+				} else if ("error" in result) {
+					triggerAlert({
+						title: `Error adding ${config.entityName}`,
+						color: "error",
+						place: "form",
+					});
+					console.error("Add failed:", result.error);
+				}
 				break;
+			}
+
 			case "edit":
 				setOpenDialog(true);
 				setDataToEdit(data);
-				setDifferences(findDifferenceObjs(dataById, data));
+				setDifferences(findDifferenceObjs(dataById ?? {}, data));
 				break;
+
 			default:
 				console.warn(`Unknown mode: ${mode}`);
 		}
 	};
 
 	const handleEdit = (confirm: boolean) => {
-		if (confirm) {
+		if (confirm && dataToEdit) {
 			updateMutation({
 				id,
-				updates: dataToEdit as T,
+				updates: dataToEdit,
 			});
 			form.reset(dataToEdit);
 		}
 		setOpenDialog(false);
 	};
 
-	const getFieldError = (
-		errors: FieldErrors<FieldValues>,
+	const getFieldError = <TFieldValues extends FieldValues = FieldValues>(
+		errors: FieldErrors<TFieldValues>,
 		fieldName: string
-	) => {
-		if (!errors || !fieldName) {
-			return undefined;
+	): string | undefined => {
+		const keys = fieldName.split(".") as Array<keyof TFieldValues>;
+		let current: unknown = errors;
+
+		for (const key of keys) {
+			if (current && typeof current === "object" && key in current) {
+				current = (current as Record<string, unknown>)[key as string];
+			} else {
+				return undefined;
+			}
 		}
 
-		const parts = fieldName.split(".");
-
-		if (errors[fieldName]?.message) {
-			return errors[fieldName]?.message;
+		if (current && typeof current === "object" && "message" in current) {
+			return (current as { message?: string }).message;
 		}
 
-		return errors?.[parts[0]]?.[parts[1]]?.message;
+		return undefined;
 	};
 
 	return {

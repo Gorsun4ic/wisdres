@@ -57,8 +57,8 @@ export type InferHook<
 	? Hook
 	: never;
 
-type FieldTypes = FormFieldConfig | SelectCheckboxesConfig | AutoCompleteConfig;
-type GroupedFields = [string, ...FieldTypes];
+export type FieldTypes = FormFieldConfig | SelectCheckboxesConfig | AutoCompleteConfig;
+type GroupedFields = [string, ...FieldTypes[]];
 
 export type AllMutationTypes =
 	| BookMutations

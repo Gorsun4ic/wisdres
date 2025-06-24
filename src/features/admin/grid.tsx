@@ -3,9 +3,19 @@ import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+// Hooks
 import { useAdminGrid } from "@hooks/useAdminGrid";
+
+// Custom components
 import ConfirmAction from "@components/confirmAction";
 import ErrorMessage from "@components/error";
+
+// Utils
+import { getTitle } from "@src/utils/getTitle";
+
+// Get the language
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 interface AdminGridProps<T> {
 	handleEdit?: (mode: "add" | "edit", id?: string) => void;
@@ -40,6 +50,9 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 		data,
 		onDelete,
 	});
+
+	const {i18n} = useTranslation();
+	const lang = i18n.language;
 
 	if (isLoading)
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
@@ -103,7 +116,7 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 
 			{openDialog && selectedItem && (
 				<ConfirmAction
-					title={`Delete ${selectedItem.title[lang] ? selectedItem.title[lang] : selectedItem.title }?`}
+					title={`Delete ${getTitle(selectedItem.title, lang)}?`}
 					openDialog={openDialog}
 					onConfirm={() => handleDialogAction(true)}
 					onCancel={() => handleDialogAction(false)}
