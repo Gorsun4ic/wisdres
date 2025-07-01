@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 
 // Get language
-import i18n, {LangType} from "@src/i18n";
+import i18n, { LangType } from "@src/i18n";
 
 // API
 import {
@@ -14,7 +14,7 @@ import {
 	useLazyGetPublisherByIdQuery,
 	useDeletePublisherMutation,
 	useGetPublishersQuery,
-	apiPublishersSlice
+	apiPublishersSlice,
 } from "@api/apiPublishersSlice";
 
 // Utils
@@ -22,7 +22,6 @@ import { validateImageType, imageTypes } from "@utils/imgValidation";
 
 // Types
 import { AdminConfig, InferHook } from "@custom-types/adminFormConfig";
-
 
 export type PublisherMutations = {
 	add: InferHook<typeof apiPublishersSlice, "addPublisher", "useMutation">;
@@ -44,8 +43,6 @@ export type PublisherMutations = {
 	>;
 	getAll: InferHook<typeof apiPublishersSlice, "getPublishers", "useQuery">;
 };
-
-const lang = i18n.language as LangType;
 
 export const publisherConfig: AdminConfig<PublisherMutations> = {
 	entityName: "publisher",
@@ -117,7 +114,10 @@ export const publisherConfig: AdminConfig<PublisherMutations> = {
 			field: "about",
 			headerName: "About",
 			width: 150,
-			renderCell: (params) => params.value[lang],
+			renderCell: (params) => {
+				const lang = i18n.language as LangType;
+				return params.value[lang];
+			},
 		},
 		{
 			field: "books",

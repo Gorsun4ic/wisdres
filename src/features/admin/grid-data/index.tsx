@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -71,6 +71,17 @@ const AdminGrid = ({
 		handleEdit?.("edit", rowData?.id);
 	};
 
+	const processRowUpdate = (newRow) => {
+		const errors = validateRow(newRow);
+		const updatedRow = { ...newRow, lastUpdated: new Date() };
+		if (Object.keys(errors).length > 0) {
+			throw new Error(JSON.stringify(errors));
+		}
+		setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+		toast.success("Row updated successfully!")
+		return updatedRow;
+	};
+
 	const handleId = (data: IBook[]) => {
 		return data.map((item: IBook) => {
 			const { info, ...data } = item;
@@ -130,13 +141,6 @@ const AdminGrid = ({
 				rows={info}
 				columns={columnsInfo}
 				columnVisibilityModel={columnVisibilityModel}
-				initialState={{
-					pagination: {
-						paginationModel: {
-							pageSize: 15,
-						},
-					},
-				}}
 				slots={{ toolbar: GridToolbar }}
 				slotProps={{
 					toolbar: {
@@ -145,7 +149,6 @@ const AdminGrid = ({
 				}}
 				pageSizeOptions={[5]}
 				checkboxSelection
-				disableRowSelectionOnClick
 			/>
 			{openDialog && (
 				<ConfirmAction

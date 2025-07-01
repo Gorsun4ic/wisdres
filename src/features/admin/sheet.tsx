@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-
 import { ErrorBoundary } from "react-error-boundary";
 import { Stack, Alert } from "@mui/material";
 
@@ -15,9 +13,7 @@ import InputFileUpload from "@components/uploadFile/uploadFile";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
-
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
-import readJSON from "@utils/readJSONfile";
 
 interface BaseSheetProps<T> {
 	config: AdminConfig<T>;

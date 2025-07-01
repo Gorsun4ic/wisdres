@@ -1,4 +1,4 @@
-import Sheet from "../sheet";
+import Sheet from "@features/admin/sheet";
 import { booksConfig } from "./books.config";
 
 import { useGetGenresQuery } from "@api/apiGenresSlice";

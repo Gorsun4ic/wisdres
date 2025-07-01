@@ -35,7 +35,7 @@ import AutoCompleteField from "@components/autoCompleteField";
 
 // Utils
 import { validateImageType } from "@utils/imgValidation";
-import { getTitle } from "@src/utils/getTitle";
+import { getLangEntity } from "@src/utils/getLangEntity";
 
 // Style
 import { StyledForm } from "./style";
@@ -174,7 +174,7 @@ const FormBuilder = <
 
 							const options = fieldData[field.name]?.data?.data.map((item) => {
 								return {
-									label: getTitle(item.title, lang),
+									label: getLangEntity(item.title, lang),
 									id: item._id,
 								};
 							});

@@ -24,7 +24,6 @@ export function useAdminGrid<
 			const formattedData = formatGridData(data);
 			setItems(formattedData);
 		}
-		console.log(data)
 	}, [data, formatGridData]);
 	
 

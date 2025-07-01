@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridColDef} from "@mui/x-data-grid";
 import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,7 +11,7 @@ import ConfirmAction from "@components/confirmAction";
 import ErrorMessage from "@components/error";
 
 // Utils
-import { getTitle } from "@src/utils/getTitle";
+import { getLangEntity } from "@src/utils/getLangEntity";
 
 // Get the language
 import { useTranslation } from "react-i18next";
@@ -29,7 +29,7 @@ interface AdminGridProps<T> {
 	columnVisibilityModel?: GridColDef[];
 }
 
-const GridData = <T extends { _id: string; info?: { title: string } }> ({
+const GridData = <T extends { _id: string; info?: { title: string } }>({
 	handleEdit,
 	data,
 	isLoading,
@@ -51,8 +51,12 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 		onDelete,
 	});
 
-	const {i18n} = useTranslation();
+	const { i18n } = useTranslation();
 	const lang = i18n.language;
+
+	useEffect(() => {
+		console.log(1)
+	}, [i18n, lang])
 
 	if (isLoading)
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
@@ -109,14 +113,13 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 				slotProps={{
 					toolbar: { showQuickFilter: true },
 				}}
-				pageSizeOptions={[5]}
+				pageSizeOptions={[15]}
 				checkboxSelection
-				disableRowSelectionOnClick
 			/>
 
 			{openDialog && selectedItem && (
 				<ConfirmAction
-					title={`Delete ${getTitle(selectedItem.title, lang)}?`}
+					title={`Delete ${getLangEntity(selectedItem.title, lang)}?`}
 					openDialog={openDialog}
 					onConfirm={() => handleDialogAction(true)}
 					onCancel={() => handleDialogAction(false)}
@@ -124,6 +127,6 @@ const GridData = <T extends { _id: string; info?: { title: string } }> ({
 			)}
 		</>
 	);
-}
+};
 
 export default GridData;

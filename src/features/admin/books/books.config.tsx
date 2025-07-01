@@ -20,6 +20,7 @@ import {
 
 // Utils
 import { validateImageType, imageTypes } from "@utils/imgValidation";
+import { getLangEntity } from "@utils/getLangEntity";
 
 // Types
 import { AdminConfig, InferHook } from "@src/types/adminFormConfig";
@@ -36,8 +37,6 @@ export type BookMutations = {
 	delete: InferHook<typeof apiBooksSlice, "deleteBook", "useMutation">;
 	getAll: InferHook<typeof apiBooksSlice, "getBooks", "useQuery">;
 };
-
-const lang = i18n.language as LangType;
 
 export const booksConfig: AdminConfig<BookMutations> = {
 	entityName: "books",
@@ -248,21 +247,20 @@ export const booksConfig: AdminConfig<BookMutations> = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params: GridCellParams) => (
-				<img
-					src={(params.value as Record<LangType, string>)[lang]}
-					width="40"
-				/>
-			),
+			renderCell: (params: GridCellParams) => {
+				const lang = i18n.language as LangType;
+				return <img src={getLangEntity(params.value, lang)} width="40" />;
+			},
 		},
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
 			renderCell: (params: GridCellParams) => {
+				const lang = i18n.language as LangType;
 				return (
 					<Link to={`/book/${params.row.id}`}>
-						{(params.value as Record<LangType, string>)[lang]}
+						{getLangEntity(params.value, lang)}
 					</Link>
 				);
 			},
@@ -273,10 +271,11 @@ export const booksConfig: AdminConfig<BookMutations> = {
 			width: 150,
 			renderCell: (params: GridCellParams) => {
 				const value = params.value as IAuthor[];
+				const lang = i18n.language as LangType;
 				return value.map((author: IAuthor, index: number, arr: IAuthor[]) => {
 					return (
 						(value && (
-							<Link to={`/author/${author._id}`}>
+							<Link key={author._id} to={`/author/${author._id}`}>
 								{author.title[lang]}
 								{index < arr.length - 1 ? ", " : ""}
 							</Link>
@@ -306,10 +305,11 @@ export const booksConfig: AdminConfig<BookMutations> = {
 			width: 150,
 			renderCell: (params: GridCellParams) => {
 				const value = params.value as IGenre[];
+				const lang = i18n.language as LangType;
 				return value.map((genre: IGenre, index: number, arr: IGenre[]) => {
 					return (
 						(value && (
-							<Link to={`/genre/${genre._id}`}>
+							<Link key={genre._id} to={`/genre/${genre._id}`}>
 								{(genre.title as Record<LangType, string>)[lang]}
 								{index < arr.length - 1 ? ", " : ""}
 							</Link>
@@ -325,6 +325,7 @@ export const booksConfig: AdminConfig<BookMutations> = {
 			width: 80,
 			renderCell: (params: GridCellParams) => {
 				const value = params.value as ILanguage | undefined;
+				const lang = i18n.language as LangType;
 				return (value && value.title[lang]) || "Unknown Language";
 			},
 		},

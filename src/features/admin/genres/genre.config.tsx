@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 
 // Get language
-import i18n, {LangType} from "@src/i18n";
+import i18n, { LangType } from "@src/i18n";
 
 // API
 import {
@@ -14,7 +14,7 @@ import {
 	useDeleteGenreMutation,
 	useGetGenresQuery,
 	useAddGenresMutation,
-	apiGenresSlice
+	apiGenresSlice,
 } from "@api/apiGenresSlice";
 
 // Types
@@ -31,8 +31,6 @@ export type GenreMutations = {
 	delete: InferHook<typeof apiGenresSlice, "deleteGenre", "useMutation">;
 	getAll: InferHook<typeof apiGenresSlice, "getGenres", "useQuery">;
 };
-
-const lang = i18n.language as LangType;
 
 export const genreConfig: AdminConfig<GenreMutations> = {
 	entityName: "genre",
@@ -100,19 +98,23 @@ export const genreConfig: AdminConfig<GenreMutations> = {
 			field: "img",
 			headerName: "Image",
 			width: 80,
-			renderCell: (params) => (
-				<img src={params.value[lang]} width="40" />
-			),
+			renderCell: (params) => {
+				const lang = i18n.language as LangType;
+				return <img src={params.value[lang]} width="40" />;
+			},
 		},
 		{
 			field: "title",
 			headerName: "Title",
 			width: 150,
-			renderCell: (params) => (
-				<Link to={`/books/${params.value["en"].toLowerCase()}`}>
-					{params.value[lang]}
-				</Link>
-			),
+			renderCell: (params) => {
+				const lang = i18n.language as LangType;
+				return (
+					<Link to={`/books/${params.value["en"].toLowerCase()}`}>
+						{params.value[lang]}
+					</Link>
+				);
+			},
 		},
 	],
 	mutations: {

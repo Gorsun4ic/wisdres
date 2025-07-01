@@ -15,7 +15,7 @@ import {
 	useDeleteAuthorMutation,
 	useGetAuthorsQuery,
 	useAddAuthorsMutation,
-	apiAuthorsSlice
+	apiAuthorsSlice,
 } from "@api/apiAuthorsSlice";
 
 // Types
@@ -32,8 +32,6 @@ export type AuthorMutations = {
 	delete: InferHook<typeof apiAuthorsSlice, "deleteAuthor", "useMutation">;
 	getAll: InferHook<typeof apiAuthorsSlice, "getAuthors", "useQuery">;
 };
-
-const lang = i18n.language as LangType;
 
 export const authorConfig: AdminConfig<AuthorMutations> = {
 	entityName: "author",
@@ -111,18 +109,23 @@ export const authorConfig: AdminConfig<AuthorMutations> = {
 			field: "title",
 			headerName: "Title",
 			width: 150,
-			renderCell: (params: GridCellParams) => (
-				<Link to={`/author/${params.row._id}`}>
-					{(params.value as Record<LangType, string>)[lang]}
-				</Link>
-			),
+			renderCell: (params: GridCellParams) => {
+				const lang = i18n.language as LangType;
+				return (
+					<Link to={`/author/${params.row._id}`}>
+						{(params.value as Record<LangType, string>)[lang]}
+					</Link>
+				);
+			},
 		},
 		{
 			field: "about",
 			headerName: "About",
 			width: 150,
-			renderCell: (params: GridCellParams) =>
-				(params.value as Record<LangType, string>)[lang],
+			renderCell: (params: GridCellParams) => {
+				const lang = i18n.language as LangType;
+				return (params.value as Record<LangType, string>)[lang];
+			},
 		},
 		{
 			field: "books",

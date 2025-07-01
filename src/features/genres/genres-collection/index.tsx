@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { IGenre } from "@custom-types/genre";
+import { ApiSuccess } from "@src/types/apiResponse";
 
 import GenreCard from "../genre-card";
 
@@ -14,7 +15,7 @@ const GenresCollection = ({
 	data,
 	isLoading,
 }: {
-	data: IGenre[];
+	data: ApiSuccess<IGenre[]>;
 	isLoading: boolean;
 }) => {
 	const { t, i18n } = useTranslation();
@@ -27,7 +28,11 @@ const GenresCollection = ({
 		return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;
 	}
 
-	const genreList = data?.map((item: IGenre) => {
+	if (!data) {
+		return null;
+	}
+
+	const genreList = data?.data?.map((item: IGenre) => {
 		const linkPath = pathname.includes("books")
 			? item?.title["en"].toLowerCase()
 			: `books/${item?.title["en"].toLowerCase()}`;

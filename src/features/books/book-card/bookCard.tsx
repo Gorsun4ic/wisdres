@@ -9,15 +9,18 @@ import { IAuthor } from "@custom-types/author";
 
 import Button from "@components/button";
 
+import { getLangEntity } from "@src/utils/getLangEntity";
+
 import theme from "@styles/theme";
 import { StyledCard, StyledCardContent } from "./style";
+import { LangType } from "@src/i18n";
 
 interface BookCardProps {
 	data: {
 		info: {
 			img: string;
 			rating: number;
-			title: string;
+			title: LangType;
 			author: IAuthor[];
 		};
 		_id: string;
@@ -26,7 +29,7 @@ interface BookCardProps {
 
 const BookCard = ({ data }: BookCardProps) => {
 	const { t, i18n } = useTranslation();
-	const lang = i18n.language;
+	const lang = i18n.language as LangType;
 
 	const { info, _id } = data;
 	const { img, rating, title, author } = info;
@@ -43,7 +46,7 @@ const BookCard = ({ data }: BookCardProps) => {
 					border: `1px solid ${theme?.colors?.darkGrey}`,
 				}}>
 				<img
-					src={img[lang] ? img[lang] : img}
+					src={getLangEntity(img, lang)}
 					className="book-card__img"
 					width="200"
 					height="300"
@@ -60,12 +63,12 @@ const BookCard = ({ data }: BookCardProps) => {
 							</Stack>
 						) : null}
 						<h3 className="book-card__name">
-							{title[lang] ? title[lang] : title}
+							{getLangEntity(title, lang)}
 						</h3>
 						<p className="book-card__author">
 							{author
-								.map((auth: { title: string }) =>
-									auth.title[lang] ? auth.title[lang] : auth.title
+								.map((author: { title: Record<LangType, string> }) =>
+									getLangEntity(author.title, lang)
 								)
 								.join(", ")}
 						</p>
