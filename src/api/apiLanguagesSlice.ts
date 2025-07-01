@@ -1,21 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { GetLanguagesResponse, GetLanguageResponse, AddLanguageResponse, AddLanguagesResponse, DeleteLanguageResponse, UpdateLanguageResponse, ILanguageInput, ILanguagePatch } from "@custom-types/language";
+import { ApiSuccess } from "@src/types/apiResponse";
+import { ILanguage, ILanguageInput, ILanguagePatch } from "@custom-types/language";
 
 export const apiLanguagesSlice = createApi({
 	reducerPath: "LanguagesApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
 	tagTypes: ["Languages"],
 	endpoints: (builder) => ({
-		getLanguages: builder.query<GetLanguagesResponse, void>({
+		getLanguages: builder.query<ApiSuccess<ILanguage[]>, void>({
 			query: () => "/languages",
 			providesTags: ["Languages"],
 		}),
-		getLanguageById: builder.query<GetLanguageResponse, string>({
+		getLanguageById: builder.query<ApiSuccess<ILanguage>, string>({
 			query: (id) => ({ url: `/languages/${id}` }),
 			providesTags: ["Languages"],
 		}),
-		addLanguage: builder.mutation<AddLanguageResponse, ILanguageInput>({
+		addLanguage: builder.mutation<ApiSuccess<ILanguage>, ILanguageInput>({
 			query: (language) => ({
 				url: "/languages",
 				method: "POST",
@@ -23,7 +24,7 @@ export const apiLanguagesSlice = createApi({
 			}),
 			invalidatesTags: ["Languages"],
 		}),
-		addLanguages: builder.mutation<AddLanguagesResponse, ILanguageInput[]>({
+		addLanguages: builder.mutation<ApiSuccess<ILanguage[]>, ILanguageInput[]>({
 			query: (languages) => ({
 				url: "/languages/batch",
 				method: "POST",
@@ -31,7 +32,7 @@ export const apiLanguagesSlice = createApi({
 			}),
 			invalidatesTags: ["Languages"],
 		}),
-		deleteLanguage: builder.mutation<DeleteLanguageResponse, string>({
+		deleteLanguage: builder.mutation<ApiSuccess<ILanguage>, string>({
 			query: (id) => ({
 				url: `/languages/${id}`,
 				method: "DELETE",
@@ -39,7 +40,7 @@ export const apiLanguagesSlice = createApi({
 			invalidatesTags: ["Languages"],
 		}),
 		updateLanguage: builder.mutation<
-			UpdateLanguageResponse,
+			ApiSuccess<ILanguage>,
 			{ id: string; updates: ILanguagePatch }
 		>({
 			query: ({ id, updates }) => ({

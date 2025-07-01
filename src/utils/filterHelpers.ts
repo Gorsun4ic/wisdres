@@ -53,8 +53,6 @@ export const getBooksSpecificData = (
 		if (!uniqueMap.has(id)) uniqueMap.set(id, title);
 	});
 
-	console.log(uniqueMap);
-
 	return Array.from(uniqueMap.entries());
 };
 

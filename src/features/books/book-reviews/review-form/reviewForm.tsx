@@ -22,7 +22,7 @@ type FormFields = {
 };
 
 const ReviewForm = () => {
-	const { data: userData } = useCheckAuthQuery(null);
+	const { data: userData } = useCheckAuthQuery();
 	const { t } = useTranslation();
 	const { bookId } = useParams();
 	const [addNewReview, { isLoading, error: addNewReviewError }] =
@@ -48,10 +48,11 @@ const ReviewForm = () => {
 
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
 		if (bookId && userData) {
+			console.log(userData)
 			const review = {
 				bookId,
 				review: {
-					user: userData.user._id,
+					user: userData?.data?._id,
 					text: data.text,
 					rating: data.rating,
 				},

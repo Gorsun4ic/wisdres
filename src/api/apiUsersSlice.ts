@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import {GetUsersResponse, GetUserResponse, AddUserResponse, UserInput, IUserPatch, SignInResponse, LogoutResponse, ISignInInput, CheckAuthResponse, VerifyEmailResponse, ForgotPasswordResponse, ResetPasswordResponse, DeleteUserResponse, UpdateUserResponse, ResendVerificationResponse} from "@custom-types/user";
+import { ApiSuccess } from "@src/types/apiResponse";
+import {UserInfoWithoutPassword, UserInput, IUserPatch, ISignInInput, VerifyEmailResponse, IUser} from "@custom-types/user";
 
 export const apiUsersSlice = createApi({
 	reducerPath: "usersApi",
@@ -10,28 +11,28 @@ export const apiUsersSlice = createApi({
 	}),
 	tagTypes: ["Users"],
 	endpoints: (builder) => ({
-		getUsers: builder.query<GetUsersResponse, void>({
+		getUsers: builder.query<ApiSuccess<IUser[]>, void>({
 			query: () => "/users",
 			providesTags: [{ type: "Users", id: "LIST" }],
 		}),
-		getUserById: builder.query<GetUserResponse, string>({
+		getUserById: builder.query<ApiSuccess<IUser>, string>({
 			query: (id) => ({ url: `/users/${id}` }),
 			providesTags: ["Users"],
 		}),
-		authorizeUser: builder.mutation<SignInResponse, ISignInInput>({
+		authorizeUser: builder.mutation<ApiSuccess<UserInfoWithoutPassword>, ISignInInput>({
 			query: (user) => ({
 				url: "/users/sign-in",
 				method: "POST",
 				body: user,
 			}),
 		}),
-		logoutUser: builder.mutation<LogoutResponse, void>({
+		logoutUser: builder.mutation<ApiSuccess, void>({
 			query: () => ({
 				url: "/users/logout",
 				method: "POST",
 			}),
 		}),
-		checkAuth: builder.query<CheckAuthResponse, void>({
+		checkAuth: builder.query<ApiSuccess<IUser>, void>({
 			query: () => ({ url: "users/check-auth" }),
 		}),
 		verifyEmail: builder.mutation<VerifyEmailResponse, string>({
@@ -41,7 +42,7 @@ export const apiUsersSlice = createApi({
 				body: token,
 			}),
 		}),
-		forgotPassword: builder.mutation<ForgotPasswordResponse, string>({
+		forgotPassword: builder.mutation<ApiSuccess, string>({
 			query: (email) => ({
 				url: "users/forgot-password",
 				method: "POST",
@@ -49,7 +50,7 @@ export const apiUsersSlice = createApi({
 			}),
 		}),
 		resetPassword: builder.mutation<
-			ResetPasswordResponse,
+			ApiSuccess,
 			{ token: string; password: string }
 		>({
 			query: ({ token, password }) => ({
@@ -58,7 +59,7 @@ export const apiUsersSlice = createApi({
 				body: { token, password },
 			}),
 		}),
-		addUser: builder.mutation<AddUserResponse, UserInput>({
+		addUser: builder.mutation<ApiSuccess<IUser>, UserInput>({
 			query: (user) => ({
 				url: "/users/sign-up",
 				method: "POST",
@@ -66,14 +67,14 @@ export const apiUsersSlice = createApi({
 			}),
 			invalidatesTags: [{ type: "Users", id: "LIST" }],
 		}),
-		deleteUser: builder.mutation<DeleteUserResponse, string>({
+		deleteUser: builder.mutation<ApiSuccess, string>({
 			query: (id) => ({
 				url: `/users/${id}`,
 				method: "DELETE",
 			}),
 			invalidatesTags: ["Users"],
 		}),
-		updateUser: builder.mutation<UpdateUserResponse, { id: string; updates: IUserPatch }>({
+		updateUser: builder.mutation<ApiSuccess<IUser>, { id: string; updates: IUserPatch }>({
 			query: ({ id, updates }) => ({
 				url: `/users/${id}`,
 				method: "PATCH",
@@ -81,7 +82,7 @@ export const apiUsersSlice = createApi({
 			}),
 			invalidatesTags: ["Users"],
 		}),
-		resendVerification: builder.mutation<ResendVerificationResponse, string>({
+		resendVerification: builder.mutation<ApiSuccess, string>({
 			query: (email: string) => ({
 				url: "/users/resend-verification",
 				method: "POST",

@@ -1,21 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { GetGenresResponse, GetGenreResponse, AddGenreResponse, AddGenresResponse, DeleteGenreResponse, UpdateGenreResponse, IGenreInput, IGenrePatch } from "@custom-types/genre";
+import { ApiSuccess } from "@src/types/apiResponse";
+import { IGenre, IGenreInput, IGenrePatch } from "@custom-types/genre";
 
 export const apiGenresSlice = createApi({
 	reducerPath: "GenresApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
 	tagTypes: ["Genres"],
 	endpoints: (builder) => ({
-		getGenres: builder.query<GetGenresResponse, void>({
+		getGenres: builder.query<ApiSuccess<IGenre[]>, void>({
 			query: () => "/genres",
 			providesTags: ["Genres"],
 		}),
-		getGenreById: builder.query<GetGenreResponse, string>({
+		getGenreById: builder.query<ApiSuccess<IGenre>, string>({
 			query: (id) => ({ url: `/genres/${id}` }),
 			providesTags: ["Genres"],
 		}),
-		addGenre: builder.mutation<AddGenreResponse, IGenreInput>({
+		addGenre: builder.mutation<ApiSuccess<IGenre>, IGenreInput>({
 			query: (genre) => ({
 				url: "/genres",
 				method: "POST",
@@ -23,7 +24,7 @@ export const apiGenresSlice = createApi({
 			}),
 			invalidatesTags: ["Genres"],
 		}),
-		addGenres: builder.mutation<AddGenresResponse, IGenreInput[]>({
+		addGenres: builder.mutation<ApiSuccess<IGenre[]>, IGenreInput[]>({
 			query: (genres) => ({
 				url: "/genres",
 				method: "POST",
@@ -31,7 +32,7 @@ export const apiGenresSlice = createApi({
 			}),
 			invalidatesTags: ["Genres"],
 		}),
-		deleteGenre: builder.mutation<DeleteGenreResponse, string>({
+		deleteGenre: builder.mutation<ApiSuccess<IGenre>, string>({
 			query: (id) => ({
 				url: `/genres/${id}`,
 				method: "DELETE",
@@ -39,7 +40,7 @@ export const apiGenresSlice = createApi({
 			invalidatesTags: ["Genres"],
 		}),
 		updateGenre: builder.mutation<
-			UpdateGenreResponse,
+			ApiSuccess<IGenre>,
 			{ id: string; updates: Partial<IGenrePatch> }
 		>({
 			query: ({ id, updates }) => ({

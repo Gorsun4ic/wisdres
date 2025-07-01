@@ -11,9 +11,13 @@ import { StyledPublishersPage } from "./style";
 
 const PublishersPage = () => {	
 	const { t } = useTranslation();
-	const {data: publishers} = useGetPublishersQuery(null);
+	const {data: publishers} = useGetPublishersQuery();
 
-	const publishersList = publishers?.map((item) => {
+	if (!publishers?.data) {
+		return null;
+	}
+
+	const publishersList = publishers.data.map((item) => {
 		return (
 			<Grid2 size={3}>
 				<Link to={`/publisher/${item?._id}`}>

@@ -1,6 +1,8 @@
+import { IUser } from "./user";
+
 export interface IReview {
 	_id: string;
-	user: string;
+	user: IUser;
 	book: string;
 	rating: number;
 	text: string;

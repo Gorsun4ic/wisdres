@@ -18,7 +18,6 @@ const BookSort = () => {
 
 	const sortCriteria: string[] = [
 		["reviews", t("reviews")],
-		["downloads", t("downloads")],
 		["rating", t("rating")],
 	];
 

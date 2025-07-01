@@ -1,6 +1,7 @@
 import { IAuthor } from "./author";
 import { ILanguage } from "./language";
 import { IPublisher } from "./publisher";
+import { IGenre } from "./genre";
 
 export interface IBookInfo {
 	img: {
@@ -15,7 +16,7 @@ export interface IBookInfo {
 		en: string;
 		ua: string;
 	};
-	genre: string[];
+	genre: IGenre[];
 	author: IAuthor[];
 	publisher: IPublisher;
 	language: ILanguage;

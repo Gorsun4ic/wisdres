@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import {
@@ -83,7 +81,7 @@ const UsersSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
-					data={data}
+					data={data?.data}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

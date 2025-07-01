@@ -16,12 +16,12 @@ import { useLazyGetBookByIdQuery } from "@api/apiBooksSlice";
 
 // Custom styles
 import { StyledBookDescription } from "./style";
+import { LangType } from "@src/i18n";
 
 const BookDescription = () => {
 	const { bookId } = useParams();
 	const { t, i18n } = useTranslation();
-	const lang = i18n.language;
-
+	const lang = i18n.language as LangType;
 
 	const [
 		getBookById,
@@ -50,7 +50,7 @@ const BookDescription = () => {
 		);
 	}
 
-	if (!bookInfo) {
+	if (!bookInfo?.data) {
 		return null;
 	}
 
@@ -58,16 +58,16 @@ const BookDescription = () => {
 		<StyledBookDescription className="book-details">
 			<h2>{t("whatIsBookAbout")}</h2>
 			<Stack>
-				{bookInfo.details.book && (
+				{bookInfo.data.details.book && (
 					<div>
 						<h3>{t("aboutBooks")}</h3>
-						<p>{bookInfo.details.book[lang]}</p>
+						<p>{bookInfo.data.details.book[lang]}</p>
 					</div>
 				)}
-				{bookInfo.details.auditory && (
+				{bookInfo.data.details.auditory && (
 					<div>
 						<h3>{t("bookAuditory")}</h3>
-						<p>{bookInfo.details.auditory[lang]}</p>
+						<p>{bookInfo.data.details.auditory[lang]}</p>
 					</div>
 				)}
 			</Stack>

@@ -4,7 +4,7 @@ import GenresCollection from "@features/genres/genres-collection";
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
 const BooksPage = () => {
-	const { data } = useGetGenresQuery(null);
+	const { data } = useGetGenresQuery();
 
 	return (
 		<div className="books-page">

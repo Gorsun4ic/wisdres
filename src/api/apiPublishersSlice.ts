@@ -1,21 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { GetPublishersResponse, GetPublisherResponse, AddPublisherResponse, AddPublishersResponse, DeletePublisherResponse, UpdatePublisherResponse, IPublisherInput, IPublisherPatch } from "@custom-types/publisher";
+import { ApiSuccess } from "@src/types/apiResponse";
+import { IPublisher, IPublisherInput, IPublisherPatch } from "@custom-types/publisher";
 
 export const apiPublishersSlice = createApi({
 	reducerPath: "publishersApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
 	tagTypes: ["Publishers"],
 	endpoints: (builder) => ({
-		getPublishers: builder.query<GetPublishersResponse, void>({
+		getPublishers: builder.query<ApiSuccess<IPublisher[]>, void>({
 			query: () => "/publishers",
 			providesTags: ["Publishers"],
 		}),
-		getPublisherById: builder.query<GetPublisherResponse, string>({
+		getPublisherById: builder.query<ApiSuccess<IPublisher>, string>({
 			query: (id) => ({ url: `/publishers/${id}` }),
 			providesTags: ["Publishers"],
 		}),
-		addPublisher: builder.mutation<AddPublisherResponse, IPublisherInput>({
+		addPublisher: builder.mutation<ApiSuccess<IPublisher>, IPublisherInput>({
 			query: (publisher) => ({
 				url: "/publishers",
 				method: "POST",
@@ -23,7 +24,7 @@ export const apiPublishersSlice = createApi({
 			}),
 			invalidatesTags: ["Publishers"],
 		}),
-		addPublishers: builder.mutation<AddPublishersResponse, IPublisherInput[]>({
+		addPublishers: builder.mutation<ApiSuccess<IPublisher[]>, IPublisherInput[]>({
 			query: (publishers) => ({
 				url: "/publishers",
 				method: "POST",
@@ -31,7 +32,7 @@ export const apiPublishersSlice = createApi({
 			}),
 			invalidatesTags: ["Publishers"],
 		}),
-		deletePublisher: builder.mutation<DeletePublisherResponse, string>({
+		deletePublisher: builder.mutation<ApiSuccess<IPublisher>, string>({
 			query: (id) => ({
 				url: `/publishers/${id}`,
 				method: "DELETE",
@@ -39,7 +40,7 @@ export const apiPublishersSlice = createApi({
 			invalidatesTags: ["Publishers"],
 		}),
 		updatePublisher: builder.mutation<
-			UpdatePublisherResponse,
+			ApiSuccess<IPublisher>,
 			{ id: string; updates: IPublisherPatch }
 		>({
 			query: ({ id, updates }) => ({

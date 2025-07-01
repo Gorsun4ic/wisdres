@@ -11,10 +11,3 @@ export const RoleHierarchy = {
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];
-
-export interface IUser {
-	id: string;
-	email: string;
-	role: UserRole;
-	name: string;
-}

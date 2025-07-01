@@ -1,37 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ApiSuccess } from "@custom-types/apiResponse";
+import { IBook } from "@custom-types/book";
+import { IReview, IReviewInput } from "@custom-types/review";
+import { IBookDetails } from "@custom-types/bookDetails";
+
 import {
-	GetBooksResponse,
-	GetBookResponse,
-	GetBooksByGenreResponse,
-	GetBookReviewsResponse,
-	GetBookDetailsResponse,
-	GetBookInfoResponse,
-	AddBookResponse,
-	AddBooksResponse,
-	DeleteBookResponse,
-	AddReviewResponse,
-	UpdateBookResponse,
-	DeleteReviewResponse,
 	IBookInput,
 	IBookPatch,
 } from "@custom-types/book";
-import { IReviewInput } from "@custom-types/review";
+import { IBookInfo } from "@src/types/bookInfo";
 
 export const apiBooksSlice = createApi({
 	reducerPath: "booksApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
 	tagTypes: ["Books", "Reviews"],
 	endpoints: (builder) => ({
-		getBooks: builder.query<GetBooksResponse, void>({
+		getBooks: builder.query<ApiSuccess<IBook[]>, void>({
 			query: () => "/books",
 			providesTags: ["Books"],
 		}),
-		getBookById: builder.query<GetBookResponse, string>({
+		getBookById: builder.query<ApiSuccess<IBook>, string>({
 			query: (id) => ({ url: `/books/${id}` }),
 			providesTags: ["Books"],
 		}),
 		getBooksByGenres: builder.query<
-			GetBooksByGenreResponse,
+			ApiSuccess<{ books: IBook[]; totalBooks: number }>,
 			{ genre: string; page?: number; limit?: number }
 		>({
 			query: ({ genre, page = 1, limit = 25 }) =>
@@ -41,22 +34,26 @@ export const apiBooksSlice = createApi({
 			providesTags: ["Books"],
 		}),
 		getBookReviews: builder.query<
-			GetBookReviewsResponse,
+			ApiSuccess<{
+				reviews: IReview[];
+				hasMore: number;
+				totalReviews: number;
+			}>,
 			{ id: string; page?: number; limit?: number }
 		>({
 			query: ({ id, page = 1, limit = 3 }) =>
 				`/books/${id}/reviews?page=${page}&limit=${limit}`,
-			providesTags: ["Reviews", "Books"],
+			providesTags: (result, error, { id }) => [{ type: "Reviews", id }],
 		}),
-		getBookInfo: builder.query<GetBookInfoResponse, string>({
+		getBookInfo: builder.query<ApiSuccess<IBookInfo>, string>({
 			query: (id) => ({ url: `/books/${id}/info` }),
 			providesTags: ["Books"],
 		}),
-		getBookDetails: builder.query<GetBookDetailsResponse, string>({
+		getBookDetails: builder.query<ApiSuccess<IBookDetails>, string>({
 			query: (id) => ({ url: `/books/${id}/details` }),
 			providesTags: ["Books"],
 		}),
-		addBook: builder.mutation<AddBookResponse, IBookInput>({
+		addBook: builder.mutation<ApiSuccess<IBook>, IBookInput>({
 			query: (book) => ({
 				url: "/books",
 				method: "POST",
@@ -64,7 +61,7 @@ export const apiBooksSlice = createApi({
 			}),
 			invalidatesTags: ["Books"],
 		}),
-		addBooks: builder.mutation<AddBooksResponse, IBookInput[]>({
+		addBooks: builder.mutation<ApiSuccess<IBook[]>, IBookInput[]>({
 			query: (books) => ({
 				url: "/books/batch",
 				method: "POST",
@@ -72,7 +69,7 @@ export const apiBooksSlice = createApi({
 			}),
 			invalidatesTags: ["Books"],
 		}),
-		deleteBook: builder.mutation<DeleteBookResponse, string>({
+		deleteBook: builder.mutation<ApiSuccess<IBook>, string>({
 			query: (id) => ({
 				url: `/books/${id}`,
 				method: "DELETE",
@@ -80,7 +77,7 @@ export const apiBooksSlice = createApi({
 			invalidatesTags: ["Books"],
 		}),
 		addNewReview: builder.mutation<
-			AddReviewResponse,
+			ApiSuccess<IReview>,
 			{ bookId: string; review: IReviewInput }
 		>({
 			query: ({ bookId, review }) => ({
@@ -91,17 +88,19 @@ export const apiBooksSlice = createApi({
 			invalidatesTags: ["Reviews", "Books"],
 		}),
 		deleteReview: builder.mutation<
-			DeleteReviewResponse,
+			ApiSuccess<IReview>,
 			{ bookId: string; reviewId: string }
 		>({
 			query: ({ bookId, reviewId }) => ({
 				url: `/books/${bookId}/reviews/${reviewId}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Reviews", "Books"],
+			invalidatesTags: (result, error, { bookId }) => [
+				{ type: "Reviews", id: bookId },
+			],
 		}),
 		updateBook: builder.mutation<
-			UpdateBookResponse,
+			ApiSuccess<IBook>,
 			{ id: string; updates: IBookPatch }
 		>({
 			query: ({ id, updates }) => ({

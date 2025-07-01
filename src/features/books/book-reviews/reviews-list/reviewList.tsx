@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { List, Stack, Paper, Button, Pagination } from "@mui/material";
+import {
+	List,
+	Stack,
+	Paper,
+	Button,
+	Pagination,
+	CircularProgress,
+} from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
 import { useTranslation } from "react-i18next";
@@ -11,37 +18,32 @@ import {
 } from "@api/apiBooksSlice";
 import { useCheckAuthQuery } from "@api/apiUsersSlice";
 
+import ErrorMessage from "@components/error";
+
+import { IReview } from "@custom-types/review";
+
 import hasPermission from "@utils/hasPermission";
 
 import { StyledReviewsList } from "./style";
 
-interface Review {
-	author: string;
-	date: string;
-	rating: number;
-	text: string;
-}
-
 const ReviewItem = ({
 	data,
-	bookId,
+	handleDelete,
 }: {
-	data: Review;
-	bookId: string;
-	handleDeleteReview: (reviewId: string) => void;
+	data: IReview;
+	handleDelete: (id: string) => void;
 }) => {
 	const { t } = useTranslation();
 
-	const { data: userData } = useCheckAuthQuery(null);
-	const [deleteReview] = useDeleteReviewMutation();
-	const handleDeleteReview = (id: string) => {
-		if (id) {
-			deleteReview({ bookId: bookId, reviewId: id });
-		}
-	};
+	const { data: userData } = useCheckAuthQuery();
 
 	const { user, date, rating, text, _id } = data;
-	const formatedDate = date.slice(0, 10);
+	const formatedDate = date.toString().slice(0, 10);
+
+	if (!data || !userData) {
+		return null;
+	}
+
 	return (
 		<Paper elevation={3} sx={{ padding: 2 }} className="review__item">
 			<Stack
@@ -49,7 +51,7 @@ const ReviewItem = ({
 				direction="row"
 				sx={{ justifyContent: "space-between" }}>
 				<h4 className="review__name">{user?.username}</h4>
-				<time dateTime={date}>{formatedDate}</time>
+				<time dateTime={date.toString()}>{formatedDate}</time>
 			</Stack>
 			<Stack
 				direction="row"
@@ -61,15 +63,15 @@ const ReviewItem = ({
 				<StarIcon color="warning" />
 			</Stack>
 			<p className="review__text">{text}</p>
-			{(userData?.user?._id === user?._id ||
-				hasPermission(userData?.user, "delete:reviews")) && (
+			{(userData?.data?._id === user?._id ||
+				hasPermission(userData?.data, "delete:reviews")) && (
 				<Button
 					sx={{ marginTop: "16px" }}
 					variant="contained"
 					color="error"
-					onClick={() => handleDeleteReview(_id)}>
+					onClick={() => handleDelete(_id)}>
 					{t("reviewDelete")}
-					{hasPermission(userData?.user, "delete:reviews") &&
+					{hasPermission(userData?.data, "delete:reviews") &&
 						t("reviewDeleteAdmin")}
 				</Button>
 			)}
@@ -81,39 +83,53 @@ const ReviewsList = () => {
 	const { t } = useTranslation();
 
 	const { bookId } = useParams();
+	const [deleteReview] = useDeleteReviewMutation();
 	const [page, setPage] = useState(1);
-	const [reviews, setReviews] = useState([]);
+	const [reviews, setReviews] = useState<IReview[] | []>([]);
 	const { data, error, isLoading } = useGetBookReviewsQuery({
-		id: bookId || "",
+		id: bookId,
 		page: page,
 		limit: 3,
 	});
 
 	useEffect(() => {
-		if (data?.reviews) {
-			setReviews(data.reviews);
+		if (data?.data?.reviews && data?.data?.reviews?.length !== 0) {
+			setReviews(data.data.reviews);
 		}
 	}, [data]);
 
-	const list = reviews?.map((item) => {
-		const { user, date } = item;
-		return (
-			<ReviewItem
-				key={user?._id || `${user?.username}-${date}`}
-				data={item}
-				bookId={bookId}
-			/>
-		);
+	const handleDeleteReview = async (id: string) => {
+		if (id && bookId) {
+			const idToRefetch = bookId;
+			await deleteReview({ bookId: idToRefetch, reviewId: id });
+			setReviews(reviews.filter((review) => review._id !== id));
+		}
+	};
+
+	if (!bookId) {
+		return null;
+	}
+
+	if (isLoading) {
+		return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;
+	} else if (error && error.status !== 404) {
+		return <ErrorMessage />;
+	}
+
+	const list = reviews?.map((item, i) => {
+		return <ReviewItem key={i} data={item} handleDelete={handleDeleteReview} />;
 	});
 
 	return (
 		<StyledReviewsList>
-			<h3>{t("reviewsNumber")} ({data?.totalReviews || 0 })</h3>
+			<h3>
+				{t("reviewsNumber")} ({reviews.length})
+			</h3>
 			{reviews.length === 0 && <p>{t("firstReview")}</p>}
-			<List>{list}</List>
-			{reviews.length !== 0 && (
+			{reviews.length !== 0 && <List>{list}</List>}
+			{reviews.length !== 0 && data?.data?.totalReviews && (
 				<Pagination
-					count={Math.ceil(data?.totalReviews / 3)}
+					count={Math.ceil(data?.data?.totalReviews / 3)}
 					page={page}
 					onChange={(_, value) => setPage(value)}
 				/>

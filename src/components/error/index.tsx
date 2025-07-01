@@ -9,7 +9,7 @@ const ErrorMessage = ({children}: {children?: string}) => {
 	return (
 		<StyledError>
 			<img
-				src="https://shorturl.at/rWg24"
+				src="https://i.gifer.com/origin/78/787899e9d4e4491f797aba5c61294dfc_w200.gif"
 				alt="Something went wrong"
 				width="300"
 				height="250"

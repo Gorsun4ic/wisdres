@@ -27,6 +27,28 @@ const ScrolledFilter = ({
 }) => {
 	const dispatch = useDispatch();
 	const [checkedItems, setCheckedItems] = useState<string[]>([]);
+	const [originalItems, setOriginalItems] = useState<stringTuple[]>([]);
+	const [filterItems, setFilterItems] = useState<stringTuple[]>([]);
+
+	useEffect(() => {
+		if (data) {
+			setOriginalItems(data); // Save original list once
+			setFilterItems(data); // Initially show everything
+		}
+	}, [data]);
+
+	const handleSearch = (query: string) => {
+		if (!query) {
+			setFilterItems(originalItems); // Reset to full list if query is empty
+			return;
+		}
+
+		const filteredData = originalItems.filter((item) =>
+			item[1].toLowerCase().includes(query.toLowerCase())
+		);
+		setFilterItems(filteredData);
+	};
+	
 
 	useEffect(() => {
 		switch (type) {
@@ -52,7 +74,7 @@ const ScrolledFilter = ({
 
 	if (!data) return null;
 
-	const checkboxesList = data.map((item) => {
+	const checkboxesList = filterItems.map((item) => {
 		return (
 			<ListItem key={item[0]}>
 				<Checkbox
@@ -67,7 +89,7 @@ const ScrolledFilter = ({
 	return (
 		<StyledScrolledFilter className="scrolled-filter">
 			<span className="scrolled-filter__name">{title}</span>
-			{data.length > 5 && <TextField placeholder={placeholder} />}
+			{data.length > 5 && <TextField placeholder={placeholder} onChange={(event) => {handleSearch(event.target.value)}}/>}
 			<List>{checkboxesList}</List>
 		</StyledScrolledFilter>
 	);
