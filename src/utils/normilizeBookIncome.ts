@@ -4,12 +4,13 @@ import { IGenre } from "@src/types/genre";
 
 import { getLangEntity } from "./getLangEntity";
 import { LangType } from "@src/i18n";
+import { FieldValues } from "react-hook-form";
 
 type MultipleEntities = {
 	id: string;
 	label: string;
 };
-interface IBookInputAutocomplete {
+export interface IBookInputAutocomplete {
 	info: {
 		genre: MultipleEntities[];
 		author: MultipleEntities[];
@@ -18,18 +19,21 @@ interface IBookInputAutocomplete {
 	};
 }
 
-export const normalizeSubmission = (data: IBookInputAutocomplete) => {
+export const normalizeSubmission = <T extends FieldValues>(
+	data: T
+): T => {
 	return {
 		...data,
 		info: {
 			...data.info,
-			genre: data.info.genre?.map((g: MultipleEntities) => g.id),
-			author: data.info.author?.map((a: MultipleEntities) => a.id),
+			genre: data.info.genre?.map((g: IGenre) => g.id),
+			author: data.info.author?.map((a: IAuthor) => a.id),
 			publisher: data.info.publisher?.id,
 			language: data.info.language?.id,
 		},
-	};
+	} as T;
 };
+
 
 export const formatAutocompleteBookData = (data: IBook, lang: LangType) => {
 	const bookInfo = data?.info;

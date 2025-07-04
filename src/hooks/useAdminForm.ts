@@ -11,6 +11,7 @@ import { formatAutocompleteBookData, formatFromAutocompleteBookData } from "@uti
 
 // Types
 import { AdminConfig } from "@custom-types/adminFormConfig";
+import { IBookInputAutocomplete } from "@utils/normilizeBookIncome";
 
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";
@@ -63,20 +64,19 @@ export const useAdminForm = <
 	useEffect(() => {
 		if (dataById?.data?.info) {
 			const result = formatAutocompleteBookData(dataById?.data, lang);
-			form.reset(result);
+			form.reset(result as unknown as TData);
 			setFormatedData(result);
+			
 		} else if (dataById) {
 			form.reset(dataById?.data);
 			setFormatedData(dataById?.data);
 		}
-	}, [dataById, form]);
+	}, [dataById, form, setFormatedData, lang]);
 
 	const onSubmit = async (data: TData) => {
 		switch (mode) {
 			case "add": {
-				const payload = data?.info
-					? (normalizeSubmission(data) as unknown as TData)
-					: data;
+				const payload = data?.info ? normalizeSubmission(data) : data;
 
 				const result = await addMutation(payload);
 
@@ -118,10 +118,10 @@ export const useAdminForm = <
 				});
 				form.reset(dataToEdit);
 			} else if (dataToEdit?.info) {
-				const result = formatFromAutocompleteBookData(dataToEdit);
+				const result = formatFromAutocompleteBookData(dataToEdit as unknown as IBookInputAutocomplete);
 				updateMutation({
 					id,
-					updates: result,
+					updates: result as unknown as TData,
 				});
 				
 			}

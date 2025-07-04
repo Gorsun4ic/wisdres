@@ -1,5 +1,6 @@
 export interface IGenre {
 	_id: string;
+	id: string;
 	img: {
 		en: string;
 		ua: string;

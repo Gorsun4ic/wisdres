@@ -5,6 +5,7 @@ import {
 
 export interface IAuthor {
 	_id: string;
+	id: string;
 	img: string;
 	title: {
 		en: string;

@@ -18,13 +18,8 @@ export default function sortBooksByNumericProperty(
 			// Handle date properties
 			if (property === "arrived") {
 				// Convert string dates to timestamps for comparison
-				const dateA = new Date(
-					a.info[property] as unknown as string | Date
-				).getTime();
-				const dateB = new Date(
-					b.info[property] as unknown as string | Date
-				).getTime();
-				
+				const dateA = new Date(a.info[property] as string | Date).getTime();
+				const dateB = new Date(b.info[property] as string | Date).getTime();
 
 				// Sort in descending order (newest first)
 				return dateB - dateA;
