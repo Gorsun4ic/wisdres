@@ -1,12 +1,11 @@
 import { IUser, RoleKey } from "@src/types/user";
-import { ROLES } from "@src/server/models/user.js";
+import { ROLES } from "@server/models/user.js";
 
 function hasPermission(user: IUser, permission: string) {
 
 	if (!user || !permission) return false;;
 
-	const userRoles = user.role.some((role: string) => ROLES[role as RoleKey]?.includes(permission))
-	return userRoles || false;
+	return (user.role as string[]).some((role: string) => ROLES[role as RoleKey]?.includes(permission));
 }
 
 export default hasPermission;

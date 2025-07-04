@@ -5,7 +5,6 @@ import { Stack, CircularProgress } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
-
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
 import { useGetBooksQuery } from "@api/apiBooksSlice";
@@ -15,7 +14,7 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 
 const AuthorPage = () => {
 	const { authorId } = useParams();
-	const [getAuthorById, { data: authorData, isLoading, isError }] =
+	const [getAuthorById, { data: authorData, isLoading }] =
 		useLazyGetAuthorByIdQuery();
 	const { data } = useGetBooksQuery();
 	const navigate = useNavigate();

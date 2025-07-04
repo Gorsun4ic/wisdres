@@ -24,7 +24,7 @@ const ReviewForm = () => {
 	const { data: userData } = useCheckAuthQuery();
 	const { t } = useTranslation();
 	const { bookId } = useParams();
-	const [addNewReview, { isLoading, error: addNewReviewError }] =
+	const [addNewReview, { error: addNewReviewError }] =
 		useAddNewReviewMutation();
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const navigate = useNavigate();

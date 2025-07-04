@@ -32,13 +32,13 @@ import AdminsSheet from "@features/admin/admins/adminsSheet";
 import { StyledAdminPanel } from "./style";
 
 const Admin = () => {
-	const { data: userData } = useCheckAuthQuery(null);
+	const { data: userData } = useCheckAuthQuery();
 	// Get activeTab from localStorage or default to "1"
 	const [value, setValue] = useState(() => {
 		const savedTab = localStorage.getItem("adminPanelActiveTab");
 		return savedTab || "1";
 	});
-	const superAdmin = hasPermission(userData?.user, "view:admins");
+	const superAdmin = hasPermission(userData?.data, "view:admins");
 
 	// Update localStorage when tab changes
 	useEffect(() => {
@@ -52,7 +52,7 @@ const Admin = () => {
 	}, [superAdmin]);
 
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+	const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
 		setValue(newValue);
 	};
 

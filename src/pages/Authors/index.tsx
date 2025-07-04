@@ -7,9 +7,6 @@ import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 
 import SearchBar from "@components/search-bar";
 
-import { IAuthor } from "@src/types/author";
-import { ApiSuccess } from "@custom-types/apiResponse";
-
 import { StyledAuthorsPage } from "./style";
 
 const AuthorsPage = () => {

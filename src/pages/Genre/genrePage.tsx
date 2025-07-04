@@ -22,7 +22,6 @@ import BookSort from "@features/books/book-sort";
 import ErrorMessage from "@components/error";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
-import { getLangEntity } from "@src/utils/getLangEntity";
 
 import { LangType } from "@src/i18n";
 

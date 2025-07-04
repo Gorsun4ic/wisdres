@@ -1,5 +1,5 @@
 import { ApiSuccess, ApiError } from "./apiResponse";
-import {ROLES} from "@src/server/models/user";
+import {ROLES} from "@server/models/user.js";
 
 export type RoleKey = keyof typeof ROLES;
 

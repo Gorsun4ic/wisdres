@@ -40,7 +40,6 @@ const UsersSheet = () => {
 		setChangeUserId,
 		changeStatus,
 		handleChange,
-		isChanging,
 	} = useChangeUserStatus(usersConfig);
 
 	const gridColumns: GridColDef[] = [

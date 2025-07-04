@@ -21,7 +21,7 @@ import BookCollection from "@features/books/bookCollection/bookCollection";
 const BookPage = () => {
 	const { bookId } = useParams();
 	const navigate = useNavigate();
-	const { t, i18n } = useTranslation();
+	const { t} = useTranslation();
 	const [getBookById, {data, isLoading }] = useLazyGetBookByIdQuery();
 
 	// Functionality to show recently viewed books

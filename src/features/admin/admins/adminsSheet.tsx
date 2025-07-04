@@ -40,9 +40,8 @@ const AdminsSheet = () => {
 		setChangeUserId,
 		changeStatus,
 		handleChange,
-		isChanging,
 	} = useChangeUserStatus(adminsConfig);
-
+	
 	const gridColumns: GridColDef[] = [
 		{
 			field: "demote",
@@ -84,7 +83,7 @@ const AdminsSheet = () => {
 					onDelete={handleDelete}
 					columns={[
 						...adminsConfig.columns,
-						...(hasPermission(userData?.data, "manage:admins")
+						...(userData?.data && hasPermission(userData?.data, "manage:admins")
 							? gridColumns
 							: []),
 					]}

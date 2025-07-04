@@ -7,15 +7,10 @@ import useAlert from "./useAlert";
 // Utils
 import { findDifferenceObjs } from "@utils/findDiffObjs";
 import { normalizeSubmission } from "@utils/normilizeBookIncome";
-import { getLangEntity } from "@src/utils/getLangEntity";
 import { formatAutocompleteBookData, formatFromAutocompleteBookData } from "@utils/normilizeBookIncome";
 
 // Types
 import { AdminConfig } from "@custom-types/adminFormConfig";
-import { IAuthor } from "@custom-types/author";
-import { IPublisher } from "@custom-types/publisher";
-import { IGenre } from "@custom-types/genre";
-import { ILanguage } from "@custom-types/language";
 
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";

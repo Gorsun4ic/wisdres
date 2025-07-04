@@ -14,11 +14,9 @@ import { useTranslation } from "react-i18next";
 // Icons
 import PersonIcon from "@mui/icons-material/Person";
 import SecurityIcon from "@mui/icons-material/Security";
-import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import { useCheckAuthQuery, useLogoutUserMutation } from "@api/apiUsersSlice";
-import BookCollection from "@features/books/bookCollection/bookCollection";
 import { UserProfileTab } from "./components/userProfileTab";
 import { UserPersonalInfoTab } from "./components/userPersonalInfoTab";
 
@@ -28,7 +26,6 @@ import {
 	StyledMainContent,
 } from "./style";
 import Button from "@components/button/Button";
-import { gridColumnPositionsSelector } from "@mui/x-data-grid";
 
 interface TabPanelProps {
 	children?: React.ReactNode;

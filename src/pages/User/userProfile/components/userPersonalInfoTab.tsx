@@ -15,7 +15,6 @@ import PasswordField from "@components/passwordField/PasswordField";
 import { useForm } from "react-hook-form";
 import Button from "@components/button/Button";
 import LockIcon from "@mui/icons-material/Lock";
-import { useTheme } from "styled-components";
 
 interface UserPersonalInfoTabProps {
 	userData: {
@@ -36,8 +35,6 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 	const { t } = useTranslation();
 
 	// const [updatePassword] = useUpdatePasswordMutation();
-	const theme = useTheme();
-
 	const {
 		register,
 		handleSubmit,
@@ -46,7 +43,7 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 		formState: { errors },
 	} = useForm<PasswordFormData>();
 
-	const onSubmit = async (data: PasswordFormData) => {
+	const onSubmit = async () => {
 		setIsLoading(true);
 		try {
 			// await updatePassword(data).unwrap();
