@@ -248,11 +248,14 @@ export const createBook = async (req, res) => {
 		await newBook.save();
 
 		// 2. Check if the author ID is provided in the book info
-		if (info.author) {
-			// Update the author's `bookIds` array
-			await Author.findByIdAndUpdate(info.author, {
-				$push: { bookIds: newBook._id },
-			});
+		if (Array.isArray(info.author) && info.author.length > 0) {
+			await Promise.all(
+				info.author.map((authorId) =>
+					Author.findByIdAndUpdate(authorId, {
+						$addToSet: { bookIds: newBook._id },
+					})
+				)
+			);
 		}
 
 		// 3. Check if the publisher ID is provided in the book info
@@ -319,12 +322,8 @@ export const updateBook = async (req, res) => {
 	const updates = req.body;
 
 	try {
-		const updatedBook = await Book.findByIdAndUpdate(id, updates, {
-			new: true,
-			runValidators: true,
-		});
-
-		if (!updatedBook) {
+		const existingBook = await Book.findById(id);
+		if (!existingBook) {
 			return res.status(404).json({
 				success: false,
 				error: {
@@ -332,6 +331,68 @@ export const updateBook = async (req, res) => {
 				},
 			});
 		}
+
+		const oldAuthors = existingBook.info.author || [];
+		const newAuthors = updates.info?.author || [];
+
+		// Update the book document
+		const updatedBook = await Book.findByIdAndUpdate(id, updates, {
+			new: true,
+			runValidators: true,
+		});
+
+		// Convert to strings for reliable comparison
+		const oldAuthorIds = oldAuthors.map((id) => id.toString());
+		const newAuthorIds = newAuthors.map((id) => id.toString());
+
+		const authorsToRemove = oldAuthorIds.filter(
+			(id) => !newAuthorIds.includes(id)
+		);
+		const authorsToAdd = newAuthorIds.filter(
+			(id) => !oldAuthorIds.includes(id)
+		);
+
+		const oldPublishers = existingBook.info.publisher || [];
+		const newPublishers = updates.info?.publisher || [];
+
+		// Convert to strings for reliable comparison
+		const oldPublisherIds = oldPublishers.map((id) => id.toString());
+		const newPublisherIds = newPublishers.map((id) => id.toString());
+
+		const publishersToRemove = oldPublisherIds.filter(
+			(id) => !newPublisherIds.includes(id)
+		);
+		const publishersToAdd = newPublisherIds.filter(
+			(id) => !oldPublisherIds.includes(id)
+		);
+
+		// Remove book ID from removed authors
+		await Promise.all(
+			authorsToRemove.map((authorId) =>
+				Author.findByIdAndUpdate(authorId, { $pull: { bookIds: id } })
+			)
+		);
+
+		// Add book ID to newly added authors
+		await Promise.all(
+			authorsToAdd.map((authorId) =>
+				Author.findByIdAndUpdate(authorId, { $addToSet: { bookIds: id } })
+			)
+		);
+
+		// Remove book ID from removed publishers
+		await Promise.all(
+			publishersToRemove.map((authorId) =>
+				Publisher.findByIdAndUpdate(publisherId, { $pull: { bookIds: id } })
+			)
+		);
+
+		// Add book ID to newly added publishers
+		await Promise.all(
+			publishersToAdd.map((publisherId) =>
+				Publisher.findByIdAndUpdate(publisherId, { $addToSet: { bookIds: id } })
+			)
+		);
 
 		return res.json({
 			success: true,

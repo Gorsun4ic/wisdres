@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { DataGrid, GridToolbar, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
 import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -69,17 +69,6 @@ const AdminGrid = ({
 	// Handle change/edit click
 	const handleChangeClick = (rowData: IBook) => {
 		handleEdit?.("edit", rowData?.id);
-	};
-
-	const processRowUpdate = (newRow) => {
-		const errors = validateRow(newRow);
-		const updatedRow = { ...newRow, lastUpdated: new Date() };
-		if (Object.keys(errors).length > 0) {
-			throw new Error(JSON.stringify(errors));
-		}
-		setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-		toast.success("Row updated successfully!")
-		return updatedRow;
 	};
 
 	const handleId = (data: IBook[]) => {

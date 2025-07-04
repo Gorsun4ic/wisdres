@@ -11,6 +11,8 @@ import BookCollection from "@features/books/bookCollection/bookCollection";
 import { useGetBooksQuery } from "@api/apiBooksSlice";
 import { useLazyGetAuthorByIdQuery } from "@api/apiAuthorsSlice";
 
+import { getLangEntity } from "@src/utils/getLangEntity";
+
 const AuthorPage = () => {
 	const { authorId } = useParams();
 	const [getAuthorById, { data: authorData, isLoading, isError }] =
@@ -20,8 +22,8 @@ const AuthorPage = () => {
 	const { t, i18n } = useTranslation();
 	const lang = i18n.language;
 
-	const books = data?.filter((book) =>
-		authorData?.bookIds?.includes(book?._id)
+	const books = data?.data?.filter((book) =>
+		authorData?.data?.bookIds?.includes(book?._id)
 	);
 
 	useEffect(() => {
@@ -32,7 +34,6 @@ const AuthorPage = () => {
 
 	useEffect(() => {
 		if (!isLoading && !data) {
-			// navigate("*")
 			const navigateTo404 = setTimeout(() => {
 				navigate("*");
 			}, 1000);
@@ -59,13 +60,13 @@ const AuthorPage = () => {
 		<Stack gap={6}>
 			<Stack direction="row" gap={4}>
 				<img
-					src={authorData?.img}
+					src={authorData?.data?.img}
 					width="500"
-					alt={`Picture of ${authorData?.title}`}
+					alt={`Picture of ${authorData?.data?.title?.en}`}
 				/>
 				<Stack gap={2}>
-					<h1>{authorData?.title[lang]}</h1>
-					<p>{authorData?.about[lang]}</p>
+					<h1>{getLangEntity(authorData?.data?.title, lang)}</h1>
+					<p> {getLangEntity(authorData?.data?.about, lang)}</p>
 				</Stack>
 			</Stack>
 			<BookCollection title={t("authorsBook")} booksArr={books} />

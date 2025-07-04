@@ -9,12 +9,11 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useTranslation } from "react-i18next";
 
 import { useGetBooksByGenresQuery } from "@api/apiBooksSlice";
+import { useGetGenresQuery } from "@src/api/apiGenresSlice";
 
 import { IFilter } from "@reducers/filters";
 
 import { useBookFilters } from "@hooks/useBookFilters";
-
-import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
 import BookFilters from "@features/books/book-filters/bookFilters";
 import BookList from "@features/books/book-list";
@@ -22,28 +21,41 @@ import BookSort from "@features/books/book-sort";
 
 import ErrorMessage from "@components/error";
 
+import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
+import { getLangEntity } from "@src/utils/getLangEntity";
+
+import { LangType } from "@src/i18n";
+
 import { StyledGenrePage } from "./style";
 
 const GenrePage = () => {
 	const { genre = "" } = useParams<{ genre: string }>();
-	const { t } = useTranslation();
+	const { data: genres } = useGetGenresQuery();
+	const { t, i18n } = useTranslation();
+	const lang = i18n.language as LangType;
 	const [page, setPage] = useState(1);
 	const { data, isLoading } = useGetBooksByGenresQuery({
 		genre: genre,
-		limit: 25,
+		limit: 20,
 		page: page,
 	});
 	const { sortBy, filters } = useSelector(
 		(state: { filters: IFilter }) => state.filters
 	);
-
 	const booksData = data?.success && data.data ? data.data : null;
 	const books = booksData?.books ?? [];
 	const totalBooks = booksData?.totalBooks ?? 0;
 
 	const { filterData, sortedBooks } = useBookFilters(books, sortBy, filters);
 
-	const genreTitle = upperCaseFirstLetter(genre);
+	const genreSlug = genre.toLowerCase();
+
+	const matchedGenre = genres?.data?.find(
+		(g) => g.title?.en?.toLowerCase() === genreSlug
+	);
+
+	const genreTitle = matchedGenre?.title?.[lang] ?? upperCaseFirstLetter(genre);
+
 
 	return (
 		<StyledGenrePage>
@@ -91,7 +103,7 @@ const GenrePage = () => {
 						{books.length > 0 && (
 							<Pagination
 								sx={{ marginBottom: 4 }}
-								count={Math.ceil(totalBooks / 25)}
+								count={Math.ceil(totalBooks / 20)}
 								page={page}
 								onChange={(_, value) => setPage(value)}
 							/>

@@ -29,6 +29,11 @@ export const apiSearchSlice = createApi({
 			}) => {
 				return response.data.message || "Search failed";
 			},
+			transformResponse: (response: {
+				success: boolean;
+				message: string;
+				data: SearchResult[];
+			}) => response.data,
 			serializeQueryArgs: ({ queryArgs }) => {
 				return queryArgs ? queryArgs : "empty";
 			},

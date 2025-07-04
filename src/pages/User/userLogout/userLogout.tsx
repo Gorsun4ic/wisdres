@@ -8,7 +8,7 @@ const UserLogout = () => {
 	const [logout] = useLogoutUserMutation();
 
 	useEffect(() => {
-		logout(null);
+		logout();
 		localStorage.setItem("isAuthenticated", "false");
 	}, [logout]);
 

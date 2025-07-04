@@ -30,6 +30,7 @@ export const apiUsersSlice = createApi({
 			query: () => ({
 				url: "/users/logout",
 				method: "POST",
+				credentials: "include"
 			}),
 		}),
 		checkAuth: builder.query<ApiSuccess<IUser>, void>({

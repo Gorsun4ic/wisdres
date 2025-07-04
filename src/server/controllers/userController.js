@@ -266,6 +266,7 @@ export const checkAuth = async (req, res) => {
 			success: true,
 			message: "User is authorized",
 			data: user,
+			emailVerified: user.emailVerified
 		});
 	} catch (error) {
 		res.status(500).json({

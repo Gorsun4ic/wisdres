@@ -40,7 +40,7 @@ const ReviewItem = ({
 	const { user, date, rating, text, _id } = data;
 	const formatedDate = date.toString().slice(0, 10);
 
-	if (!data || !userData) {
+	if (!data) {
 		return null;
 	}
 
@@ -63,7 +63,7 @@ const ReviewItem = ({
 				<StarIcon color="warning" />
 			</Stack>
 			<p className="review__text">{text}</p>
-			{(userData?.data?._id === user?._id ||
+			{(userData?.data?._id === user?._id &&
 				hasPermission(userData?.data, "delete:reviews")) && (
 				<Button
 					sx={{ marginTop: "16px" }}
@@ -71,7 +71,7 @@ const ReviewItem = ({
 					color="error"
 					onClick={() => handleDelete(_id)}>
 					{t("reviewDelete")}
-					{hasPermission(userData?.data, "delete:reviews") &&
+					{hasPermission(userData?.data, "delete:reviews") && userData?.data?.role.includes("ADMIN") && 
 						t("reviewDeleteAdmin")}
 				</Button>
 			)}

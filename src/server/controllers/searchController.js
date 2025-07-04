@@ -17,7 +17,10 @@ export const searchAll = async (req, res) => {
 		const [books, authors, publishers] = await Promise.all([
 			// Search books by title
 			Book.find({
-				"info.title": searchRegex,
+				$or: [
+					{ "info.title.en": searchRegex },
+					{ "info.title.ua": searchRegex },
+				],
 			})
 				.populate("info.author")
 				.populate("info.publisher")
@@ -27,7 +30,10 @@ export const searchAll = async (req, res) => {
 
 			// Search authors by name
 			Author.find({
-				title: searchRegex,
+				$or: [
+					{ "title.en": searchRegex },
+					{ "title.ua": searchRegex },
+				],
 			}).limit(3),
 
 			// Search publishers by name
@@ -36,35 +42,70 @@ export const searchAll = async (req, res) => {
 			}).limit(3),
 		]);
 
-		// Format results with clear type separation
-		const results = [
-			// Book results
-			...books.map((book) => ({
+		const lowerTerm = searchTerm.toLowerCase();
+
+		const authorResults = authors.map((author) => ({
+			id: author._id,
+			title: author.title.en || author.title.ua || "",
+			type: "author",
+			imageUrl: author.img,
+			description: author.about,
+		}));
+
+		const publisherResults = publishers.map((publisher) => ({
+			id: publisher._id,
+			title:
+				typeof publisher.title === "object"
+					? publisher.title.en || publisher.title.ua
+					: publisher.title,
+			type: "publisher",
+			description: publisher.about,
+		}));
+
+		const bookResults = books.map((book) => {
+			const enTitle = book.info.title.en || "";
+			const uaTitle = book.info.title.ua || "";
+
+			const enMatch = enTitle.toLowerCase().includes(lowerTerm);
+			const uaMatch = uaTitle.toLowerCase().includes(lowerTerm);
+
+			let bestTitle = enTitle;
+			let bestAuthor = [];
+			let bestPublisher = "";
+
+			const imageUrl = enMatch
+				? book.info.img?.en || ""
+				: book.info.img?.ua || "";
+
+			if (enMatch && !uaMatch) {
+				bestTitle = enTitle;
+				bestAuthor = (book.info.author || []).map((a) => a.title?.en || "");
+				bestPublisher = book.info.publisher?.title?.en || "";
+			} else if (uaMatch && !enMatch) {
+				bestTitle = uaTitle;
+				bestAuthor = (book.info.author || []).map((a) => a.title?.ua || "");
+				bestPublisher = book.info.publisher?.title?.ua || "";
+			} else if (enMatch && uaMatch) {
+				bestTitle = enTitle;
+				bestAuthor = (book.info.author || []).map((a) => a.title?.en || "");
+				bestPublisher = book.info.publisher?.title?.en || "";
+			} else {
+				bestTitle = enTitle;
+				bestAuthor = (book.info.author || []).map((a) => a.title?.en || "");
+				bestPublisher = book.info.publisher?.title?.en || "";
+			}
+
+			return {
 				id: book._id,
-				title: book.info.title,
+				title: bestTitle,
 				type: "book",
-				imageUrl: book.info.img,
-				author: book.info.author, // Get author name if populated
-				publisher: book.info.publisher?.title, // Get publisher name if populated
-				genre: book.info.genre,
-				language: book.info.language,
-			})),
-			// Author results
-			...authors.map((author) => ({
-				id: author._id,
-				title: author.title,
-				type: "author",
-				imageUrl: author.img,
-				description: author.about,
-			})),
-			// Publisher results
-			...publishers.map((publisher) => ({
-				id: publisher._id,
-				title: publisher.title,
-				type: "publisher",
-				description: publisher.about,
-			})),
-		];
+				imageUrl,
+				author: bestAuthor,
+				publisher: bestPublisher,
+			};
+		});
+
+		const results = [...bookResults, ...authorResults, ...publisherResults];
 
 		res.json({
 			success: true,

@@ -28,6 +28,7 @@ import {
 	StyledMainContent,
 } from "./style";
 import Button from "@components/button";
+import { gridColumnPositionsSelector } from "@mui/x-data-grid";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -55,7 +56,7 @@ const UserProfile = () => {
 	const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 	const navigate = useNavigate();
 
-	const { data } = useCheckAuthQuery(null);
+	const { data } = useCheckAuthQuery();
 	const [logout, { isLoading }] = useLogoutUserMutation();
 
 	// Update localStorage when activeTab changes
@@ -67,7 +68,8 @@ const UserProfile = () => {
 		try {
 			await logout().unwrap();
 			localStorage.removeItem("isAuthenticated");
-			navigate("/");
+			navigate("/", {replace: true});
+			window.location.reload();
 		} catch (error) {
 			console.error("Logout failed:", error);
 		}
@@ -107,10 +109,10 @@ const UserProfile = () => {
 
 			<StyledMainContent>
 				<TabPanel value={activeTab} index={0}>
-					<UserProfileTab userData={data?.user} />
+					<UserProfileTab userData={data?.data} />
 				</TabPanel>
 				<TabPanel value={activeTab} index={1}>
-					<UserPersonalInfoTab userData={data?.user} />
+					<UserPersonalInfoTab userData={data?.data} />
 				</TabPanel>
 			</StyledMainContent>
 

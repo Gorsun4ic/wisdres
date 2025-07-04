@@ -39,6 +39,7 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 
 // Style
 import { StyledForm } from "./style";
+import { LangType } from "@src/i18n";
 
 type AddMutation<Data> = [
 	(data: Data) => void,
@@ -72,7 +73,7 @@ const FormBuilder = <
 	id?: string;
 }) => {
 	const { i18n } = useTranslation();
-	const lang = i18n.language;
+	const lang = i18n.language as LangType;
 
 	const {
 		onSubmit,
@@ -134,7 +135,7 @@ const FormBuilder = <
 								const isValidImage = validateImageType(value);
 
 								return (
-									<AccordionDetails>
+									<AccordionDetails key={item.name}>
 										<FormField
 											name={item.name}
 											type={item.type}
@@ -158,7 +159,7 @@ const FormBuilder = <
 								);
 							});
 							return (
-								<Accordion>
+								<Accordion key={`accordion-${title}`}>
 									<AccordionSummary
 										expandIcon={<ExpandMoreIcon />}
 										aria-controls="panel1-content"
@@ -171,8 +172,7 @@ const FormBuilder = <
 						}
 						if (field.type === "autoComplete" && fieldData) {
 							const singleField = field as FieldTypes;
-
-							const options = fieldData[field.name]?.data?.data.map((item) => {
+							const options = fieldData[field.name]?.data?.data?.map((item) => {
 								return {
 									label: getLangEntity(item.title, lang),
 									id: item._id,

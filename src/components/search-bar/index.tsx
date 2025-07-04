@@ -81,7 +81,7 @@ const SearchBar = () => {
 												<Typography variant="caption" color="textSecondary">
 													{result.type === "book" && result.author
 														? `by ${result.author
-																.map((author: string) => author?.title)
+																.map((author: string) => author)
 																.join(", ")}`
 														: result.type}
 												</Typography>

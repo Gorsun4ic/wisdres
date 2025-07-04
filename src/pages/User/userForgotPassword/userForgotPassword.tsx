@@ -41,7 +41,6 @@ const UserForgotPasswordPage = () => {
 
 	const { t } = useTranslation();
 
-	const navigate = useNavigate();
 	const [invalidFieldValue, setInvalidFieldValue] = useState<string>("");
 	const [disabledSubmit, setDisabledSubmit] = useState<boolean>(false);
 	const [success, setSuccess] = useState(false);

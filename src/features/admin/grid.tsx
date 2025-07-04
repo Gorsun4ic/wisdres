@@ -54,10 +54,6 @@ const GridData = <T extends { _id: string; info?: { title: string } }>({
 	const { i18n } = useTranslation();
 	const lang = i18n.language;
 
-	useEffect(() => {
-		console.log(1)
-	}, [i18n, lang])
-
 	if (isLoading)
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;
 	if (error) return <ErrorMessage />;
@@ -114,7 +110,6 @@ const GridData = <T extends { _id: string; info?: { title: string } }>({
 					toolbar: { showQuickFilter: true },
 				}}
 				pageSizeOptions={[15]}
-				checkboxSelection
 			/>
 
 			{openDialog && selectedItem && (
