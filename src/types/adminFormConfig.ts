@@ -56,7 +56,7 @@ export type InferHook<
 > = Api["endpoints"][Endpoint] extends Record<HookName, infer Hook>
 	? Hook
 	: never;
-
+	
 export type FieldTypes = FormFieldConfig | SelectCheckboxesConfig | AutoCompleteConfig;
 type GroupedFields = [string, ...FieldTypes[]];
 

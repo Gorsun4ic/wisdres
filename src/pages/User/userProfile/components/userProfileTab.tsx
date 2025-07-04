@@ -26,6 +26,7 @@ import { IError } from "@custom-types/apiError";
 
 interface UserProfileTabProps {
 	userData: {
+		_id: string;
 		username: string;
 		email: string;
 	};
@@ -38,7 +39,6 @@ type FormFields = {
 
 export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 	const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
 	const [updateUser] = useUpdateUserMutation();
 	const theme = useTheme();
 	const { t } = useTranslation();
@@ -71,17 +71,14 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 			return;
 		}
 
-		setIsLoading(true);
 		try {
-			await updateUser({ user: changedFields }).unwrap();
+			await updateUser({ id: userData?._id, updates: changedFields }).unwrap();
 			setIsEditDialogOpen(false);
 		} catch (error) {
 			const errorMessage =
 				(error as IError)?.data?.error?.message || t("failedUpdateProfile");
 			setApiError(errorMessage);
-		} finally {
-			setIsLoading(false);
-		}
+		} 
 	};
 
 	return (
@@ -108,8 +105,6 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 						</Typography>
 					</Stack>
 					<Button
-						variant="primary"
-						size="small"
 						onClick={() => setIsEditDialogOpen(true)}
 						startIcon={<EditIcon sx={{ fontSize: 20 }} />}
 						sx={{
@@ -182,15 +177,12 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 						gap: "12px",
 					}}>
 					<Button
-						variant="outlined"
 						onClick={() => setIsEditDialogOpen(false)}
 						sx={{ minWidth: "120px" }}>
 						{t("cancel")}
 					</Button>
 					<Button
-						variant="primary"
 						onClick={handleSubmit(onSubmit)}
-						isLoading={isLoading}
 						sx={{ minWidth: "120px" }}>
 						{t("saveChanges")}
 					</Button>

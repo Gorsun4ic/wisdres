@@ -5,7 +5,6 @@ import { Stack, CircularProgress } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
-
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
 import { useGetBooksQuery } from "@api/apiBooksSlice";
@@ -31,7 +30,7 @@ const PublisherPage = () => {
 		if (publisherId) {
 			getPublisherById(publisherId);
 		}
-	}, [publisherId]);
+	}, [publisherId, getPublisherById]);
 
 	useEffect(() => {
 		if (!isLoading && !data) {
@@ -40,7 +39,7 @@ const PublisherPage = () => {
 			}, 1000);
 			return () => clearTimeout(navigateTo404);
 		}
-	}, [isLoading, data]);
+	}, [isLoading, data, navigate]);
 
 	if (isLoading || !data) {
 		return (
@@ -63,14 +62,14 @@ const PublisherPage = () => {
 				<img
 					src={publisherData?.data?.img}
 					width="500"
-					alt={`Picture of ${publisherData?.data?.title?.en}`}
+					alt={`Picture of ${publisherData?.data?.title}`}
 				/>
 				<Stack gap={2}>
 					<h1>{publisherData?.data?.title}</h1>
-					<p> {getLangEntity(publisherData?.data?.about, lang)}</p>
+					<p>{getLangEntity(publisherData?.data?.about ?? "", lang)}</p>
 				</Stack>
 			</Stack>
-			<BookCollection title={t("publisherBooks")} booksArr={books} />
+			<BookCollection title={t("publisherBooks")} booksArr={books} filterBy={"date"} number={0} />
 		</Stack>
 	);
 };

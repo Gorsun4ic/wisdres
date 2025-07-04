@@ -1,4 +1,4 @@
-import { IBook, IBookInput } from "@src/types/book";
+import { IBook } from "@src/types/book";
 import { IAuthor } from "@src/types/author";
 import { IGenre } from "@src/types/genre";
 
@@ -9,8 +9,7 @@ type MultipleEntities = {
 	id: string;
 	label: string;
 };
-
-interface IBookInputAutocomplete extends IBookInput {
+interface IBookInputAutocomplete {
 	info: {
 		genre: MultipleEntities[];
 		author: MultipleEntities[];
@@ -67,18 +66,16 @@ export const formatAutocompleteBookData = (data: IBook, lang: LangType) => {
 	};
 };
 
-export const formatFromAutocompleteBookData = (data) => {
+export const formatFromAutocompleteBookData = (data: IBookInputAutocomplete) => {
 	const bookInfo = data?.info;
 	const author = bookInfo.author?.map(
 		(author: { label: string; id: string }) => {
 			return author?.id;
 		}
 	);
-	const genre = bookInfo.genre?.map(
-		(genre: { label: string; id: string }) => {
-			return genre?.id;
-		}
-	);
+	const genre = bookInfo.genre?.map((genre: { label: string; id: string }) => {
+		return genre?.id;
+	});
 	const publisher = bookInfo.publisher?.id;
 	const language = bookInfo.language?.id;
 	return {

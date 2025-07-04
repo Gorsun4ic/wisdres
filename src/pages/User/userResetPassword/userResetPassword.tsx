@@ -64,6 +64,8 @@ const UserResetPasswordPage = () => {
 	}, [isSubmitSuccessful, resetError, reset]);
 
 	const onSubmit = (data: FormFields) => {
+		if (!token) return;
+
 		resetPassword({ token, password: data.password });
 	};
 
@@ -97,7 +99,7 @@ const UserResetPasswordPage = () => {
 						/>
 					</>
 				)}
-				<Button size="big" type="submit">
+				<Button type="submit">
 					{t("setNewPassword")}
 				</Button>
 			</Stack>

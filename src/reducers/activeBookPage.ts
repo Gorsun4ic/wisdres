@@ -1,8 +1,7 @@
 // activeBookPage.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { IBookInfo } from "@custom-types/book";
-
+import { IBookInfo } from "@src/types/bookInfo";
 interface activeBookPage {
 	activeBook: IBookInfo | null;
 }

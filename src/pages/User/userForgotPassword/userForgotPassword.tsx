@@ -59,7 +59,7 @@ const UserForgotPasswordPage = () => {
 		if (verificationError) {
 			setInvalidFieldValue(currentFieldValue);
 		}
-	}, [verificationError]);
+	}, [verificationError, currentFieldValue]);
 
 	useEffect(() => {
 		if (verificationError) {
@@ -77,12 +77,12 @@ const UserForgotPasswordPage = () => {
 				message,
 			});
 		}
-	}, [currentFieldValue, invalidFieldValue]);
+	}, [currentFieldValue, invalidFieldValue, setError, verificationError]);
 
 	const onSubmit = (data: FormFields) => {
 		if (disabledSubmit) return;
 		setSuccess(true);
-		verifyEmail(data);
+		verifyEmail(data.email);
 	};
 
 	return (
@@ -113,7 +113,7 @@ const UserForgotPasswordPage = () => {
 				)}
 				{success && <p className="success">{data?.message}</p>}
 				{!success && (
-					<Button size="big" type="submit" disabled={disabledSubmit}>
+					<Button type="submit" disabled={disabledSubmit}>
 						{t("sendResetLink")}
 					</Button>
 				)}

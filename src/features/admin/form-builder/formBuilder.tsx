@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
 // RHF
-import { FieldValues } from "react-hook-form";
+import { FieldValues, Path } from "react-hook-form";
 
 // MUI
 import Grid from "@mui/material/Grid2";
@@ -19,7 +19,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { RootState } from "@store/index";
 
 // Custom types
-import { AdminConfig, FieldTypes } from "@src/types/adminFormConfig";
+import { AdminConfig, FieldTypes, FormFieldConfig } from "@src/types/adminFormConfig";
 
 // Custom hooks
 import { useAdminForm } from "@hooks/useAdminForm";
@@ -38,25 +38,35 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 import { StyledForm } from "./style";
 import { LangType } from "@src/i18n";
 
-type AddMutation<Data> = readonly [
-	(data: Data) => unknown,
+type AddMutation<Data> = [
+	(data: Data) => Promise<{ data?: unknown; error?: unknown }>,
 	{ isLoading: boolean; error?: unknown }
 ];
-type UpdateMutation<Data> = readonly [
-	(args: { id?: string; updates: Data }) => unknown,
+
+type UpdateMutation<Data> = [
+	(args: {
+		id?: string;
+		updates: Data;
+	}) => Promise<{ data?: unknown; error?: unknown }>,
 	{ isLoading: boolean; error?: unknown }
 ];
-type GetByIdMutation<Data> = readonly [
-	(id: string) => unknown,
+
+type GetByIdMutation<Data> = [
+	(id: string) => Promise<{ data?: unknown; error?: unknown }>,
 	{ data?: Data; isLoading: boolean; error?: unknown }
 ];
 
+
 type BaseFormMutations<TData extends FieldValues = FieldValues> = {
-	add?: () => AddMutation<TData>;
-	update?: () => UpdateMutation<TData>;
-	getById?: () => GetByIdMutation<TData>;
+	add: () => AddMutation<TData>;
+	update: () => UpdateMutation<TData>;
+	getById: () => GetByIdMutation<TData>;
 };
 
+
+function isFormFieldConfig(field: FieldTypes): field is FormFieldConfig {
+	return "placeholder" in field;
+}
 
 const FormBuilder = <
 	TData extends FieldValues,
@@ -69,7 +79,7 @@ const FormBuilder = <
 }: {
 	config: AdminConfig<TMutations>;
 	mode: "add" | "edit";
-	fieldData?: Record<string, { data: { title: string }[] }>;
+	fieldData?: Record<string, { data: { title: string, _id: string }[] }>;
 	id?: string;
 }) => {
 	const { i18n } = useTranslation();
@@ -130,17 +140,24 @@ const FormBuilder = <
 
 							const fields = field.map((item, i) => {
 								if (i === 0) return null;
-								const value = watch(item.name);
+
+								if (typeof item === "string") return null;
+
+								const value = watch(item.name as Path<TData>);
 								const isImageField = /img/i.test(item.name);
 								const isValidImage = validateImageType(value);
+
+								if (!isFormFieldConfig(item)) return null;
 
 								return (
 									<AccordionDetails key={item.name}>
 										<FormField
-											name={item.name}
+											name={item.name as Path<TData>}
 											type={item.type}
 											placeholder={item.placeholder}
-											validation={item.validation}
+											validation={
+												item.validation as unknown as Record<string, unknown>
+											}
 											register={register}
 											rows={item.rows}
 											multiline={item.rows ? true : false}
@@ -172,7 +189,7 @@ const FormBuilder = <
 						}
 						if (field.type === "autoComplete" && fieldData) {
 							const singleField = field as FieldTypes;
-							const options = fieldData[field.name]?.data?.data?.map((item) => {
+							const options = fieldData[field.name]?.data?.map((item) => {
 								return {
 									label: getLangEntity(item.title, lang),
 									id: item._id,
@@ -185,7 +202,7 @@ const FormBuilder = <
 										<p>{field.label}</p>
 										<AutocompleteElement
 											control={control}
-											name={field.name}
+											name={field.name as Path<TData>}
 											options={options || []}
 											multiple={field.multiple ?? true}
 										/>
@@ -193,13 +210,18 @@ const FormBuilder = <
 								);
 							}
 						}
+
+						if (!isFormFieldConfig(field)) return null;
+
 						return (
 							<Grid size={12}>
 								<FormField
-									name={field.name}
+									name={field.name as Path<TData>}
 									type={field.type}
 									placeholder={field.placeholder}
-									validation={field.validation}
+									validation={
+										field.validation as unknown as Record<string, unknown>
+									}
 									register={register}
 									rows={field.rows}
 									multiline={field.rows ? true : false}

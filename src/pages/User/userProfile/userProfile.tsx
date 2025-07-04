@@ -54,7 +54,7 @@ const UserProfile = () => {
 	const navigate = useNavigate();
 
 	const { data } = useCheckAuthQuery();
-	const [logout, { isLoading }] = useLogoutUserMutation();
+	const [logout] = useLogoutUserMutation();
 
 	// Update localStorage when activeTab changes
 	useEffect(() => {
@@ -106,10 +106,10 @@ const UserProfile = () => {
 
 			<StyledMainContent>
 				<TabPanel value={activeTab} index={0}>
-					<UserProfileTab userData={data?.data} />
+					{data?.data && <UserProfileTab userData={data?.data} />}
 				</TabPanel>
 				<TabPanel value={activeTab} index={1}>
-					<UserPersonalInfoTab userData={data?.data} />
+					{data?.data && <UserPersonalInfoTab userData={data?.data} />}
 				</TabPanel>
 			</StyledMainContent>
 
@@ -125,11 +125,7 @@ const UserProfile = () => {
 						sx={{ minWidth: "120px" }}>
 						{t("cancel")}
 					</Button>
-					<Button
-						variant="primary"
-						onClick={handleLogout}
-						isLoading={isLoading}
-						sx={{ minWidth: "120px" }}>
+					<Button onClick={handleLogout} sx={{ minWidth: "120px" }}>
 						{t("logout")}
 					</Button>
 				</DialogActions>
