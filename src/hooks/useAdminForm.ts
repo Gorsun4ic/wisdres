@@ -124,7 +124,6 @@ export const useAdminForm = <
 				form.reset(dataToEdit);
 			} else if (dataToEdit?.info) {
 				const result = formatFromAutocompleteBookData(dataToEdit);
-				console.log(dataToEdit)
 				updateMutation({
 					id,
 					updates: result,

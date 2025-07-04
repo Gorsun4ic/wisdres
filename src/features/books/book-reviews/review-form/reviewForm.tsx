@@ -48,7 +48,6 @@ const ReviewForm = () => {
 
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
 		if (bookId && userData) {
-			console.log(userData)
 			const review = {
 				bookId,
 				review: {
