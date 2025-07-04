@@ -94,5 +94,4 @@ const UserSchema = new mongoose.Schema({
 });
 
 // Export ROLES separately for use in middleware and components
-export { ROLES };
 export default mongoose.model("User", UserSchema);

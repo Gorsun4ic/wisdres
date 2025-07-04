@@ -51,13 +51,16 @@ type GetByIdMutation<Data> = readonly [
 	{ data?: Data; isLoading: boolean; error?: unknown }
 ];
 
+type BaseFormMutations<TData extends FieldValues = FieldValues> = {
+	add?: () => AddMutation<TData>;
+	update?: () => UpdateMutation<TData>;
+	getById?: () => GetByIdMutation<TData>;
+};
+
+
 const FormBuilder = <
 	TData extends FieldValues,
-	TMutations extends {
-		add: () => AddMutation<TData>;
-		update: () => UpdateMutation<TData>;
-		getById: () => GetByIdMutation<TData>;
-	}
+	TMutations extends BaseFormMutations<TData>
 >({
 	config,
 	mode,

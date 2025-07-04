@@ -28,7 +28,7 @@ interface AdminGridProps<T> {
 	columnVisibilityModel?: GridColDef[];
 }
 
-const GridData = <T extends { _id: string; info?: { title: string } }>({
+const GridData = <T extends { _id: string}>({
 	handleEdit,
 	data,
 	isLoading,

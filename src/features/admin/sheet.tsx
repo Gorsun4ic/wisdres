@@ -13,15 +13,16 @@ import { AdminConfig, AllMutationTypes } from "@custom-types/adminFormConfig";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
-interface BaseSheetProps<T> {
-	config: AdminConfig<T>;
-	fieldData?: T[];
+interface BaseSheetProps<TMutations, TOptions> {
+	config: AdminConfig<TMutations>;
+	fieldData?: TMutations;
+	fieldOptions?: TOptions;
 }
 
-const Sheet = <T extends AllMutationTypes>({
+const Sheet = <TMutations extends AllMutationTypes, TOptions>({
 	config,
 	fieldData,
-}: BaseSheetProps<T>) => {
+}: BaseSheetProps<TMutations, TOptions>) => {
 	const {
 		open,
 		data,
@@ -46,8 +47,7 @@ const Sheet = <T extends AllMutationTypes>({
 					{config.icon}
 					<p>{upperCaseFirstLetter(config.entityName)}</p>
 				</Stack>
-				<Button
-					onClick={() => handleOpen("add")}>
+				<Button onClick={() => handleOpen("add")}>
 					Add new {config.entityName.toLowerCase()}
 				</Button>
 			</Stack>
