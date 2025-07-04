@@ -80,13 +80,13 @@ const AdminsSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
-					data={data.data}
+					data={data?.data ?? []}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}
 					columns={[
 						...adminsConfig.columns,
-						...(hasPermission(userData?.user, "manage:admins")
+						...(hasPermission(userData?.data, "manage:admins")
 							? gridColumns
 							: []),
 					]}

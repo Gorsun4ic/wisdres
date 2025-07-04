@@ -43,7 +43,7 @@ export const apiBooksSlice = createApi({
 		>({
 			query: ({ id, page = 1, limit = 3 }) =>
 				`/books/${id}/reviews?page=${page}&limit=${limit}`,
-			providesTags: (result, error, { id }) => [{ type: "Reviews", id }],
+			providesTags: (_, __, { id }) => [{ type: "Reviews", id }],
 		}),
 		getBookInfo: builder.query<ApiSuccess<IBookInfo>, string>({
 			query: (id) => ({ url: `/books/${id}/info` }),
@@ -95,7 +95,7 @@ export const apiBooksSlice = createApi({
 				url: `/books/${bookId}/reviews/${reviewId}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: (result, error, { bookId }) => [
+			invalidatesTags: (_, __, { bookId }) => [
 				{ type: "Reviews", id: bookId },
 			],
 		}),

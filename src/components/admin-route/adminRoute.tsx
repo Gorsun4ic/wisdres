@@ -11,7 +11,7 @@ import { CircularProgress } from "@mui/material";
 import { useCheckAuthQuery } from "@api/apiUsersSlice";
 
 // Types
-import { IUser } from "@custom-types/roles";
+import { IUser } from "@custom-types/user";
 
 // Utils
 import hasPermission from "@utils/hasPermission";

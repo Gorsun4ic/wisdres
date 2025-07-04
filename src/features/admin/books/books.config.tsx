@@ -249,7 +249,8 @@ export const booksConfig: AdminConfig<BookMutations> = {
 			width: 80,
 			renderCell: (params: GridCellParams) => {
 				const lang = i18n.language as LangType;
-				return <img src={getLangEntity(params.value, lang)} width="40" />;
+				const value = params.value as Record<LangType, string>; 
+				return <img src={getLangEntity(value, lang)} width="40" />;
 			},
 		},
 		{
@@ -258,9 +259,10 @@ export const booksConfig: AdminConfig<BookMutations> = {
 			width: 150,
 			renderCell: (params: GridCellParams) => {
 				const lang = i18n.language as LangType;
+				const value = params.value as Record<LangType, string>; 
 				return (
 					<Link to={`/book/${params.row.id}`}>
-						{getLangEntity(params.value, lang)}
+						{getLangEntity(value, lang)}
 					</Link>
 				);
 			},

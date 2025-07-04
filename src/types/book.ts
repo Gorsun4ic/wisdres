@@ -1,7 +1,7 @@
 import { IBookInfo } from "./bookInfo";
 import { IBookDetails } from "./bookDetails";
 export interface IBook {
-	_id?: string;
+	_id: string;
 	info: IBookInfo;
 	details: IBookDetails;
 	reviews: string[];

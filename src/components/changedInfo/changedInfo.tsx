@@ -11,10 +11,6 @@ interface Change {
 	to: string | number;
 }
 
-interface Changes {
-	[key: string]: Change | Changes;
-}
-
 const formatValue = (value: string | number): string => {
 	if (value === null || value === undefined) {
 		return "none";

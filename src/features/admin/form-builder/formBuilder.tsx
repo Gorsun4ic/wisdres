@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { useTranslation } from "react-i18next";
 
 // Redux
@@ -31,7 +29,6 @@ import FormField from "@components/formField";
 import Button from "@components/button";
 import ConfirmAction from "@components/confirmAction";
 import ChangedInfo from "@components/changedInfo/changedInfo";
-import AutoCompleteField from "@components/autoCompleteField";
 
 // Utils
 import { validateImageType } from "@utils/imgValidation";

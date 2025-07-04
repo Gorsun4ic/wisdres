@@ -4,9 +4,9 @@ import { useCheckAuthQuery } from "@api/apiUsersSlice";
 
 
 const NotAuthenticateRoute = () => {
-	const { data, error, isLoading } = useCheckAuthQuery();
+	const { data} = useCheckAuthQuery();
 
-	if (data?.success && data?.emailVerified) {
+	if (data?.success && data?.data?.emailVerified) {
 		return <Navigate to="/" replace />;
 	}
 

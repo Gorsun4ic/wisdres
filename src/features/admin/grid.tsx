@@ -15,7 +15,6 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 
 // Get the language
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
 
 interface AdminGridProps<T> {
 	handleEdit?: (mode: "add" | "edit", id?: string) => void;

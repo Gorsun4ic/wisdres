@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ApiSuccess } from "@custom-types/apiResponse";
 
-import { IUser } from "@custom-types/roles"
+import { IUser } from "@custom-types/user"
 
 type IAdminUser = IUser & {
 	role: ["ADMIN"]

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TextField, Box, Typography, ClickAwayListener } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -13,7 +13,7 @@ interface SearchResult {
 	title: string;
 	type: "book" | "author" | "publisher";
 	imageUrl?: string;
-	author?: string;
+	author?: string[];
 	publisher?: string;
 	genre?: string;
 	language?: string;

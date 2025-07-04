@@ -28,7 +28,7 @@ const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
 		}
 	}, [pageDiapason, maxPage, minPage]);
 
-	const handleChange = (event: Event, newValue: [number, number]) => {
+	const handleChange = (_event: Event, newValue: [number, number]) => {
 		setValue(newValue as [number, number]);
 	};
 
