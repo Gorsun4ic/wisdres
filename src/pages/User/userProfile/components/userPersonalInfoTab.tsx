@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 
 import PasswordField from "@components/passwordField/PasswordField";
 import { useForm } from "react-hook-form";
-import Button from "@components/button";
+import Button from "@components/button/Button";
 import LockIcon from "@mui/icons-material/Lock";
 import { useTheme } from "styled-components";
 

@@ -7,7 +7,6 @@ export const StyledSearchBar = styled.div`
         width: 100%;
     }
     .MuiTextField-root {
-        background-color: ${({ theme }) => theme.colors.lightGray};
         border-radius: 20px;
         
         .MuiOutlinedInput-root {
@@ -35,10 +34,6 @@ export const StyledSearchResults = styled.div`
         padding: 12px;
         gap: 12px;
         transition: background-color 0.2s;
-
-        &:hover {
-            background-color: ${({ theme }) => theme.colors.lightGray};
-        }
 
         img {
             object-fit: cover;

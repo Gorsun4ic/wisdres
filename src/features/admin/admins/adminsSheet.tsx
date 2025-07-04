@@ -27,14 +27,12 @@ import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 import GridData from "../grid";
 
 import ErrorMessage from "@components/error";
-import Button from "@components/button";
-
+import Button from "@components/button/Button";
 
 const AdminsSheet = () => {
 	const { data: userData } = useCheckAuthQuery();
 
-	const { data, isLoading, error, handleDelete } =
-		useAdminSheet(adminsConfig);
+	const { data, isLoading, error, handleDelete } = useAdminSheet(adminsConfig);
 
 	const {
 		isChangeDialogOpen,
@@ -105,14 +103,11 @@ const AdminsSheet = () => {
 					</DialogContent>
 					<DialogActions>
 						<Button
-							variant="outlined"
 							onClick={() => setIsChangeDialogOpen(false)}>
 							Cancel
 						</Button>
 						<Button
-							variant="primary"
-							onClick={handleChange}
-							isLoading={isChanging}>
+							onClick={handleChange}>
 							Promote
 						</Button>
 					</DialogActions>

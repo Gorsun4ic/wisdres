@@ -22,7 +22,7 @@ import { IError } from "@custom-types/apiError";
 // Custom components
 import FormField from "@components/formField";
 import PasswordField from "@components/passwordField/PasswordField";
-import Button from "@components/button";
+import Button from "@components/button/Button";
 
 import { StyledForm } from "./style";
 

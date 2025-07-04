@@ -26,7 +26,7 @@ import { useAdminForm } from "@hooks/useAdminForm";
 
 // Custom components
 import FormField from "@components/formField";
-import Button from "@components/button";
+import Button from "@components/button/Button";
 import ConfirmAction from "@components/confirmAction";
 import ChangedInfo from "@components/changedInfo/changedInfo";
 
@@ -38,16 +38,16 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 import { StyledForm } from "./style";
 import { LangType } from "@src/i18n";
 
-type AddMutation<Data> = [
-	(data: Data) => void,
+type AddMutation<Data> = readonly [
+	(data: Data) => unknown,
 	{ isLoading: boolean; error?: unknown }
 ];
-type UpdateMutation<Data> = [
-	(args: { id?: string; updates: Data }) => void,
+type UpdateMutation<Data> = readonly [
+	(args: { id?: string; updates: Data }) => unknown,
 	{ isLoading: boolean; error?: unknown }
 ];
-type GetByIdMutation<Data> = [
-	(id: string) => void,
+type GetByIdMutation<Data> = readonly [
+	(id: string) => unknown,
 	{ data?: Data; isLoading: boolean; error?: unknown }
 ];
 

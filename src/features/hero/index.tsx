@@ -9,8 +9,6 @@ import { StyledHero } from "./style";
 import useWindowDimensions from "@hooks/useWindowDimensions";
 import { useTranslation } from "react-i18next";
 
-import { useEffect } from "react";
-
 const Hero = () => {
 	const sizes = useWindowDimensions();
 	const { t } = useTranslation();

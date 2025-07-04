@@ -27,15 +27,12 @@ import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 import GridData from "../grid";
 
 import ErrorMessage from "@components/error";
-import Button from "@components/button";
-
+import Button from "@components/button/Button";
 
 const UsersSheet = () => {
 	const { data: userData } = useCheckAuthQuery();
 
-
-	const { data, isLoading, error, handleDelete } =
-		useAdminSheet(usersConfig);
+	const { data, isLoading, error, handleDelete } = useAdminSheet(usersConfig);
 
 	const {
 		isChangeDialogOpen,
@@ -58,8 +55,7 @@ const UsersSheet = () => {
 						onClick={() => {
 							setIsChangeDialogOpen(true);
 							setChangeUserId(params.row.id);
-						}} 
-					>
+						}}>
 						<KeyboardDoubleArrowUpIcon color="success" />
 					</IconButton>
 				</Tooltip>
@@ -85,14 +81,19 @@ const UsersSheet = () => {
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}
-					columns={[...usersConfig.columns, ...(hasPermission(userData?.user, "manage:admins") ? gridColumns : [])]}
+					columns={[
+						...usersConfig.columns,
+						...(hasPermission(userData?.user, "manage:admins")
+							? gridColumns
+							: []),
+					]}
 				/>
 				<Dialog
 					open={isChangeDialogOpen}
 					onClose={() => setIsChangeDialogOpen(false)}>
 					<DialogTitle>Confirm Promotion</DialogTitle>
 					<DialogContent>
-						<Stack spacing={2}>	
+						<Stack spacing={2}>
 							<p>Are you sure you want to promote this user to admin?</p>
 							{changeStatus.show && changeStatus.severity === "error" && (
 								<Alert severity="error">{changeStatus.message}</Alert>
@@ -101,20 +102,17 @@ const UsersSheet = () => {
 					</DialogContent>
 					<DialogActions>
 						<Button
-							variant="outlined"
 							onClick={() => setIsChangeDialogOpen(false)}>
 							Cancel
 						</Button>
 						<Button
-							variant="primary"
-							onClick={handleChange}
-							isLoading={isChanging}>
+							onClick={handleChange}>
 							Promote
 						</Button>
 					</DialogActions>
 				</Dialog>
 			</ErrorBoundary>
-			{changeStatus.show &&  (
+			{changeStatus.show && (
 				<Alert
 					severity={changeStatus.severity}
 					sx={{

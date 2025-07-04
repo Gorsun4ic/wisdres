@@ -8,7 +8,7 @@ import path from "path";
 // Vite config with Vitest setup
 export default defineConfig({
 	plugins: [react()],
-	base: process.env.VITE_BASE_PATH || "/wisdres",
+	// base: process.env.VITE_BASE_PATH || "/wisdres",
 	test: {
 		globals: true, // Enables global test functions like describe, it, etc.
 		environment: "jsdom", // Sets the environment for React testing (jsdom)

@@ -18,7 +18,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 
 import FormField from "@components/formField";
-import Button from "@components/button";
+import Button from "@components/button/Button";
 import { StyledUserProfileContainer } from "../style";
 
 import { useTheme } from "styled-components";

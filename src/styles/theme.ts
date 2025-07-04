@@ -5,7 +5,7 @@ interface Theme {
 	fontSizes?: Record<string, string>;
 }
 
-const theme: Theme = {
+export const scTheme: Theme = {
 	colors: {
 		black: "#000",
 		grey: "#7A7A7A",
@@ -35,5 +35,3 @@ const theme: Theme = {
 		lightBorder: "0.5px",
 	},
 };
-
-export default theme;

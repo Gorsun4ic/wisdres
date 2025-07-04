@@ -19,7 +19,7 @@ import BookList from "@features/books/book-list";
 import ErrorMessage from "@components/error";
 
 // Custom theme
-import theme from "@styles/theme";
+import {scTheme} from "@styles/theme";
 
 // Custom styled components
 import { StyledBookCollection } from "./style";
@@ -80,8 +80,8 @@ const BookCollection = ({
 					href="#"
 					underline="none"
 					sx={{
-						color: theme?.colors?.green,
-						fontWeight: theme?.fontWeights?.medium,
+						color: scTheme?.colors?.main,
+						fontWeight: scTheme?.fontWeights?.medium,
 					}}></Link>
 			</Stack>
 			<BookList data={list} isLoading={isLoading} />

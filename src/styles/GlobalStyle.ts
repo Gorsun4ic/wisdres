@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import theme from "@styles/theme";
+import {scTheme} from "@styles/theme";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Oswald:wght@200..700&display=swap');
@@ -11,54 +11,54 @@ const GlobalStyle = createGlobalStyle`
   }
 
   p {
-    font-size: ${theme?.fontSizes?.default}
+    font-size: ${scTheme?.fontSizes?.default}
   }
 
   h1,h2,h3, h4 {
-    font-weight: ${theme?.fontWeights?.regular};
+    font-weight: ${scTheme?.fontWeights?.regular};
   }
 
   h1 {
-    font-size: ${theme?.fontSizes?.h1};
+    font-size: ${scTheme?.fontSizes?.h1};
     @media (max-width: 1200px) {
-      font-size: ${theme?.fontSizes?.h2};
+      font-size: ${scTheme?.fontSizes?.h2};
 
     }
   }
 
   h2 {
-    font-size: ${theme?.fontSizes?.h2};
+    font-size: ${scTheme?.fontSizes?.h2};
     @media (max-width: 1200px) {
-      font-size: ${theme?.fontSizes?.h3};
+      font-size: ${scTheme?.fontSizes?.h3};
 
     }
   }
 
   h3 {
-    font-size: ${theme?.fontSizes?.h3};
+    font-size: ${scTheme?.fontSizes?.h3};
     @media (max-width: 1200px) {
-      font-size: ${theme?.fontSizes?.h4};
+      font-size: ${scTheme?.fontSizes?.h4};
 
     }
   }
 
     h4 {
-    font-size: ${theme?.fontSizes?.h4};
+    font-size: ${scTheme?.fontSizes?.h4};
   }
 
   a {
     text-decoration: none;
-    color: ${theme?.colors?.black};
+    color: ${scTheme?.colors?.black};
     transition: color 0.3s ease;
     			&:hover {
-				color: ${theme?.colors?.green};
+				color: ${scTheme?.colors?.green};
 			}
   }
 
   /* For inputs make */
   .MuiOutlinedInput-root {
 			fieldset {
-				border-color: ${theme.colors.grey} !important;
+				border-color: ${scTheme.colors.grey} !important;
         border-width: 1px !important;
 			}
     }

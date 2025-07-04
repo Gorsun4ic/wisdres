@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLazyGetBookInfoQuery } from "@api/apiBooksSlice";
 
-import Button from "@components/button";
+import Button from "@components/button/Button";
 
 import { StyledBookInfo } from "./style";
 
@@ -100,7 +100,7 @@ const BookInfo = () => {
 					)}
 				</List>
 				<Link to={data.link[lang]}>
-					<Button size="big">{t("download")}</Button>
+					<Button>{t("download")}</Button>
 				</Link>
 			</div>
 		</StyledBookInfo>

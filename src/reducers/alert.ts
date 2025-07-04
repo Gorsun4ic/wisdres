@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface IAlert {
 	title: string;
 	color: string;
+	place: string;
 }
 
 interface AlertState {

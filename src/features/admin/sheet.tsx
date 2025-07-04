@@ -7,11 +7,9 @@ import GridData from "./grid";
 import FormBuilder from "./form-builder/formBuilder";
 
 import Modal from "@components/modal";
-import Button from "@components/button";
+import Button from "@components/button/Button";
 import ErrorMessage from "@components/error";
-import InputFileUpload from "@components/uploadFile/uploadFile";
-
-import { AdminConfig } from "@custom-types/adminFormConfig";
+import { AdminConfig, AllMutationTypes } from "@custom-types/adminFormConfig";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
@@ -20,8 +18,10 @@ interface BaseSheetProps<T> {
 	fieldData?: T[];
 }
 
-
-const Sheet = ({ config, fieldData }: BaseSheetProps<T>) => {
+const Sheet = <T extends AllMutationTypes>({
+	config,
+	fieldData,
+}: BaseSheetProps<T>) => {
 	const {
 		open,
 		data,
@@ -35,14 +35,6 @@ const Sheet = ({ config, fieldData }: BaseSheetProps<T>) => {
 		handleDelete,
 	} = useAdminSheet(config);
 
-	const [addManyMutation, { isLoading: isAdding, error: addError }] =
-		config.mutations.addMany();
-		
-	const onFileAttachment = async (file) => {
-		const data = await readJSON(file);
-		addManyMutation(data);
-	}
-
 	return (
 		<>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
@@ -54,10 +46,10 @@ const Sheet = ({ config, fieldData }: BaseSheetProps<T>) => {
 					{config.icon}
 					<p>{upperCaseFirstLetter(config.entityName)}</p>
 				</Stack>
-				<Button size="small" onClick={() => handleOpen("add")}>
+				<Button
+					onClick={() => handleOpen("add")}>
 					Add new {config.entityName.toLowerCase()}
 				</Button>
-				<InputFileUpload onAttachment={onFileAttachment}/>
 			</Stack>
 
 			<ErrorBoundary fallback={<ErrorMessage />}>
@@ -76,7 +68,7 @@ const Sheet = ({ config, fieldData }: BaseSheetProps<T>) => {
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
 					handleEdit={handleOpen}
-					data={data?.data}
+					data={data?.data ?? []}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

@@ -9,10 +9,12 @@ import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 // MUI components
 import { Container } from "@mui/material";
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
 // Custom styles and theme
 import GlobalStyle from "@styles/GlobalStyle";
-import theme from "@styles/theme";
+import {scTheme} from "@styles/theme";
+import { muiTheme } from "@src/styles/muiStyles";
 
 // Custom components
 import Header from "@components/header";
@@ -57,77 +59,79 @@ const UserResetPasswordPage = lazy(
 function App() {
 	return (
 		<Suspense>
-			<StyledThemeProvider theme={theme}>
-				<GlobalStyle />
-				<Router>
-					<Container
-						maxWidth="lg"
-						sx={{
-							"&.MuiContainer-maxWidthLg": {
-								maxWidth: "1600px",
-							},
-						}}>
-						<Header />
-						<Routes>
-							<Route path="/" element={<MainPage />} />
-							<Route path="*" element={<Page404 />} />
-							<Route path="/books" element={<BooksPage />} />
-							<Route path="/book/:bookId" element={<BookPage />} />
-							<Route path="/books/:genre" element={<GenrePage />} />
-							<Route path="/authors" element={<AuthorsPage />} />
-							<Route path="/author/:authorId" element={<AuthorPage />} />
-							<Route path="/publishers" element={<PublishersPage />} />
-							<Route
-								path="/publisher/:publisherId"
-								element={<PublisherPage />}
-							/>
-							<Route path="/contacts" element={<ContactsPage />} />
-							<Route element={<AdminRoute />}>
-								<Route path="/admin" element={<Admin />} />
-							</Route>
-
-							{/* Only for users who are on email verification stage */}
-							<Route
-								path="/email-verification/:verificationToken"
-								element={<UserVerificationPage />}
-							/>
-
-							{/* Only for authorized users */}
-							<Route element={<AuthenticateRoute />}>
-								<Route path="/logout" element={<UserLogoutPage />} />
-							</Route>
-
-							<Route element={<AuthenticateRoute />}>
-								<Route path="/check-auth" element={<UserProfilePage />} />
-							</Route>
-
-							{/* Only for unauthorized users  */}
-
-							<Route element={<NotAuthenticateRoute />}>
-								<Route path="/sign-up" element={<UserSignUpPage />} />
-							</Route>
-
-							<Route element={<NotAuthenticateRoute />}>
-								<Route path="/sign-in" element={<UserSignInPage />} />
-							</Route>
-
-							<Route element={<NotAuthenticateRoute />}>
+			<MuiThemeProvider theme={muiTheme}>
+				<StyledThemeProvider theme={scTheme}>
+					<GlobalStyle />
+					<Router>
+						<Container
+							maxWidth="lg"
+							sx={{
+								"&.MuiContainer-maxWidthLg": {
+									maxWidth: "1600px",
+								},
+							}}>
+							<Header />
+							<Routes>
+								<Route path="/" element={<MainPage />} />
+								<Route path="*" element={<Page404 />} />
+								<Route path="/books" element={<BooksPage />} />
+								<Route path="/book/:bookId" element={<BookPage />} />
+								<Route path="/books/:genre" element={<GenrePage />} />
+								<Route path="/authors" element={<AuthorsPage />} />
+								<Route path="/author/:authorId" element={<AuthorPage />} />
+								<Route path="/publishers" element={<PublishersPage />} />
 								<Route
-									path="/forgot-password"
-									element={<UserForgotPasswordPage />}
+									path="/publisher/:publisherId"
+									element={<PublisherPage />}
 								/>
-							</Route>
+								<Route path="/contacts" element={<ContactsPage />} />
+								<Route element={<AdminRoute />}>
+									<Route path="/admin" element={<Admin />} />
+								</Route>
 
-							<Route element={<NotAuthenticateRoute />}>
+								{/* Only for users who are on email verification stage */}
 								<Route
-									path="/reset-password/:token"
-									element={<UserResetPasswordPage />}
+									path="/email-verification/:verificationToken"
+									element={<UserVerificationPage />}
 								/>
-							</Route>
-						</Routes>
-					</Container>
-				</Router>
-			</StyledThemeProvider>
+
+								{/* Only for authorized users */}
+								<Route element={<AuthenticateRoute />}>
+									<Route path="/logout" element={<UserLogoutPage />} />
+								</Route>
+
+								<Route element={<AuthenticateRoute />}>
+									<Route path="/check-auth" element={<UserProfilePage />} />
+								</Route>
+
+								{/* Only for unauthorized users  */}
+
+								<Route element={<NotAuthenticateRoute />}>
+									<Route path="/sign-up" element={<UserSignUpPage />} />
+								</Route>
+
+								<Route element={<NotAuthenticateRoute />}>
+									<Route path="/sign-in" element={<UserSignInPage />} />
+								</Route>
+
+								<Route element={<NotAuthenticateRoute />}>
+									<Route
+										path="/forgot-password"
+										element={<UserForgotPasswordPage />}
+									/>
+								</Route>
+
+								<Route element={<NotAuthenticateRoute />}>
+									<Route
+										path="/reset-password/:token"
+										element={<UserResetPasswordPage />}
+									/>
+								</Route>
+							</Routes>
+						</Container>
+					</Router>
+				</StyledThemeProvider>
+			</MuiThemeProvider>
 		</Suspense>
 	);
 }

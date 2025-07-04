@@ -7,11 +7,11 @@ import { useTranslation } from "react-i18next";
 
 import { IAuthor } from "@custom-types/author";
 
-import Button from "@components/button";
+import Button from "@components/button/Button";
 
 import { getLangEntity } from "@src/utils/getLangEntity";
 
-import theme from "@styles/theme";
+import { scTheme } from "@styles/theme";
 import { StyledCard, StyledCardContent } from "./style";
 import { LangType } from "@src/i18n";
 
@@ -43,7 +43,7 @@ const BookCard = ({ data }: BookCardProps) => {
 			<StyledCard
 				sx={{
 					boxShadow: "none",
-					border: `1px solid ${theme?.colors?.darkGrey}`,
+					border: `1px solid ${scTheme?.colors?.darkGrey}`,
 				}}>
 				<img
 					src={getLangEntity(img, lang)}
@@ -62,9 +62,7 @@ const BookCard = ({ data }: BookCardProps) => {
 								<p>{rating && rating > 0 ? rating : null}</p>
 							</Stack>
 						) : null}
-						<h3 className="book-card__name">
-							{getLangEntity(title, lang)}
-						</h3>
+						<h3 className="book-card__name">{getLangEntity(title, lang)}</h3>
 						<p className="book-card__author">
 							{author
 								.map((author: { title: Record<LangType, string> }) =>
@@ -73,7 +71,7 @@ const BookCard = ({ data }: BookCardProps) => {
 								.join(", ")}
 						</p>
 					</Stack>
-					<Button size="small">{t("read")}</Button>
+					<Button>{t("read")}</Button>
 				</StyledCardContent>
 			</StyledCard>
 		</Link>

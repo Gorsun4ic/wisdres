@@ -27,7 +27,7 @@ import {
 	StyledSidebar,
 	StyledMainContent,
 } from "./style";
-import Button from "@components/button";
+import Button from "@components/button/Button";
 import { gridColumnPositionsSelector } from "@mui/x-data-grid";
 
 interface TabPanelProps {
@@ -68,7 +68,7 @@ const UserProfile = () => {
 		try {
 			await logout().unwrap();
 			localStorage.removeItem("isAuthenticated");
-			navigate("/", {replace: true});
+			navigate("/", { replace: true });
 			window.location.reload();
 		} catch (error) {
 			console.error("Logout failed:", error);

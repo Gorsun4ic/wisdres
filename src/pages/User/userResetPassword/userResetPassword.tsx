@@ -7,16 +7,14 @@ import { useForm } from "react-hook-form";
 
 import { useTranslation } from "react-i18next";
 
-
 // MUI Components
 import { Stack } from "@mui/material";
 // Custom API
 import { useResetPasswordMutation } from "@api/apiUsersSlice";
 
-
 // Custom components
 import PasswordField from "@components/passwordField/PasswordField";
-import Button from "@components/button";
+import Button from "@components/button/Button";
 
 import { StyledForm } from "./style";
 
@@ -31,8 +29,7 @@ const UserResetPasswordPage = () => {
 	const { t } = useTranslation();
 
 	// RTK Query Add function, error
-	const [resetPassword, { error: resetError }] =
-		useResetPasswordMutation();
+	const [resetPassword, { error: resetError }] = useResetPasswordMutation();
 
 	const navigate = useNavigate();
 	// RHF functions / data

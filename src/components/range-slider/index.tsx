@@ -28,7 +28,11 @@ const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
 		}
 	}, [pageDiapason, maxPage, minPage]);
 
-	const handleChange = (_event: Event, newValue: [number, number]) => {
+	const handleChange = (
+		_event: Event,
+		newValue: number | number[],
+		_activeThumb: number // eslint-disable-line @typescript-eslint/no-unused-vars
+	) => {
 		setValue(newValue as [number, number]);
 	};
 
@@ -36,7 +40,7 @@ const RangeSlider = ({pageDiapason}: {pageDiapason: [number, number]}) => {
 		const numericValue = parseInt(inputValue, 10);
 		if (!isNaN(numericValue)) {
 			setValue((prevValue) => {
-				const newValue = [...prevValue];
+				const newValue = [...prevValue] as [number, number];
 				newValue[order] = Math.min(Math.max(numericValue, 1), 1144); // Clamp within min and max
 				return newValue;
 			});

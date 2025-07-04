@@ -6,12 +6,11 @@ import { Rating, Stack, Alert } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
-
 import { useCheckAuthQuery } from "@api/apiUsersSlice";
 import { useAddNewReviewMutation } from "@api/apiBooksSlice";
 import containsBadWords from "@utils/badWordsValidator";
 
-import Button from "@components/button";
+import Button from "@components/button/Button";
 import FormField from "@components/formField";
 
 import { StyledForm } from "./style";
@@ -65,7 +64,7 @@ const ReviewForm = () => {
 		return (
 			<StyledForm>
 				<p>{t("reviewNotAuthenticated")}</p>
-				<Button size="big" onClick={() => navigate("/sign-in")}>
+				<Button onClick={() => navigate("/sign-in")}>
 					{t("login")}
 				</Button>
 			</StyledForm>
@@ -116,7 +115,7 @@ const ReviewForm = () => {
 					multiline
 					rows={4}
 				/>
-				<Button size="big" isLoading={isLoading} type="submit">
+				<Button type="submit">
 					{t("publish")}
 				</Button>
 			</Stack>
