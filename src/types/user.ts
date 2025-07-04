@@ -1,11 +1,14 @@
 import { ApiSuccess, ApiError } from "./apiResponse";
+import {ROLES} from "@src/server/models/user";
+
+export type RoleKey = keyof typeof ROLES;
 
 export interface IUser {
 	_id: string;
 	username: string;
 	email: string;
 	password: string;
-	role: string[];
+	role: RoleKey[];
 	emailVerified?: boolean;
 	emailVerificationCode?: boolean;
 	emailVerificationCodeExpiresAt?: Date;

@@ -6,11 +6,14 @@ import {
 } from "@reducers/filters";
 import { useDispatch } from "react-redux";
 
-import { TextField, List, ListItem } from "@mui/material";
+import {
+	TextField,
+	FormGroup,
+	FormControlLabel,
+	Checkbox,
+} from "@mui/material";
 
 import { stringTuple } from "@custom-types/filter";
-
-import Checkbox from "@components/checkbox";
 
 import { StyledScrolledFilter } from "./style";
 
@@ -48,7 +51,6 @@ const ScrolledFilter = ({
 		);
 		setFilterItems(filteredData);
 	};
-	
 
 	useEffect(() => {
 		switch (type) {
@@ -74,23 +76,29 @@ const ScrolledFilter = ({
 
 	if (!data) return null;
 
-	const checkboxesList = filterItems.map((item) => {
-		return (
-			<ListItem key={item[0]}>
-				<Checkbox
-					label={item[1]}
-					checked={checkedItems.includes(item[0])}
-					onChange={() => handleCheckboxChange(item[0])}
-				/>
-			</ListItem>
-		);
-	});
-
 	return (
 		<StyledScrolledFilter className="scrolled-filter">
 			<span className="scrolled-filter__name">{title}</span>
-			{data.length > 5 && <TextField placeholder={placeholder} onChange={(event) => {handleSearch(event.target.value)}}/>}
-			<List>{checkboxesList}</List>
+			{data.length > 5 && (
+				<TextField
+					placeholder={placeholder}
+					onChange={(event) => {
+						handleSearch(event.target.value);
+					}}
+				/>
+			)}
+			<FormGroup>
+				{filterItems.map((item) => {
+					return (
+						<FormControlLabel
+							control={<Checkbox />}
+							label={item[1]}
+							checked={checkedItems.includes(item[0])}
+							onChange={() => handleCheckboxChange(item[0])}
+						/>
+					);
+				})}
+			</FormGroup>
 		</StyledScrolledFilter>
 	);
 };

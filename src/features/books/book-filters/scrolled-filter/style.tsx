@@ -26,6 +26,20 @@ export const StyledScrolledFilter = styled.div`
 			overflow-y: auto;
 		}
 
+		.MuiSvgIcon-root {
+			color: ${({ theme }) => theme.colors.grey};
+			border-radius: 2px;
+			font-size: 1.2rem;
+		}
+
+		.MuiCheckbox-root {
+			padding: 4px 4px 4px 9px;
+			color: ${({ theme }) => theme.colors.grey};
+		}
+		.MuiFormControlLabel-label {
+			color: ${({ theme }) => theme.colors.grey};
+		}
+
 		::-webkit-scrollbar {
 			width: 6px;
 		}

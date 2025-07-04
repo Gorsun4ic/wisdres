@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ROLES = {
+const ROLES= {
 	USER: [
 		"view:books",
 		"view:authors",
