@@ -1,4 +1,9 @@
-import { DataGrid, GridToolbar, GridColDef, GridColumnVisibilityModel} from "@mui/x-data-grid";
+import {
+	DataGrid,
+	GridToolbar,
+	GridColDef,
+	GridColumnVisibilityModel,
+} from "@mui/x-data-grid";
 import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,7 +22,7 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";
 
-interface AdminGridProps<T extends {_id: string}> {
+interface AdminGridProps<T extends { _id: string, title: {en: string, ua: string} }> {
 	handleEdit?: (mode: "add" | "edit", id?: string) => void;
 	isLoading: boolean;
 	columns: GridColDef[];
@@ -29,7 +34,9 @@ interface AdminGridProps<T extends {_id: string}> {
 	columnVisibilityModel?: GridColumnVisibilityModel;
 }
 
-const GridData = <T extends { _id: string, title?: {en: string, ua: string}}>({
+const GridData = <
+	T extends { _id: string; title: { en: string; ua: string } }
+>({
 	handleEdit,
 	data,
 	isLoading,
@@ -114,7 +121,9 @@ const GridData = <T extends { _id: string, title?: {en: string, ua: string}}>({
 
 			{openDialog && selectedItem && (
 				<ConfirmAction
-					title={`Delete ${selectedItem.title && getLangEntity(selectedItem.title, lang)}?`}
+					title={`Delete ${
+						selectedItem.title && getLangEntity(selectedItem.title, lang)
+					}?`}
 					openDialog={openDialog}
 					onConfirm={() => handleDialogAction(true)}
 					onCancel={() => handleDialogAction(false)}

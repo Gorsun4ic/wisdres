@@ -6,22 +6,9 @@ import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 import { useGetLanguagesQuery } from "@api/apiLanguagesSlice";
 
-import { IGenre } from "@src/types/genre";
-import { IAuthor } from "@src/types/author";
-import { IPublisher } from "@src/types/publisher";
-import { ILanguage } from "@src/types/language";
+import i18n, { LangType } from "@src/i18n";
 
-type FieldOption<DataType> = {
-	data: DataType[];
-	isLoading: boolean;
-};
-
-type FieldOptions = {
-	"info.genre"?: FieldOption<IGenre>;
-	"info.author"?: FieldOption<IAuthor>;
-	"info.publisher"?: FieldOption<IPublisher>;
-	"info.language"?: FieldOption<ILanguage>;
-};
+import { getLangEntity } from "@src/utils/getLangEntity";
 
 const BookFormData = () => {
 	const { data: genres, isLoading: isLoadingGenres } = useGetGenresQuery();
@@ -31,15 +18,41 @@ const BookFormData = () => {
 	const { data: languages, isLoading: isLoadingLanguages } =
 		useGetLanguagesQuery();
 
-	const fieldOptions: FieldOptions = {
-		"info.genre": { data: genres?.data || [], isLoading: isLoadingGenres },
-		"info.author": { data: authors?.data || [], isLoading: isLoadingAuthors },
+	const lang = i18n.language as LangType;
+
+	const mapToTitleString = <T extends { _id: string; title: string }>(
+		items: T[] | undefined
+	): { _id: string; title: string }[] =>
+		items?.map((item) => ({
+			_id: item._id,
+			title: item.title,
+		})) || [];
+
+	const mapToTitleObject = <
+		T extends { _id: string; title: { en: string; ua: string } }
+	>(
+		items: T[] | undefined
+	): { _id: string; title: string }[] =>
+		items?.map((item) => ({
+			_id: item._id,
+			title: getLangEntity(item.title, lang),
+		})) || [];
+
+	const fieldOptions = {
+		"info.genre": {
+			data: mapToTitleObject(genres?.data),
+			isLoading: isLoadingGenres,
+		},
+		"info.author": {
+			data: mapToTitleObject(authors?.data),
+			isLoading: isLoadingAuthors,
+		},
 		"info.publisher": {
-			data: publishers?.data || [],
+			data: mapToTitleString(publishers?.data),
 			isLoading: isLoadingPublishers,
 		},
 		"info.language": {
-			data: languages?.data || [],
+			data: mapToTitleObject(languages?.data),
 			isLoading: isLoadingLanguages,
 		},
 	};
