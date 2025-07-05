@@ -28,11 +28,15 @@ import GridData from "../grid";
 
 import ErrorMessage from "@components/error";
 import Button from "@components/button/button";
+import { IUser } from "@src/types/user";
 
 const UsersSheet = () => {
 	const { data: userData } = useCheckAuthQuery();
 
-	const { data, isLoading, error, handleDelete } = useAdminSheet(usersConfig);
+	const { data, isLoading, error, handleDelete } = useAdminSheet<
+		IUser,
+		typeof usersConfig.mutations
+	>(usersConfig);
 
 	const {
 		isChangeDialogOpen,
@@ -78,7 +82,7 @@ const UsersSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
-					data={data?.data || []}
+					data={data}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

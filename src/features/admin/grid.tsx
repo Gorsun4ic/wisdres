@@ -29,7 +29,7 @@ interface AdminGridProps<T extends {_id: string}> {
 	columnVisibilityModel?: GridColumnVisibilityModel;
 }
 
-const GridData = <T extends { _id: string, title: {en: string, ua: string}}>({
+const GridData = <T extends { _id: string, title?: {en: string, ua: string}}>({
 	handleEdit,
 	data,
 	isLoading,
@@ -114,7 +114,7 @@ const GridData = <T extends { _id: string, title: {en: string, ua: string}}>({
 
 			{openDialog && selectedItem && (
 				<ConfirmAction
-					title={`Delete ${getLangEntity(selectedItem.title, lang)}?`}
+					title={`Delete ${selectedItem.title && getLangEntity(selectedItem.title, lang)}?`}
 					openDialog={openDialog}
 					onConfirm={() => handleDialogAction(true)}
 					onCancel={() => handleDialogAction(false)}

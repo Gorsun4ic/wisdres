@@ -7,17 +7,29 @@ import { RootState } from "@store/index";
 import useAlert from "@hooks/useAlert";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
+import { ApiSuccess } from "@src/types/apiResponse";
 
 type SheetMutations<T> = {
-	getAll: () => { data?: T[]; isLoading: boolean; error?: unknown };
-	delete: () => [(id: string) => Promise<{ data?: unknown; error?: unknown }>];
+	getAll: () => {
+		data?: ApiSuccess<T[]>;
+		isLoading: boolean;
+		error?: unknown;
+	};
+	delete: () => readonly [
+		(id: string) => Promise<{ data?: unknown; error?: unknown }>,
+		unknown
+	];
 };
 
 export const useAdminSheet = <TData, TMutations extends SheetMutations<TData>>(
 	config: AdminConfig<TMutations>
 ) => {
 	const [deleteMutation] = config.mutations.delete();
-	const { data, isLoading, error } = config.mutations.getAll();
+  const queryResult = config.mutations.getAll();
+
+	const data = queryResult.data?.data || []; // unwrap here
+	const isLoading = queryResult.isLoading;
+	const error = queryResult.error;
 
 	const { alert } = useSelector((state: RootState) => state.alert);
 	const triggerAlert = useAlert();
