@@ -62,6 +62,8 @@ const UsersSheet = () => {
 		},
 	];
 
+	if (!userData?.data) return null;
+
 	return (
 		<>
 			<Stack direction="row" gap={4} className="admin-panel__bar">
@@ -76,13 +78,13 @@ const UsersSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
-					data={data?.data}
+					data={data?.data || []}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}
 					columns={[
 						...usersConfig.columns,
-						...(hasPermission(userData?.user, "manage:admins")
+						...(hasPermission(userData?.data, "manage:admins")
 							? gridColumns
 							: []),
 					]}
@@ -100,14 +102,8 @@ const UsersSheet = () => {
 						</Stack>
 					</DialogContent>
 					<DialogActions>
-						<Button
-							onClick={() => setIsChangeDialogOpen(false)}>
-							Cancel
-						</Button>
-						<Button
-							onClick={handleChange}>
-							Promote
-						</Button>
+						<Button onClick={() => setIsChangeDialogOpen(false)}>Cancel</Button>
+						<Button onClick={handleChange}>Promote</Button>
 					</DialogActions>
 				</Dialog>
 			</ErrorBoundary>

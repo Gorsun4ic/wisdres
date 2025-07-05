@@ -4,11 +4,11 @@ import GenresCollection from "@features/genres/genres-collection";
 import BookCollection from "@features/books/bookCollection/bookCollection";
 
 const BooksPage = () => {
-	const { data } = useGetGenresQuery();
+	const { data, isLoading } = useGetGenresQuery();
 
 	return (
 		<div className="books-page">
-			<GenresCollection data={data} />
+			{data && <GenresCollection data={data} isLoading={isLoading}/>}
 			<BookCollection title="New arrivals" filterBy="date" number={6} />
 			<BookCollection title="Top books" filterBy="popularity" number={6} />
 		</div>

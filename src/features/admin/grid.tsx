@@ -15,6 +15,7 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 
 // Get the language
 import { useTranslation } from "react-i18next";
+import { LangType } from "@src/i18n";
 
 interface AdminGridProps<T> {
 	handleEdit?: (mode: "add" | "edit", id?: string) => void;
@@ -51,7 +52,7 @@ const GridData = <T extends { _id: string}>({
 	});
 
 	const { i18n } = useTranslation();
-	const lang = i18n.language;
+	const lang = i18n.language as LangType;
 
 	if (isLoading)
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;

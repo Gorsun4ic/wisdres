@@ -46,11 +46,12 @@ const ReviewForm = () => {
 	}, [userData]);
 
 	const onSubmit: SubmitHandler<FormFields> = (data) => {
-		if (bookId && userData) {
+		if (bookId && userData?.data) {
 			const review = {
 				bookId,
 				review: {
-					user: userData?.data?._id,
+					book: bookId,
+					user: userData.data,
 					text: data.text,
 					rating: data.rating,
 				},
@@ -77,7 +78,7 @@ const ReviewForm = () => {
 				<h3>{t("writeReview")}</h3>
 				{addNewReviewError && (
 					<Alert severity="error">
-						{addNewReviewError?.data?.message || t("failedReview")}
+						{t("failedReview")}
 					</Alert>
 				)}
 				<Controller

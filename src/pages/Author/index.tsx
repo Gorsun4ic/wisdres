@@ -11,6 +11,7 @@ import { useGetBooksQuery } from "@api/apiBooksSlice";
 import { useLazyGetAuthorByIdQuery } from "@api/apiAuthorsSlice";
 
 import { getLangEntity } from "@src/utils/getLangEntity";
+import { LangType } from "@src/i18n";
 
 const AuthorPage = () => {
 	const { authorId } = useParams();
@@ -19,7 +20,7 @@ const AuthorPage = () => {
 	const { data } = useGetBooksQuery();
 	const navigate = useNavigate();
 	const { t, i18n } = useTranslation();
-	const lang = i18n.language;
+	const lang = i18n.language as LangType;
 
 	const books = data?.data?.filter((book) =>
 		authorData?.data?.bookIds?.includes(book?._id)
@@ -29,7 +30,7 @@ const AuthorPage = () => {
 		if (authorId) {
 			getAuthorById(authorId);
 		}
-	}, [authorId]);
+	}, [authorId, getAuthorById]);
 
 	useEffect(() => {
 		if (!isLoading && !data) {
@@ -38,9 +39,9 @@ const AuthorPage = () => {
 			}, 1000);
 			return () => clearTimeout(navigateTo404);
 		}
-	}, [isLoading, data]);
+	}, [isLoading, data, navigate]);
 
-	if (isLoading || !data) {
+	if (isLoading || !data || !authorData?.data) {
 		return (
 			<div>
 				<CircularProgress

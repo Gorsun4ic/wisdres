@@ -60,7 +60,7 @@ const BookPage = () => {
 			<BookOverview />
 			<BookDescription />
 			<BookReviews />
-			<BookCollection title={t("similarBooks")} number={6} />
+			<BookCollection title={t("similarBooks")} filterBy="date" number={6} />
 		</div>
 	);
 };

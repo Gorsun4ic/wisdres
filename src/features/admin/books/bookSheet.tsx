@@ -50,7 +50,7 @@ const BookFormData = () => {
 const BookSheet = () => {
 	const fieldData = BookFormData();
 
-	return <Sheet config={booksConfig} fieldData={fieldData} />;
+	return <Sheet config={booksConfig} fieldOptions={fieldData} />;
 };
 
 export default BookSheet;

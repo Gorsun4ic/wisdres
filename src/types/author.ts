@@ -7,6 +7,7 @@ export interface IAuthor {
 	_id: string;
 	id: string;
 	img: string;
+	bookIds: string[];
 	title: {
 		en: string;
 		ua: string;

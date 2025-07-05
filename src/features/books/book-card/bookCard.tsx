@@ -14,20 +14,9 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 import { scTheme } from "@styles/theme";
 import { StyledCard, StyledCardContent } from "./style";
 import { LangType } from "@src/i18n";
+import { IBook } from "@src/types/book";
 
-interface BookCardProps {
-	data: {
-		info: {
-			img: string;
-			rating: number;
-			title: LangType;
-			author: IAuthor[];
-		};
-		_id: string;
-	};
-}
-
-const BookCard = ({ data }: BookCardProps) => {
+const BookCard = ({ data }: {data: IBook}) => {
 	const { t, i18n } = useTranslation();
 	const lang = i18n.language as LangType;
 

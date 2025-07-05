@@ -8,6 +8,7 @@ import { useGetBooksQuery } from "@api/apiBooksSlice";
 
 // Custom types
 import { IBook } from "@custom-types/book";
+import { SortType } from "@src/types/filter";
 
 // Custom hooks
 import useSortedBooks from "@src/hooks/useSortedBooks";
@@ -24,9 +25,6 @@ import {scTheme} from "@styles/theme";
 // Custom styled components
 import { StyledBookCollection } from "./style";
 
-// Types of collections
-type collectionFilters = "popularity" | "date" | "recent";
-
 const BookCollection = ({
 	title,
 	filterBy,
@@ -34,8 +32,8 @@ const BookCollection = ({
 	booksArr,
 }: {
 	title: string;
-	filterBy: collectionFilters;
-	number: number;
+	filterBy?: SortType;
+	number?: number;
 	booksArr?: IBook[];
 }) => {
 	const { data, isLoading, error } = useGetBooksQuery();
@@ -53,7 +51,7 @@ const BookCollection = ({
 		}
 	}, [data, booksArr]);
 
-	const list = useSortedBooks(books, filterBy, number);
+	const list = useSortedBooks(books, filterBy as SortType, number as number);
 
 	if (isLoading) {
 		return <CircularProgress sx={{ display: "block", margin: "0 auto" }} />;

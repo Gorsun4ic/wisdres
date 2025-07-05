@@ -16,7 +16,7 @@ const BookSort = () => {
 
 	const [isActive, setIsActive] = useState<number | null>(null);
 
-	const sortCriteria: string[] = [
+	const sortCriteria: [string, string][] = [
 		["reviews", t("reviews")],
 		["rating", t("rating")],
 	];

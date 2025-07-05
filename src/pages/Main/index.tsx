@@ -15,7 +15,7 @@ const MainPage = () => {
 	return (
 		<div className="main-page">
 			<Hero />
-			<GenresCollection data={data} isLoading={isLoading} />
+			{data && <GenresCollection data={data} isLoading={isLoading} />}
 			{error && <ErrorMessage>{t("failedToLoadGenres")}</ErrorMessage>}
 			<BookCollection filterBy="popularity" number={6} title={t("topBooks")} />
 			<BookCollection filterBy="date" number={6} title={t("newArrivals")} />

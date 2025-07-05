@@ -12,6 +12,7 @@ import ErrorMessage from "@components/error";
 import { AdminConfig, AllMutationTypes } from "@custom-types/adminFormConfig";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
+import { AlertColors } from "@src/types/alert";
 
 interface BaseSheetProps<TMutations, TOptions> {
 	config: AdminConfig<TMutations>;
@@ -19,9 +20,9 @@ interface BaseSheetProps<TMutations, TOptions> {
 	fieldOptions?: TOptions;
 }
 
-const Sheet = <TMutations extends AllMutationTypes, TOptions>({
+const Sheet = <TMutations extends AllMutationTypes, TOptions extends Record<string, { data: { title: string; _id: string; }[]; }> | undefined>({
 	config,
-	fieldData,
+	fieldOptions
 }: BaseSheetProps<TMutations, TOptions>) => {
 	const {
 		open,
@@ -58,8 +59,8 @@ const Sheet = <TMutations extends AllMutationTypes, TOptions>({
 						<FormBuilder
 							config={config}
 							mode={formMode}
-							id={toEditId}
-							fieldData={fieldData}
+							id={toEditId ?? ""}
+							fieldData={fieldOptions}
 						/>
 					</Modal>
 				)}
@@ -80,7 +81,7 @@ const Sheet = <TMutations extends AllMutationTypes, TOptions>({
 
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				{alert?.place === "sheet" && (
-					<Alert severity={alert.color}>{alert.title}</Alert>
+					<Alert severity={alert.color as AlertColors}>{alert.title}</Alert>
 				)}
 			</ErrorBoundary>
 		</>

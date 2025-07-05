@@ -7,18 +7,21 @@ import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 
 import SearchBar from "@components/search-bar";
 
+import { getLangEntity } from "@src/utils/getLangEntity";
+
 import { StyledAuthorsPage } from "./style";
+import { LangType } from "@src/i18n";
 
 const AuthorsPage = () => {
 	const {data: authors} = useGetAuthorsQuery();
 	const { t, i18n } = useTranslation();
-	const lang = i18n.language;
+	const lang = i18n.language as LangType;
 
 
 	const authorsList = authors?.data?.map((item) => (
 		<Grid2 key={item?._id} size={3}>
 			<Link to={`/author/${item?._id}`}>
-				{item?.title[lang]}
+				{getLangEntity(item?.title, lang)}
 				{` (${item?.bookIds?.length})`}
 			</Link>
 		</Grid2>

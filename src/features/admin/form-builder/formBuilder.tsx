@@ -19,7 +19,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { RootState } from "@store/index";
 
 // Custom types
-import { AdminConfig, FieldTypes, FormFieldConfig } from "@src/types/adminFormConfig";
+import {
+	AdminConfig,
+	FieldTypes,
+	FormFieldConfig,
+} from "@src/types/adminFormConfig";
 
 // Custom hooks
 import { useAdminForm } from "@hooks/useAdminForm";
@@ -37,6 +41,7 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 // Style
 import { StyledForm } from "./style";
 import { LangType } from "@src/i18n";
+import { AlertColors } from "@src/types/alert";
 
 type AddMutation<Data> = [
 	(data: Data) => Promise<{ data?: unknown; error?: unknown }>,
@@ -56,7 +61,6 @@ type GetByIdMutation<Data> = [
 	{ data?: Data; isLoading: boolean; error?: unknown }
 ];
 
-
 type BaseFormMutations<TData extends FieldValues = FieldValues> = {
 	add: () => AddMutation<TData>;
 	update: () => UpdateMutation<TData>;
@@ -64,27 +68,36 @@ type BaseFormMutations<TData extends FieldValues = FieldValues> = {
 };
 
 
+
 function isFormFieldConfig(field: FieldTypes): field is FormFieldConfig {
 	return "placeholder" in field;
 }
 
+interface FormBuilderProps<
+	TData extends FieldValues,
+	TMutations extends BaseFormMutations<TData>,
+	TFieldOptions
+> {
+	config: AdminConfig<TMutations>;
+	mode: "add" | "edit";
+	id?: string;
+	fieldData?: TFieldOptions;
+}
+
 const FormBuilder = <
 	TData extends FieldValues,
-	TMutations extends BaseFormMutations<TData>
+	TMutations extends BaseFormMutations<TData>,
+	TFieldOptions extends Record<
+		string,
+		{ data: { title: string; _id: string }[] }
+	>
 >({
 	config,
 	mode,
 	id,
 	fieldData,
-}: {
-	config: AdminConfig<TMutations>;
-	mode: "add" | "edit";
-	fieldData?: Record<string, { data: { title: string, _id: string }[] }>;
-	id?: string;
-}) => {
-	const { i18n } = useTranslation();
-	const lang = i18n.language as LangType;
-
+}: FormBuilderProps<TData, TMutations, TFieldOptions>) => {
+	// ...
 	const {
 		onSubmit,
 		openDialog,
@@ -106,6 +119,8 @@ const FormBuilder = <
 
 	// Hook to track img input status
 	const formValues = watch();
+	const { i18n } = useTranslation();
+	const lang = i18n.language as LangType;
 
 	// Alert state
 	const { alert } = useSelector((state: RootState) => state.alert);
@@ -243,7 +258,7 @@ const FormBuilder = <
 			)}
 			<Button type="submit">{mode === "edit" ? "Edit" : "Publish"}</Button>
 			{alert && alert.place === "form" && (
-				<Alert severity={alert.color} sx={{ marginTop: "16px" }}>
+				<Alert severity={alert.color as AlertColors} sx={{ marginTop: "16px" }}>
 					{alert.title}
 				</Alert>
 			)}

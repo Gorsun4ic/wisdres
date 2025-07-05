@@ -86,8 +86,8 @@ const ReviewsList = () => {
 	const [deleteReview] = useDeleteReviewMutation();
 	const [page, setPage] = useState(1);
 	const [reviews, setReviews] = useState<IReview[] | []>([]);
-	const { data, error, isLoading } = useGetBookReviewsQuery({
-		id: bookId,
+	const { data, isLoading } = useGetBookReviewsQuery({
+		id: bookId ?? "",
 		page: page,
 		limit: 3,
 	});
@@ -112,8 +112,6 @@ const ReviewsList = () => {
 
 	if (isLoading) {
 		return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;
-	} else if (error && error.status !== 404) {
-		return <ErrorMessage />;
 	}
 
 	const list = reviews?.map((item, i) => {

@@ -38,7 +38,9 @@ const Admin = () => {
 		const savedTab = localStorage.getItem("adminPanelActiveTab");
 		return savedTab || "1";
 	});
-	const superAdmin = hasPermission(userData?.data, "view:admins");
+	const superAdmin = userData?.data
+		? hasPermission(userData.data, "view:admins")
+		: false;
 
 	// Update localStorage when tab changes
 	useEffect(() => {
@@ -55,7 +57,6 @@ const Admin = () => {
 	const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
 		setValue(newValue);
 	};
-
 
 	return (
 		<StyledAdminPanel className="admin-panel">
