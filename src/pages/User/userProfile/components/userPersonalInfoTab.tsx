@@ -8,7 +8,7 @@ import {
 	DialogContent,
 	DialogActions,
 } from "@mui/material";
-// import { useUpdatePasswordMutation } from "@api/apiUsersSlice";
+
 import { useTranslation } from "react-i18next";
 
 import PasswordField from "@components/passwordField/PasswordField";
@@ -143,7 +143,6 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 						</Button>
 						<Button
 							type="submit"
-							isLoading={isLoading}
 							sx={{ minWidth: "120px" }}>
 							{t("updatePassword")}
 						</Button>

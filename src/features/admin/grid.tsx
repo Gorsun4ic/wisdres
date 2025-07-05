@@ -22,7 +22,13 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";
 
-interface AdminGridProps<T extends { _id: string, title: {en: string, ua: string} }> {
+type EntityWithTitle = { _id: string; title: { en: string; ua: string } };
+type EntityUser = { _id: string; username: string };
+
+type Entity = EntityWithTitle | EntityUser;
+interface AdminGridProps<
+	T extends Entity
+> {
 	handleEdit?: (mode: "add" | "edit", id?: string) => void;
 	isLoading: boolean;
 	columns: GridColDef[];
@@ -34,9 +40,12 @@ interface AdminGridProps<T extends { _id: string, title: {en: string, ua: string
 	columnVisibilityModel?: GridColumnVisibilityModel;
 }
 
-const GridData = <
-	T extends { _id: string; title: { en: string; ua: string } }
->({
+
+function hasTitle(entity: Entity): entity is EntityWithTitle {
+	return (entity as EntityWithTitle).title !== undefined;
+}
+
+const GridData = <T extends Entity>({
 	handleEdit,
 	data,
 	isLoading,
@@ -122,7 +131,9 @@ const GridData = <
 			{openDialog && selectedItem && (
 				<ConfirmAction
 					title={`Delete ${
-						selectedItem.title && getLangEntity(selectedItem.title, lang)
+						hasTitle(selectedItem)
+							? getLangEntity(selectedItem.title, lang)
+							: selectedItem.username
 					}?`}
 					openDialog={openDialog}
 					onConfirm={() => handleDialogAction(true)}
