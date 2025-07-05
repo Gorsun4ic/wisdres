@@ -123,9 +123,7 @@ const UserSignInPage = () => {
 					error={errors.password?.message}
 				/>
 				<Link to="/forgot-password">Forgot password?</Link>
-				<Button size="big" type="submit">
-					Login
-				</Button>
+				<Button type="submit">Login</Button>
 			</Stack>
 			<Box>
 				<p>

@@ -116,7 +116,7 @@ const UserVerifyEmail = () => {
 							}}
 							error={errors.email?.message || error || undefined}
 						/>
-						<Button size="big" type="submit" disabled={isResending}>
+						<Button type="submit" disabled={isResending}>
 							{isResending ? "Sending..." : "Resend Verification Email"}
 						</Button>
 					</Stack>
@@ -135,9 +135,7 @@ const UserVerifyEmail = () => {
 					sx={{ padding: "0 32px 32px 32px", textAlign: "center" }}>
 					<p>Your email has been successfully verified.</p>
 					<p>Now you can log in to your account.</p>
-					<Button onClick={() => navigate("/sign-in")} size="big">
-						Proceed to Login
-					</Button>
+					<Button onClick={() => navigate("/sign-in")}>Proceed to Login</Button>
 				</Stack>
 			</StyledForm>
 		);

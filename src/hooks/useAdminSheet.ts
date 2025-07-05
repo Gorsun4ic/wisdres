@@ -6,9 +6,16 @@ import { RootState } from "@store/index";
 
 import useAlert from "@hooks/useAlert";
 
-import { AdminConfig, AllMutationTypes } from "@custom-types/adminFormConfig";
+import { AdminConfig } from "@custom-types/adminFormConfig";
 
-export const useAdminSheet = (config: AdminConfig<AllMutationTypes>) => {
+type SheetMutations<T> = {
+	getAll: () => { data?: T[]; isLoading: boolean; error?: unknown };
+	delete: () => [(id: string) => Promise<{ data?: unknown; error?: unknown }>];
+};
+
+export const useAdminSheet = <TData, TMutations extends SheetMutations<TData>>(
+	config: AdminConfig<TMutations>
+) => {
 	const [deleteMutation] = config.mutations.delete();
 	const { data, isLoading, error } = config.mutations.getAll();
 

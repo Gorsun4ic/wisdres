@@ -157,7 +157,7 @@ const UserSignUpPage = () => {
 					}}
 					error={errors.passwordConfirm?.message}
 				/>
-				<Button size="big" type="submit" disabled={isLoading}>
+				<Button type="submit" disabled={isLoading}>
 					{isLoading ? <CircularProgress size={24} /> : "Sign Up"}
 				</Button>
 			</Stack>

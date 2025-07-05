@@ -6,6 +6,10 @@
 	],
 	"compilerOptions": {
 		"baseUrl": "./",
+		"moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
 		"paths": {
 			"@src/*": ["src/*"],
 			"@components/*": ["src/components/*"],

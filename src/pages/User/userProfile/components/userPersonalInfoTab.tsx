@@ -79,8 +79,6 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 						</Typography>
 					</Stack>
 					<Button
-						variant="primary"
-						size="small"
 						onClick={() => setIsPasswordDialogOpen(true)}
 						startIcon={<LockIcon />}>
 						{t("changePassword")}
@@ -144,7 +142,6 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 							{t("cancel")}
 						</Button>
 						<Button
-							variant="primary"
 							type="submit"
 							isLoading={isLoading}
 							sx={{ minWidth: "120px" }}>

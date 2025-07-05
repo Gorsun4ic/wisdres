@@ -76,7 +76,7 @@ export type ContentMutationTypes =
 	| LanguageMutations
 	| GenreMutations;
 
-export interface AdminConfig<T> {
+export interface AdminConfig<TMutations> {
 	entityName: string; // 'publisher', 'author', 'book'
 	fields?: (FieldTypes | GroupedFields)[];
 	icon: React.ReactNode;
@@ -85,5 +85,5 @@ export interface AdminConfig<T> {
 	changeButton?: boolean;
 	successChangeUserStatus?: string;
 	failChangeUserStatus?: string;
-	mutations: T;
+	mutations: TMutations;
 }

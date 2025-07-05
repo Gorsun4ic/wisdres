@@ -17,7 +17,7 @@ import { getLangEntity } from "@src/utils/getLangEntity";
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";
 
-interface AdminGridProps<T> {
+interface AdminGridProps<T extends {_id: string}> {
 	handleEdit?: (mode: "add" | "edit", id?: string) => void;
 	isLoading: boolean;
 	columns: GridColDef[];
