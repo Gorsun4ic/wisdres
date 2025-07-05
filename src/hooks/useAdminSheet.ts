@@ -9,7 +9,7 @@ import useAlert from "@hooks/useAlert";
 import { AdminConfig } from "@custom-types/adminFormConfig";
 import { ApiSuccess } from "@src/types/apiResponse";
 
-import { BaseFormMutations } from "@src/features/admin/form-builder/formBuilder";
+import { BaseFormMutations } from "@src/types/baseMutations";
 
 export type SheetMutations<T> = BaseFormMutations<T> & {
 	getAll: () => {

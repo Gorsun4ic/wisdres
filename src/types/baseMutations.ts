@@ -6,15 +6,17 @@ export type AddMutation<D> = readonly [
 	{ isLoading: boolean; error?: unknown }
 ];
 export type UpdateMutation<D> = readonly [
-	(a: {
-		id?: string;
+	(args: {
+		id: string;
 		updates: D;
 	}) => Promise<{ data?: unknown; error?: unknown }>,
 	{ isLoading: boolean; error?: unknown }
 ];
+
 export type GetByIdMutation<D> = readonly [
 	(id: string) => Promise<{ data?: unknown; error?: unknown }>,
-	{ data?: D; isLoading: boolean; error?: unknown }
+	{ data?: ApiSuccess<D>; isLoading: boolean; error?: unknown },
+	unknown
 ];
 
 export type BaseFormMutations<T> = {
