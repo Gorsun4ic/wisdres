@@ -1,34 +1,41 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { Stack, Alert } from "@mui/material";
 
+import { FieldValues } from "react-hook-form";
+
+
 import { useAdminSheet } from "@hooks/useAdminSheet";
 
-import GridData from "./grid";
+import GridData, { Entity } from "./grid";
 import FormBuilder from "./form-builder/formBuilder";
 
 import Modal from "@components/modal";
 import Button from "@components/button/button";
 import ErrorMessage from "@components/error";
-import { AdminConfig, AllMutationTypes } from "@custom-types/adminFormConfig";
+
+import { AdminConfig } from "@custom-types/adminFormConfig";
+import { AlertColors } from "@custom-types/alert";
+import { SheetMutations } from "@hooks/useAdminSheet";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
-import { AlertColors } from "@src/types/alert";
+interface SheetProps<
+	TData extends FieldValues,
+	TMutations extends SheetMutations<TData>,
+	TFieldData extends Record<string,{ data: { title: string; _id: string }[] }> | undefined = undefined
 
-interface BaseSheetProps<TMutations, TOptions> {
+> {
 	config: AdminConfig<TMutations>;
-	fieldData?: TMutations;
-	fieldOptions?: TOptions;
+	fieldData?: TFieldData;
 }
 
 const Sheet = <
-	TMutations extends AllMutationTypes,
-	TOptions extends
-		| Record<string, { data: { title: string; _id: string }[] }>
-		| undefined
+	TData extends FieldValues,
+	TMutations extends SheetMutations<TData>,
+	TFieldData extends Record<string,{ data: { title: string; _id: string }[] }> | undefined = undefined
 >({
 	config,
-	fieldOptions,
-}: BaseSheetProps<TMutations, TOptions>) => {
+	fieldData,
+}: SheetProps<TData, TMutations, TFieldData>) => {
 	const {
 		open,
 		data,
@@ -40,7 +47,7 @@ const Sheet = <
 		handleOpen,
 		handleClose,
 		handleDelete,
-	} = useAdminSheet(config);
+	} = useAdminSheet<TData, TMutations>(config);
 
 	return (
 		<>
@@ -65,7 +72,7 @@ const Sheet = <
 							config={config}
 							mode={formMode}
 							id={toEditId ?? ""}
-							fieldData={fieldOptions}
+							fieldData={fieldData}
 						/>
 					</Modal>
 				)}
@@ -74,7 +81,7 @@ const Sheet = <
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
 					handleEdit={handleOpen}
-					data={data?.data ?? []}
+					data={data as Entity[]}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

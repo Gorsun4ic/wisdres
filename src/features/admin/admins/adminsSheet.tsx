@@ -24,6 +24,8 @@ import { useChangeUserStatus } from "@hooks/useChangeUserStatus";
 import hasPermission from "@utils/hasPermission";
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 
+import { Entity } from "../grid";
+
 import GridData from "../grid";
 
 import ErrorMessage from "@components/error";
@@ -77,7 +79,7 @@ const AdminsSheet = () => {
 			</Stack>
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
-					data={data?.data ?? []}
+					data={data as Entity[]}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

@@ -31,7 +31,7 @@ type PasswordFormData = {
 
 export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 	const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [setIsLoading] = useState(false);
 	const { t } = useTranslation();
 
 	// const [updatePassword] = useUpdatePasswordMutation();

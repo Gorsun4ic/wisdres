@@ -9,7 +9,9 @@ import useAlert from "@hooks/useAlert";
 import { AdminConfig } from "@custom-types/adminFormConfig";
 import { ApiSuccess } from "@src/types/apiResponse";
 
-type SheetMutations<T> = {
+import { BaseFormMutations } from "@src/features/admin/form-builder/formBuilder";
+
+export type SheetMutations<T> = BaseFormMutations<T> & {
 	getAll: () => {
 		data?: ApiSuccess<T[]>;
 		isLoading: boolean;
@@ -25,7 +27,7 @@ export const useAdminSheet = <TData, TMutations extends SheetMutations<TData>>(
 	config: AdminConfig<TMutations>
 ) => {
 	const [deleteMutation] = config.mutations.delete();
-  const queryResult = config.mutations.getAll();
+	const queryResult = config.mutations.getAll();
 
 	const data = queryResult.data?.data || []; // unwrap here
 	const isLoading = queryResult.isLoading;

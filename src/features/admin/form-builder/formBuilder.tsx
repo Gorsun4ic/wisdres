@@ -34,6 +34,8 @@ import Button from "@components/button/button";
 import ConfirmAction from "@components/confirmAction";
 import ChangedInfo from "@components/changedInfo/changedInfo";
 
+import { BaseFormMutations } from "@src/types/baseMutations";
+
 // Utils
 import { validateImageType } from "@utils/imgValidation";
 import { getLangEntity } from "@src/utils/getLangEntity";
@@ -43,30 +45,6 @@ import { StyledForm } from "./style";
 import { LangType } from "@src/i18n";
 import { AlertColors } from "@src/types/alert";
 
-type AddMutation<Data> = [
-	(data: Data) => Promise<{ data?: unknown; error?: unknown }>,
-	{ isLoading: boolean; error?: unknown }
-];
-
-type UpdateMutation<Data> = [
-	(args: {
-		id?: string;
-		updates: Data;
-	}) => Promise<{ data?: unknown; error?: unknown }>,
-	{ isLoading: boolean; error?: unknown }
-];
-
-type GetByIdMutation<Data> = [
-	(id: string) => Promise<{ data?: unknown; error?: unknown }>,
-	{ data?: Data; isLoading: boolean; error?: unknown }
-];
-
-type BaseFormMutations<TData extends FieldValues = FieldValues> = {
-	add: () => AddMutation<TData>;
-	update: () => UpdateMutation<TData>;
-	getById: () => GetByIdMutation<TData>;
-};
-
 function isFormFieldConfig(field: FieldTypes): field is FormFieldConfig {
 	return "placeholder" in field;
 }
@@ -74,7 +52,7 @@ function isFormFieldConfig(field: FieldTypes): field is FormFieldConfig {
 interface FormBuilderProps<
 	TData extends FieldValues,
 	TMutations extends BaseFormMutations<TData>,
-	TFieldOptions
+  TFieldOptions extends Record<string, { data: { title: string; _id: string }[] }> | undefined = undefined
 > {
 	config: AdminConfig<TMutations>;
 	mode: "add" | "edit";
@@ -85,10 +63,7 @@ interface FormBuilderProps<
 const FormBuilder = <
 	TData extends FieldValues,
 	TMutations extends BaseFormMutations<TData>,
-	TFieldOptions extends Record<
-		string,
-		{ data: { title: string; _id: string }[] }
-	>
+  TFieldOptions extends Record<string, { data: { title: string; _id: string }[] }> | undefined = undefined
 >({
 	config,
 	mode,

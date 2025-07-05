@@ -16,18 +16,7 @@ import { IBookInputAutocomplete } from "@utils/normilizeBookIncome";
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";
 
-type AddMutation<Data> = [
-	(data: Data) => Promise<{ data?: unknown; error?: unknown }>,
-	{ isLoading: boolean; error?: unknown }
-];
-type UpdateMutation<Data> = [
-	(args: { id?: string; updates: Data }) => void,
-	{ isLoading: boolean; error?: unknown }
-];
-type GetByIdMutation<Data> = [
-	(id: string) => void,
-	{ data?: Data; isLoading: boolean; error?: unknown }
-];
+import { AddMutation, UpdateMutation, GetByIdMutation } from "@src/features/admin/form-builder/formBuilder";
 
 export const useAdminForm = <
 	TData extends FieldValues,

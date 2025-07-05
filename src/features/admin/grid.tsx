@@ -25,7 +25,7 @@ import { LangType } from "@src/i18n";
 type EntityWithTitle = { _id: string; title: { en: string; ua: string } };
 type EntityUser = { _id: string; username: string };
 
-type Entity = EntityWithTitle | EntityUser;
+export type Entity = EntityWithTitle | EntityUser;
 interface AdminGridProps<
 	T extends Entity
 > {
