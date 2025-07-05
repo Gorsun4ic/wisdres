@@ -25,7 +25,7 @@ import {
 	StyledSidebar,
 	StyledMainContent,
 } from "./style";
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 
 interface TabPanelProps {
 	children?: React.ReactNode;

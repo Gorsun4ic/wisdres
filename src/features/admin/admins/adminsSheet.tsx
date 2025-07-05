@@ -41,7 +41,7 @@ const AdminsSheet = () => {
 		changeStatus,
 		handleChange,
 	} = useChangeUserStatus(adminsConfig);
-	
+
 	const gridColumns: GridColDef[] = [
 		{
 			field: "demote",
@@ -101,14 +101,8 @@ const AdminsSheet = () => {
 						</Stack>
 					</DialogContent>
 					<DialogActions>
-						<Button
-							onClick={() => setIsChangeDialogOpen(false)}>
-							Cancel
-						</Button>
-						<Button
-							onClick={handleChange}>
-							Promote
-						</Button>
+						<Button onClick={() => setIsChangeDialogOpen(false)}>Cancel</Button>
+						<Button onClick={handleChange}>Promote</Button>
 					</DialogActions>
 				</Dialog>
 			</ErrorBoundary>

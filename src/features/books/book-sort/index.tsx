@@ -26,7 +26,7 @@ const BookSort = () => {
 	};
 
 	// Check is the element is not last
-	const isElementLast = (i: number, arr: string[]) => {
+	const isElementLast = (i: number, arr: [string, string][]) => {
 		return i === arr.length - 1;
 	};
 

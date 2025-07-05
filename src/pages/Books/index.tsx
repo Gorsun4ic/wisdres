@@ -10,7 +10,7 @@ const BooksPage = () => {
 		<div className="books-page">
 			{data && <GenresCollection data={data} isLoading={isLoading}/>}
 			<BookCollection title="New arrivals" filterBy="date" number={6} />
-			<BookCollection title="Top books" filterBy="popularity" number={6} />
+			<BookCollection title="Top books" filterBy="rating" number={6} />
 		</div>
 	);
 };

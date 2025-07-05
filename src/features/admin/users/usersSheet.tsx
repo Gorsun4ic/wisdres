@@ -27,7 +27,7 @@ import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 import GridData from "../grid";
 
 import ErrorMessage from "@components/error";
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 
 const UsersSheet = () => {
 	const { data: userData } = useCheckAuthQuery();

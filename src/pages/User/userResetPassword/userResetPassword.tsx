@@ -14,7 +14,7 @@ import { useResetPasswordMutation } from "@api/apiUsersSlice";
 
 // Custom components
 import PasswordField from "@components/passwordField/PasswordField";
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 
 import { StyledForm } from "./style";
 
@@ -99,9 +99,7 @@ const UserResetPasswordPage = () => {
 						/>
 					</>
 				)}
-				<Button type="submit">
-					{t("setNewPassword")}
-				</Button>
+				<Button type="submit">{t("setNewPassword")}</Button>
 			</Stack>
 		</StyledForm>
 	);

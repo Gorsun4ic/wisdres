@@ -10,7 +10,7 @@ import { useCheckAuthQuery } from "@api/apiUsersSlice";
 import { useAddNewReviewMutation } from "@api/apiBooksSlice";
 import containsBadWords from "@utils/badWordsValidator";
 
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 import FormField from "@components/formField";
 
 import { StyledForm } from "./style";
@@ -65,9 +65,7 @@ const ReviewForm = () => {
 		return (
 			<StyledForm>
 				<p>{t("reviewNotAuthenticated")}</p>
-				<Button onClick={() => navigate("/sign-in")}>
-					{t("login")}
-				</Button>
+				<Button onClick={() => navigate("/sign-in")}>{t("login")}</Button>
 			</StyledForm>
 		);
 	}
@@ -77,9 +75,7 @@ const ReviewForm = () => {
 			<Stack>
 				<h3>{t("writeReview")}</h3>
 				{addNewReviewError && (
-					<Alert severity="error">
-						{t("failedReview")}
-					</Alert>
+					<Alert severity="error">{t("failedReview")}</Alert>
 				)}
 				<Controller
 					name="rating"
@@ -116,9 +112,7 @@ const ReviewForm = () => {
 					multiline
 					rows={4}
 				/>
-				<Button type="submit">
-					{t("publish")}
-				</Button>
+				<Button type="submit">{t("publish")}</Button>
 			</Stack>
 		</StyledForm>
 	);

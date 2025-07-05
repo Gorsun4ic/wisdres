@@ -18,7 +18,7 @@ import {
 import { IError } from "@custom-types/apiError";
 
 // Custom components
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 import FormField from "@components/formField";
 
 import { StyledForm } from "./style";

@@ -7,7 +7,7 @@ import GridData from "./grid";
 import FormBuilder from "./form-builder/formBuilder";
 
 import Modal from "@components/modal";
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 import ErrorMessage from "@components/error";
 import { AdminConfig, AllMutationTypes } from "@custom-types/adminFormConfig";
 
@@ -20,9 +20,14 @@ interface BaseSheetProps<TMutations, TOptions> {
 	fieldOptions?: TOptions;
 }
 
-const Sheet = <TMutations extends AllMutationTypes, TOptions extends Record<string, { data: { title: string; _id: string; }[]; }> | undefined>({
+const Sheet = <
+	TMutations extends AllMutationTypes,
+	TOptions extends
+		| Record<string, { data: { title: string; _id: string }[] }>
+		| undefined
+>({
 	config,
-	fieldOptions
+	fieldOptions,
 }: BaseSheetProps<TMutations, TOptions>) => {
 	const {
 		open,

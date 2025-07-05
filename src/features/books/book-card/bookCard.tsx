@@ -5,9 +5,7 @@ import { Stack } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
-import { IAuthor } from "@custom-types/author";
-
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 
 import { getLangEntity } from "@src/utils/getLangEntity";
 
@@ -16,7 +14,7 @@ import { StyledCard, StyledCardContent } from "./style";
 import { LangType } from "@src/i18n";
 import { IBook } from "@src/types/book";
 
-const BookCard = ({ data }: {data: IBook}) => {
+const BookCard = ({ data }: { data: IBook }) => {
 	const { t, i18n } = useTranslation();
 	const lang = i18n.language as LangType;
 

@@ -17,7 +17,7 @@ const MainPage = () => {
 			<Hero />
 			{data && <GenresCollection data={data} isLoading={isLoading} />}
 			{error && <ErrorMessage>{t("failedToLoadGenres")}</ErrorMessage>}
-			<BookCollection filterBy="popularity" number={6} title={t("topBooks")} />
+			<BookCollection filterBy="rating" number={6} title={t("topBooks")} />
 			<BookCollection filterBy="date" number={6} title={t("newArrivals")} />
 		</div>
 	);

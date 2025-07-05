@@ -1,4 +1,4 @@
-import { DataGrid, GridToolbar, GridColDef} from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridColDef, GridColumnVisibilityModel} from "@mui/x-data-grid";
 import { IconButton, Tooltip, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -26,10 +26,10 @@ interface AdminGridProps<T> {
 	deleteButton?: boolean;
 	changeButton?: boolean;
 	error: unknown;
-	columnVisibilityModel?: GridColDef[];
+	columnVisibilityModel?: GridColumnVisibilityModel;
 }
 
-const GridData = <T extends { _id: string}>({
+const GridData = <T extends { _id: string, title: {en: string, ua: string}}>({
 	handleEdit,
 	data,
 	isLoading,

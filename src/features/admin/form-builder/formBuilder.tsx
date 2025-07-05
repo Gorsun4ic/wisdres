@@ -30,7 +30,7 @@ import { useAdminForm } from "@hooks/useAdminForm";
 
 // Custom components
 import FormField from "@components/formField";
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 import ConfirmAction from "@components/confirmAction";
 import ChangedInfo from "@components/changedInfo/changedInfo";
 
@@ -66,8 +66,6 @@ type BaseFormMutations<TData extends FieldValues = FieldValues> = {
 	update: () => UpdateMutation<TData>;
 	getById: () => GetByIdMutation<TData>;
 };
-
-
 
 function isFormFieldConfig(field: FieldTypes): field is FormFieldConfig {
 	return "placeholder" in field;

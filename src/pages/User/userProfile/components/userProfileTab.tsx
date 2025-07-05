@@ -18,7 +18,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 
 import FormField from "@components/formField";
-import Button from "@components/button/Button";
+import Button from "@components/button/button";
 import { StyledUserProfileContainer } from "../style";
 
 import { useTheme } from "styled-components";
@@ -78,7 +78,7 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 			const errorMessage =
 				(error as IError)?.data?.error?.message || t("failedUpdateProfile");
 			setApiError(errorMessage);
-		} 
+		}
 	};
 
 	return (
@@ -181,9 +181,7 @@ export const UserProfileTab = ({ userData }: UserProfileTabProps) => {
 						sx={{ minWidth: "120px" }}>
 						{t("cancel")}
 					</Button>
-					<Button
-						onClick={handleSubmit(onSubmit)}
-						sx={{ minWidth: "120px" }}>
+					<Button onClick={handleSubmit(onSubmit)} sx={{ minWidth: "120px" }}>
 						{t("saveChanges")}
 					</Button>
 				</DialogActions>
