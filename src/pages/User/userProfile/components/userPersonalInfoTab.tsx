@@ -31,7 +31,6 @@ type PasswordFormData = {
 
 export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 	const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
-	const [setIsLoading] = useState(false);
 	const { t } = useTranslation();
 
 	// const [updatePassword] = useUpdatePasswordMutation();
@@ -44,15 +43,12 @@ export const UserPersonalInfoTab = ({ userData }: UserPersonalInfoTabProps) => {
 	} = useForm<PasswordFormData>();
 
 	const onSubmit = async () => {
-		setIsLoading(true);
 		try {
 			// await updatePassword(data).unwrap();
 			setIsPasswordDialogOpen(false);
 			reset();
 		} catch (error) {
 			console.error("Password update failed:", error);
-		} finally {
-			setIsLoading(false);
 		}
 	};
 

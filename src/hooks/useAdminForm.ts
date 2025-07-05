@@ -16,7 +16,8 @@ import { IBookInputAutocomplete } from "@utils/normilizeBookIncome";
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";
 
-import { AddMutation, UpdateMutation, GetByIdMutation } from "@src/features/admin/form-builder/formBuilder";
+import { AddMutation, UpdateMutation, GetByIdMutation } from "@src/types/baseMutations";
+import { IBook } from "@src/types/book";
 
 export const useAdminForm = <
 	TData extends FieldValues,
@@ -37,7 +38,7 @@ export const useAdminForm = <
 	const lang = i18n.language as LangType;
 
 	const [dataToEdit, setDataToEdit] = useState<TData | null>(null);
-	const [formatedData, setFormatedData] = useState({});
+	const [formatedData, setFormatedData] = useState<TData | undefined>(undefined);
 	const [openDialog, setOpenDialog] = useState(false);
 	const [differences, setDifferences] = useState<Partial<TData> | null>(null);
 
@@ -51,16 +52,19 @@ export const useAdminForm = <
 	}, [id, mode, getById]);
 
 	useEffect(() => {
-		if (dataById?.data?.info) {
-			const result = formatAutocompleteBookData(dataById?.data, lang);
-			form.reset(result as unknown as TData);
-			setFormatedData(result);
-			
-		} else if (dataById) {
-			form.reset(dataById?.data);
-			setFormatedData(dataById?.data);
+		if (!dataById?.data) return;
+
+		let payload: TData;
+		if ("info" in dataById.data) {
+			const formatted = formatAutocompleteBookData(dataById.data as unknown as IBook, lang);
+			payload = formatted as unknown as TData;
+		} else {
+			payload = dataById.data as unknown as TData;
 		}
-	}, [dataById, form, setFormatedData, lang]);
+
+		form.reset(payload);
+		setFormatedData(payload);
+	}, [dataById, form, lang]);
 
 	const onSubmit = async (data: TData) => {
 		switch (mode) {
@@ -99,7 +103,7 @@ export const useAdminForm = <
 	};
 
 	const handleEdit = (confirm: boolean) => {
-		if (confirm && dataToEdit) {
+		if (confirm && dataToEdit && typeof id === "string") {
 			if (!dataToEdit?.info) {
 				updateMutation({
 					id,

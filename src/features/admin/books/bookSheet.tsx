@@ -6,6 +6,9 @@ import { useGetAuthorsQuery } from "@api/apiAuthorsSlice";
 import { useGetPublishersQuery } from "@api/apiPublishersSlice";
 import { useGetLanguagesQuery } from "@api/apiLanguagesSlice";
 
+import { IBookInput } from "@src/types/book";
+import { BookMutations } from "./books.config";
+
 import i18n, { LangType } from "@src/i18n";
 
 import { getLangEntity } from "@src/utils/getLangEntity";
@@ -61,9 +64,17 @@ const BookFormData = () => {
 };
 
 const BookSheet = () => {
-	const fieldData = BookFormData();
-
-	return <Sheet config={booksConfig} fieldOptions={fieldData} />;
+	const fieldOptions = BookFormData();
+	return (
+		<Sheet<
+			IBookInput,
+			BookMutations,
+			typeof fieldOptions
+		>
+			config={booksConfig}
+			fieldOptions={fieldOptions}
+		/>
+	);
 };
 
 export default BookSheet;
