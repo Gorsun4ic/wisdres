@@ -41,26 +41,26 @@ app.use((req, res, next) => {
 connectDB();
 console.log('connectDB() called.'); // After calling DB connection
 
-app.get("*", (req, res) => {
-	console.log("--- Temporary Catch-All Route Hit ---");
-	console.log("req.path:", req.path);
-	console.log("req.url:", req.url);
-	res.status(200).json({
-		message: "Temporary catch-all hit!",
-		path_from_server: req.path, // What Express sees as the path
-		url_from_server: req.url, // What Express sees as the URL
-	});
-});
+// app.get("*", (req, res) => {
+// 	console.log("--- Temporary Catch-All Route Hit ---");
+// 	console.log("req.path:", req.path);
+// 	console.log("req.url:", req.url);
+// 	res.status(200).json({
+// 		message: "Temporary catch-all hit!",
+// 		path_from_server: req.path, // What Express sees as the path
+// 		url_from_server: req.url, // What Express sees as the URL
+// 	});
+// });
 
 // Routes
-// app.use("/books", bookRoutes);
-app.use("/authors", authorRoutes);
-app.use("/publishers", publisherRoutes);
-app.use("/genres", genreRoute);
-app.use("/languages", languageRoute);
-app.use("/users", userRoute);
-app.use("/search", searchRoutes);
-app.use("/admins", adminRoute);
+app.use("/api/books", bookRoutes);
+app.use("/api/authors", authorRoutes);
+app.use("/api/publishers", publisherRoutes);
+app.use("/api/genres", genreRoute);
+app.use("/api/languages", languageRoute);
+app.use("/api/users", userRoute);
+app.use("/api/search", searchRoutes);
+app.use("/api/admins", adminRoute);
 console.log('All routes mounted.'); // After all routes are mounted
 
 // Add a general error handling middleware (IMPORTANT for seeing server-side errors)
