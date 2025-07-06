@@ -9,7 +9,9 @@ import {
 
 export const apiPublishersSlice = createApi({
 	reducerPath: "publishersApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${import.meta.env.VITE_CLIENT_URL}/api`,
+	}),
 	tagTypes: ["Publishers"],
 	endpoints: (builder) => ({
 		getPublishers: builder.query<ApiSuccess<IPublisher[]>, void>({

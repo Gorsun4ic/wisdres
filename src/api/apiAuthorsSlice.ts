@@ -7,7 +7,9 @@ import { IAuthor } from "@custom-types/author";
 
 export const apiAuthorsSlice = createApi({
 	reducerPath: "authorsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${import.meta.env.VITE_CLIENT_URL}/api`,
+	}),
 	tagTypes: ["Authors"],
 	endpoints: (builder) => ({
 		getAuthors: builder.query<ApiSuccess<IAuthor[]>, void>({

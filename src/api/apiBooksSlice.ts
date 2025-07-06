@@ -9,7 +9,9 @@ import { IBookInfo } from "@src/types/bookInfo";
 
 export const apiBooksSlice = createApi({
 	reducerPath: "booksApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${import.meta.env.VITE_CLIENT_URL}/api`,
+	}),
 	tagTypes: ["Books", "Reviews"],
 	endpoints: (builder) => ({
 		getBooks: builder.query<ApiSuccess<IBook[]>, void>({

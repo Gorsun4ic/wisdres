@@ -14,7 +14,9 @@ interface SearchResult {
 
 export const apiSearchSlice = createApi({
 	reducerPath: "searchApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${import.meta.env.VITE_CLIENT_URL}/api`,
+	}),
 	tagTypes: ["Search", "Books"],
 	endpoints: (builder) => ({
 		search: builder.query<SearchResult[], string>({

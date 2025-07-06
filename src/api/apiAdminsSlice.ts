@@ -9,7 +9,9 @@ type IAdminUser = IUser & {
 
 export const apiAdminsSlice = createApi({
 	reducerPath: "adminsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${import.meta.env.VITE_CLIENT_URL}/api`,
+	}),
 	tagTypes: ["Admins"],
 	endpoints: (builder) => ({
 		getAllAdmins: builder.query<ApiSuccess<IAdminUser[]>, void>({

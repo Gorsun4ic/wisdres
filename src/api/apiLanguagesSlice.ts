@@ -9,7 +9,9 @@ import {
 
 export const apiLanguagesSlice = createApi({
 	reducerPath: "LanguagesApi",
-	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${import.meta.env.VITE_CLIENT_URL}/api`,
+	}),
 	tagTypes: ["Languages"],
 	endpoints: (builder) => ({
 		getLanguages: builder.query<ApiSuccess<ILanguage[]>, void>({

@@ -13,7 +13,7 @@ import {
 export const apiUsersSlice = createApi({
 	reducerPath: "usersApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: `${import.meta.env.CLIENT_URL}/api`,
+		baseUrl: `${import.meta.env.VITE_CLIENT_URL}/api`,
 		credentials: "include",
 	}),
 	tagTypes: ["Users"],
