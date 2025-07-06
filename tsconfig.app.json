@@ -21,7 +21,7 @@
 			"@reducers/*": ["./src/reducers/*"],
 			"@actions/*": ["./src/actions/*"],
 			"@utils/*": ["./src/utils/*"],
-			"@server/*": ["./api/server/*"]
+			"@server/*": ["./src/server/*"]
 		},
 
 		/* Bundler mode */
