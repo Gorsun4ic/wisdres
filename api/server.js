@@ -24,9 +24,13 @@ app.use(
 	})
 );
 app.use(cookieParser());
+console.log('Middleware configured.'); // After middleware setup
+
 
 // Connect to MongoDB
 connectDB();
+console.log('connectDB() called.'); // After calling DB connection
+
 
 // Routes
 app.use("/books", bookRoutes);
@@ -37,5 +41,25 @@ app.use("/languages", languageRoute);
 app.use("/users", userRoute);
 app.use("/search", searchRoutes);
 app.use("/admins", adminRoute);
+console.log('All routes mounted.'); // After all routes are mounted
+
+// Add a very simple catch-all for 404s (optional, but can help differentiate)
+app.use((req, res, next) => {
+  console.log(`404: No route found for ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ message: `Cannot ${req.method} ${req.originalUrl}` });
+});
+
+// Add a general error handling middleware (IMPORTANT for seeing server-side errors)
+app.use((err, req, res, next) => {
+    console.error('--- UNHANDLED SERVER ERROR ---');
+    console.error(err.stack || err); // Log the full error stack
+    res.status(err.statusCode || 500).json({
+        message: err.message || 'Internal Server Error',
+        error: err.name,
+        // Only send stack in development for security
+        // stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    });
+});
+
 
 export default app;

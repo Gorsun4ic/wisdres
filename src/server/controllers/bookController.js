@@ -5,6 +5,8 @@ import Genre from "../models/genre.js";
 
 // Get all books with populated fields
 export const getAllBooks = async (req, res) => {
+	console.log("----> bookController.js: Inside getAllBooks function."); // Log entry into controller
+
 	try {
 		const books = await Book.find()
 			.populate({
@@ -48,12 +50,26 @@ export const getAllBooks = async (req, res) => {
 				},
 			});
 
+			console.log(
+				"----> bookController.js: Books fetched from DB successfully."
+			); // Log after successful DB query
+			if (books.length === 0) {
+				console.log("----> bookController.js: No books found.");
+			}
+
 		res.json({
 			success: true,
 			message: "Received all books",
 			data: books,
 		});
+		console.log("----> bookController.js: Response sent for getAllBooks.");
+
 	} catch (error) {
+		console.error(
+			"----> bookController.js: Error in getAllBooks:",
+			error.message
+		);
+		console.error(error); // Log the full error object
 		res.status(500).json({
 			success: false,
 			error: {

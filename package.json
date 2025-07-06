@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "concurrently \"vite\" \"node ./src/server/index.js\"",
+		"dev": "concurrently \"vite\" \"node ./api/server.js\"",
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"test": "vitest",

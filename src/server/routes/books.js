@@ -13,7 +13,10 @@ import { createReview, getReviewsByBookId, deleteReview } from "../controllers/r
 
 const router = express.Router();
 
-router.get("/", getAllBooks);
+router.get("/", (req, res, next) => {
+	console.log("--> books.js: GET / route hit. Calling getAllBooks controller."); // Log when this route is hit
+	getAllBooks(req, res, next); // Ensure this is called correctly
+});
 router.get("/:id", getBookById);
 router.get("/genre/:genre", getBooksByGenre);
 router.get("/:id/info", getBookInfo);
