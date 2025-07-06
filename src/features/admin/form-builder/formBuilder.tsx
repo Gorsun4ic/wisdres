@@ -3,9 +3,6 @@ import { useTranslation } from "react-i18next";
 // Redux
 import { useSelector } from "react-redux";
 
-// RHF
-import { FieldValues, Path } from "react-hook-form";
-
 // MUI
 import Grid from "@mui/material/Grid2";
 import { Alert } from "@mui/material";
@@ -34,8 +31,6 @@ import Button from "@components/button/button";
 import ConfirmAction from "@components/confirmAction";
 import ChangedInfo from "@components/changedInfo/changedInfo";
 
-import { BaseFormMutations } from "@src/types/baseMutations";
-
 // Utils
 import { validateImageType } from "@utils/imgValidation";
 import { getLangEntity } from "@src/utils/getLangEntity";
@@ -49,27 +44,19 @@ function isFormFieldConfig(field: FieldTypes): field is FormFieldConfig {
 	return "placeholder" in field;
 }
 
-interface FormBuilderProps<
-	TData extends FieldValues,
-	TMutations extends BaseFormMutations<TData>,
-  TFieldOptions extends Record<string, { data: { title: string; _id: string }[] }> | undefined = undefined
-> {
-	config: AdminConfig<TMutations>;
+interface FormBuilderProps {
+	config: AdminConfig<unknown>;
 	mode: "add" | "edit";
 	id?: string;
-	fieldData?: TFieldOptions;
+	fieldData?: unknown;
 }
 
-const FormBuilder = <
-	TData extends FieldValues,
-	TMutations extends BaseFormMutations<TData>,
-  TFieldOptions extends Record<string, { data: { title: string; _id: string }[] }> | undefined = undefined
->({
+const FormBuilder = ({
 	config,
 	mode,
 	id,
 	fieldData,
-}: FormBuilderProps<TData, TMutations, TFieldOptions>) => {
+}: FormBuilderProps) => {
 	// ...
 	const {
 		onSubmit,
@@ -79,7 +66,7 @@ const FormBuilder = <
 		form,
 		differences,
 		getFieldError,
-	} = useAdminForm<TData, TMutations>(config, mode, id);
+	} = useAdminForm(config, mode, id);
 
 	// React Hook Form
 	const {
@@ -91,7 +78,8 @@ const FormBuilder = <
 	} = form;
 
 	// Hook to track img input status
-	const formValues = watch();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const formValues: Record<string, any> = watch();
 	const { i18n } = useTranslation();
 	const lang = i18n.language as LangType;
 
@@ -131,7 +119,7 @@ const FormBuilder = <
 
 								if (typeof item === "string") return null;
 
-								const value = watch(item.name as Path<TData>);
+								const value = watch(item.name);
 								const isImageField = /img/i.test(item.name);
 								const isValidImage = validateImageType(value);
 
@@ -140,7 +128,7 @@ const FormBuilder = <
 								return (
 									<AccordionDetails key={item.name}>
 										<FormField
-											name={item.name as Path<TData>}
+											name={item.name}
 											type={item.type}
 											placeholder={item.placeholder}
 											validation={
@@ -177,12 +165,17 @@ const FormBuilder = <
 						}
 						if (field.type === "autoComplete" && fieldData) {
 							const singleField = field as FieldTypes;
-							const options = fieldData[field.name]?.data?.map((item) => {
-								return {
-									label: getLangEntity(item.title, lang),
-									id: item._id,
-								};
-							});
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							const options = (fieldData as Record<string, any>)[
+								field.name
+							]?.data?.map(
+								(item: { title: { en: string; ua: string }; _id: string }) => {
+									return {
+										label: getLangEntity(item.title, lang),
+										id: item._id,
+									};
+								}
+							);
 
 							if (singleField.type === "autoComplete") {
 								return (
@@ -190,7 +183,7 @@ const FormBuilder = <
 										<p>{field.label}</p>
 										<AutocompleteElement
 											control={control}
-											name={field.name as Path<TData>}
+											name={field.name}
 											options={options || []}
 											multiple={field.multiple ?? true}
 										/>
@@ -204,7 +197,7 @@ const FormBuilder = <
 						return (
 							<Grid size={12}>
 								<FormField
-									name={field.name as Path<TData>}
+									name={field.name}
 									type={field.type}
 									placeholder={field.placeholder}
 									validation={

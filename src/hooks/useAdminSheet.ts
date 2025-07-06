@@ -8,11 +8,9 @@ import useAlert from "@hooks/useAlert";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 
-import { SheetMutations } from "@src/types/baseMutations";
-import { FieldValues } from "react-hook-form";
-
-export const useAdminSheet = <TData extends FieldValues, TMutations extends SheetMutations<TData>>(
-	config: AdminConfig<TMutations>
+export const useAdminSheet =(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	config: AdminConfig<any>
 ) => {
 	const [deleteMutation] = config.mutations.delete();
 	const queryResult = config.mutations.getAll();

@@ -7,7 +7,10 @@ import useAlert from "./useAlert";
 // Utils
 import { findDifferenceObjs } from "@utils/findDiffObjs";
 import { normalizeSubmission } from "@utils/normilizeBookIncome";
-import { formatAutocompleteBookData, formatFromAutocompleteBookData } from "@utils/normilizeBookIncome";
+import {
+	formatAutocompleteBookData,
+	formatFromAutocompleteBookData,
+} from "@utils/normilizeBookIncome";
 
 // Types
 import { AdminConfig } from "@custom-types/adminFormConfig";
@@ -16,18 +19,11 @@ import { IBookInputAutocomplete } from "@utils/normilizeBookIncome";
 import { useTranslation } from "react-i18next";
 import { LangType } from "@src/i18n";
 
-import { AddMutation, UpdateMutation, GetByIdMutation } from "@src/types/baseMutations";
-import { IBook } from "@src/types/book";
+import { Difference } from "@utils/findDiffObjs";
 
-export const useAdminForm = <
-	TData extends FieldValues,
-	TMutations extends {
-		add: () => AddMutation<TData>;
-		update: () => UpdateMutation<TData>;
-		getById: () => GetByIdMutation<TData>;
-	}
->(
-	config: AdminConfig<TMutations>,
+export const useAdminForm = (
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	config: AdminConfig<any>,
 	mode: "add" | "edit",
 	id?: string
 ) => {
@@ -37,12 +33,13 @@ export const useAdminForm = <
 	const { i18n } = useTranslation();
 	const lang = i18n.language as LangType;
 
-	const [dataToEdit, setDataToEdit] = useState<TData | null>(null);
-	const [formatedData, setFormatedData] = useState<TData | undefined>(undefined);
-	const [openDialog, setOpenDialog] = useState(false);
-	const [differences, setDifferences] = useState<Partial<TData> | null>(null);
+	const [dataToEdit, setDataToEdit] = useState<FieldValues | null>(null);
+	const [formatedData, setFormatedData] = useState<FieldValues | undefined>();
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [differences, setDifferences] =
+		useState<Difference<FieldValues> | null>(null);
 
-	const form = useForm<TData>();
+	const form = useForm();
 	const triggerAlert = useAlert();
 
 	useEffect(() => {
@@ -54,19 +51,19 @@ export const useAdminForm = <
 	useEffect(() => {
 		if (!dataById?.data) return;
 
-		let payload: TData;
+		let payload;
 		if ("info" in dataById.data) {
-			const formatted = formatAutocompleteBookData(dataById.data as unknown as IBook, lang);
-			payload = formatted as unknown as TData;
+			const formatted = formatAutocompleteBookData(dataById.data, lang);
+			payload = formatted;
 		} else {
-			payload = dataById.data as unknown as TData;
+			payload = dataById.data;
 		}
 
 		form.reset(payload);
 		setFormatedData(payload);
 	}, [dataById, form, lang]);
 
-	const onSubmit = async (data: TData) => {
+	const onSubmit = async (data: FieldValues) => {
 		switch (mode) {
 			case "add": {
 				const payload = data?.info ? normalizeSubmission(data) : data;
@@ -111,12 +108,13 @@ export const useAdminForm = <
 				});
 				form.reset(dataToEdit);
 			} else if (dataToEdit?.info) {
-				const result = formatFromAutocompleteBookData(dataToEdit as unknown as IBookInputAutocomplete);
+				const result = formatFromAutocompleteBookData(
+					dataToEdit as unknown as IBookInputAutocomplete
+				);
 				updateMutation({
 					id,
-					updates: result as unknown as TData,
+					updates: result,
 				});
-				
 			}
 		}
 		setOpenDialog(false);

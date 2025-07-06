@@ -15,27 +15,20 @@ import ErrorMessage from "@components/error";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 import { AlertColors } from "@custom-types/alert";
-import { SheetMutations, BaseFormMutations } from "@custom-types/baseMutations";
+import { BaseFormMutations } from "@custom-types/baseMutations";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
-interface SheetProps<
-	TData extends FieldValues,
-	TMutations extends SheetMutations<TData>,
-	TFieldData extends Record<string,{ data: { title: string; _id: string }[] }> | undefined = undefined
-
-> {
-	config: AdminConfig<TMutations>;
-	fieldData?: TFieldData;
+interface SheetProps{
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	config: AdminConfig<any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	fieldData?: any;
 }
 
-const Sheet = <
-	TData extends FieldValues,
-	TMutations extends SheetMutations<TData>,
-	TFieldData extends Record<string,{ data: { title: string; _id: string }[] }> | undefined = undefined
->({
+const Sheet = ({
 	config,
 	fieldData,
-}: SheetProps<TData, TMutations, TFieldData>) => {
+}: SheetProps) => {
 	const {
 		open,
 		data,
@@ -47,7 +40,7 @@ const Sheet = <
 		handleOpen,
 		handleClose,
 		handleDelete,
-	} = useAdminSheet<TData, TMutations>(config);
+	} = useAdminSheet(config);
 
 	return (
 		<>
