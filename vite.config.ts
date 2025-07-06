@@ -29,7 +29,7 @@ export default defineConfig({
 			"@reducers": path.resolve(__dirname, "src/reducers"),
 			"@actions": path.resolve(__dirname, "src/actions"),
 			"@utils": path.resolve(__dirname, "src/utils"),
-			"@server": path.resolve(__dirname, "src/server"),
+			"@server": path.resolve(__dirname, "api/server"),
 		},
 	},
 });
