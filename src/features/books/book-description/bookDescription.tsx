@@ -64,7 +64,7 @@ const BookDescription = () => {
 						<p>{bookInfo.data.details.book[lang]}</p>
 					</div>
 				)}
-				{bookInfo.data.details.auditory && (
+				{bookInfo.data.details.auditory && bookInfo.data.details.auditory.en.length > 0 && (
 					<div>
 						<h3>{t("bookAuditory")}</h3>
 						<p>{bookInfo.data.details.auditory[lang]}</p>
