@@ -72,7 +72,16 @@ To get a local copy of the project up and running, follow these steps:
    npm install
    ```
 
-4. Run the application:
+4. Set up environment variables:
+    Create a `.env` file in the root directory of the project and add the following:
+    ```
+    MONGODB_URI="mongodb+srv://<your_username>:<your_password>@<your_cluster_name>.mongodb.net/<your_database_name>?retryWrites=true&w=majority&appName=<your_app_name>"
+    CLIENT_URL="http://localhost:5178" # Or the URL of your frontend application
+    JWT_SECRET_KEY= Any safe string
+    MAILTRAP_TOKEN= A token from mailtrap if you want to use registration with email. To get need to sign up in mailtrap
+    MAILTRAP_ENDPOINT="https://send.api.mailtrap.io/"
+
+5. Run the application:
 
    ```bash
    npm run dev
