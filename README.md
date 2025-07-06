@@ -8,8 +8,9 @@ Wisdres is a full-stack web application designed for managing a digital library 
 Try it now: [https://wisdres.vercel.app](https://wisdres.vercel.app)
 
 User Data to Log In:
-E-mail: wisdres_test@wisdres.com
-Password: lB2a.3.m7[U>
+
+-E-mail: wisdres_test@wisdres.com
+-Password: lB2a.3.m7[U>
 
 ![image](preview.png)
 
