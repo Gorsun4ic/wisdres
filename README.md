@@ -11,7 +11,7 @@ User Data to Log In:
 E-mail: wisdres_test@wisdres.com
 Password: lB2a.3.m7[U>
 
-![image](https://github.com/Gorsun4ic/wisdres/tree/main/src/assets/preview.png)
+![image] https://github.com/Gorsun4ic/wisdres/tree/main/src/assets/preview.png
 
 ## Table of Contents
 
