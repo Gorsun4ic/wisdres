@@ -1,11 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { ApiSuccess } from "@src/types/apiResponse";
-import { IPublisher, IPublisherInput, IPublisherPatch } from "@custom-types/publisher";
+import {
+	IPublisher,
+	IPublisherInput,
+	IPublisherPatch,
+} from "@custom-types/publisher";
 
 export const apiPublishersSlice = createApi({
 	reducerPath: "publishersApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
 	tagTypes: ["Publishers"],
 	endpoints: (builder) => ({
 		getPublishers: builder.query<ApiSuccess<IPublisher[]>, void>({
@@ -24,7 +28,10 @@ export const apiPublishersSlice = createApi({
 			}),
 			invalidatesTags: ["Publishers"],
 		}),
-		addPublishers: builder.mutation<ApiSuccess<IPublisher[]>, IPublisherInput[]>({
+		addPublishers: builder.mutation<
+			ApiSuccess<IPublisher[]>,
+			IPublisherInput[]
+		>({
 			query: (publishers) => ({
 				url: "/publishers",
 				method: "POST",

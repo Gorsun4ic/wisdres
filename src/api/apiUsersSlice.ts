@@ -1,12 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { ApiSuccess } from "@src/types/apiResponse";
-import {UserInfoWithoutPassword, UserInput, IUserPatch, ISignInInput, VerifyEmailResponse, IUser} from "@custom-types/user";
+import {
+	UserInfoWithoutPassword,
+	UserInput,
+	IUserPatch,
+	ISignInInput,
+	VerifyEmailResponse,
+	IUser,
+} from "@custom-types/user";
 
 export const apiUsersSlice = createApi({
 	reducerPath: "usersApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "http://localhost:5000",
+		baseUrl: `${import.meta.env.CLIENT_URL}/api`,
 		credentials: "include",
 	}),
 	tagTypes: ["Users"],
@@ -19,7 +26,10 @@ export const apiUsersSlice = createApi({
 			query: (id) => ({ url: `/users/${id}` }),
 			providesTags: ["Users"],
 		}),
-		authorizeUser: builder.mutation<ApiSuccess<UserInfoWithoutPassword>, ISignInInput>({
+		authorizeUser: builder.mutation<
+			ApiSuccess<UserInfoWithoutPassword>,
+			ISignInInput
+		>({
 			query: (user) => ({
 				url: "/users/sign-in",
 				method: "POST",
@@ -30,7 +40,7 @@ export const apiUsersSlice = createApi({
 			query: () => ({
 				url: "/users/logout",
 				method: "POST",
-				credentials: "include"
+				credentials: "include",
 			}),
 		}),
 		checkAuth: builder.query<ApiSuccess<IUser>, void>({
@@ -75,7 +85,10 @@ export const apiUsersSlice = createApi({
 			}),
 			invalidatesTags: ["Users"],
 		}),
-		updateUser: builder.mutation<ApiSuccess<IUser>, { id: string; updates: IUserPatch }>({
+		updateUser: builder.mutation<
+			ApiSuccess<IUser>,
+			{ id: string; updates: IUserPatch }
+		>({
 			query: ({ id, updates }) => ({
 				url: `/users/${id}`,
 				method: "PATCH",

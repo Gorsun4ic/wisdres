@@ -1,16 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ApiSuccess } from "@custom-types/apiResponse";
 
-import { IUser } from "@custom-types/user"
+import { IUser } from "@custom-types/user";
 
 type IAdminUser = IUser & {
-	role: ["ADMIN"]
-} 
-
+	role: ["ADMIN"];
+};
 
 export const apiAdminsSlice = createApi({
 	reducerPath: "adminsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
 	tagTypes: ["Admins"],
 	endpoints: (builder) => ({
 		getAllAdmins: builder.query<ApiSuccess<IAdminUser[]>, void>({

@@ -1,16 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import {
-	IAuthorInput,
-	IAuthorPatch,
-} from "@custom-types/author";
+import { IAuthorInput, IAuthorPatch } from "@custom-types/author";
 
 import { ApiSuccess } from "@src/types/apiResponse";
 import { IAuthor } from "@custom-types/author";
 
 export const apiAuthorsSlice = createApi({
 	reducerPath: "authorsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
 	tagTypes: ["Authors"],
 	endpoints: (builder) => ({
 		getAuthors: builder.query<ApiSuccess<IAuthor[]>, void>({

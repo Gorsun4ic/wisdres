@@ -1,11 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { ApiSuccess } from "@src/types/apiResponse";
-import { ILanguage, ILanguageInput, ILanguagePatch } from "@custom-types/language";
+import {
+	ILanguage,
+	ILanguageInput,
+	ILanguagePatch,
+} from "@custom-types/language";
 
 export const apiLanguagesSlice = createApi({
 	reducerPath: "LanguagesApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
 	tagTypes: ["Languages"],
 	endpoints: (builder) => ({
 		getLanguages: builder.query<ApiSuccess<ILanguage[]>, void>({

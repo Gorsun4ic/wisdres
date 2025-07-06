@@ -5,7 +5,7 @@ import { IGenre, IGenreInput, IGenrePatch } from "@custom-types/genre";
 
 export const apiGenresSlice = createApi({
 	reducerPath: "GenresApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
 	tagTypes: ["Genres"],
 	endpoints: (builder) => ({
 		getGenres: builder.query<ApiSuccess<IGenre[]>, void>({

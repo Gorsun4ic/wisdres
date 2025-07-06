@@ -4,15 +4,12 @@ import { IBook } from "@custom-types/book";
 import { IReview, IReviewInput } from "@custom-types/review";
 import { IBookDetails } from "@custom-types/bookDetails";
 
-import {
-	IBookInput,
-	IBookPatch,
-} from "@custom-types/book";
+import { IBookInput, IBookPatch } from "@custom-types/book";
 import { IBookInfo } from "@src/types/bookInfo";
 
 export const apiBooksSlice = createApi({
 	reducerPath: "booksApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.CLIENT_URL}/api` }),
 	tagTypes: ["Books", "Reviews"],
 	endpoints: (builder) => ({
 		getBooks: builder.query<ApiSuccess<IBook[]>, void>({
@@ -95,9 +92,7 @@ export const apiBooksSlice = createApi({
 				url: `/books/${bookId}/reviews/${reviewId}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: (_, __, { bookId }) => [
-				{ type: "Reviews", id: bookId },
-			],
+			invalidatesTags: (_, __, { bookId }) => [{ type: "Reviews", id: bookId }],
 		}),
 		updateBook: builder.mutation<
 			ApiSuccess<IBook>,
