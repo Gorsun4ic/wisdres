@@ -1,6 +1,6 @@
 {
 	"functions": {
-		"api/server.js": { "runtime": "nodejs@22.x" }
+		"api/server.js": { "runtime": "nodejs18.x" }
 	},
 	"rewrites": [
 		{
