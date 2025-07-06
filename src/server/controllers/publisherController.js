@@ -1,4 +1,4 @@
-import Publisher from "../models/Publisher.js";
+import Publisher from "../models/publisher.js";
 
 // Get all publishers
 export const getAllPublishers = async (req, res) => {

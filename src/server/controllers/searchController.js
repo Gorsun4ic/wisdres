@@ -1,6 +1,6 @@
-import Book from "../models/Books.js";
-import Author from "../models/Author.js";
-import Publisher from "../models/Publisher.js";
+import Book from "../models/books.js";
+import Author from "../models/author.js";
+import Publisher from "../models/publisher.js";
 
 export const searchAll = async (req, res) => {
 	try {
