@@ -1,50 +1,93 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Wisdres
 
-Currently, two official plugins are available:
+Wisdres is a full-stack web application designed for managing a digital library of books. It provides both an admin panel and a user-facing catalog, allowing administrators to manage content and users to browse and explore books efficiently.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Live Demo
 
-## Expanding the ESLint configuration
+Try it now: [https://wisdres.vercel.app](https://wisdres.vercel.app)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+User Data to Log In:
+E-mail: wisdres_test@wisdres.com
+Password: lB2a.3.m7[U>
 
-- Configure the top-level `parserOptions` property like this:
+![image](https://github.com/Gorsun4ic/wisdres/tree/main/src/assets/preview.png)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Table of Contents
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Contact](#contact)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Features
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- 🔐 Role-based admin authentication system.
+- 📚 Book management: create, update, delete, browse.
+- 🧑 Admin panel for content moderation and data input.
+- 🔍 Book search by genre, rating, and more.
+- 📱 Responsive UI across all devices.
+- 🌐 i18n support for multiple languages (via i18next).
+
+## Technologies Used
+
+- **Frontend:**
+  - React
+  - Redux Toolkit + RTK Query
+  - TypeScript
+  - React Router
+  - Styled Components
+  - i18n
+  - React Error Boundary
+  - MUI (Material UI)
+
+- **Backend:**
+  - Node.js
+  - Express
+  - MongoDB (Mongoose)
+
+- **Other:**
+  - Vercel (Frontend Hosting)
+
+## Getting Started
+
+To get a local copy of the project up and running, follow these steps:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Gorsun4ic/wisdres.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd wisdres
+   ```
+
+3. Install the required packages:
+
+   ```bash
+   npm install
+   ```
+
+4. Run the application:
+
+   ```bash
+   npm run dev
+   ```
+
+   The app will be running on `http://localhost:5173`.
+
+
+## Deployment
+
+The backend API is deployed on [Vercel](https://vercel.com/) as Serverless Functions. This allows for automatic scaling and efficient resource management.
+
+
+## Contact
+
+Herhel Yehor - [gorsunfoster@gmail.com](mailto:gorsunfoster@gmail.com)
+
+Project Link: [https://github.com/gorsun4ic/quizcrafter](https://github.com/gorsun4ic/quizcrafter)
