@@ -10,14 +10,10 @@
 			"src": "api/server.js",
 			"use": "@vercel/node",
 			"config": {
-				"includeFiles": ["api/server/**"]
+				"includeFiles": ["api/server/**"],
+				"memory": 1024,
+				"maxDuration": 10
 			}
 		}
-	],
-	"functions": {
-		"api/server.js": {
-			"memory": 1024,
-			"maxDuration": 10
-		}
-	}
+	]
 }
