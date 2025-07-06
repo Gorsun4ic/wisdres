@@ -3,15 +3,15 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import bookRoutes from "../src/server/routes/books.js"; 
-import authorRoutes from "../src/server/routes/authors.js";
-import publisherRoutes from "../src/server/routes/publishers.js";
-import genreRoute from "../src/server/routes/genres.js";
-import languageRoute from "../src/server/routes/languages.js";
-import userRoute from "../src/server/routes/users.js";
-import searchRoutes from "../src/server/routes/searchRoutes.js";
-import adminRoute from "../src/server/routes/admins.js";
-import connectDB from "../src/server/config/db.js"; 
+import bookRoutes from "./server/routes/books.js"; 
+import authorRoutes from "./server/routes/authors.js";
+import publisherRoutes from "./server/routes/publishers.js";
+import genreRoute from "./server/routes/genres.js";
+import languageRoute from "./server/routes/languages.js";
+import userRoute from "./server/routes/users.js";
+import searchRoutes from "./server/routes/searchRoutes.js";
+import adminRoute from "./server/routes/admins.js";
+import connectDB from "./server/config/db.js"; 
 
 const app = express();
 
