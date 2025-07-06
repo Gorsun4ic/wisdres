@@ -26,10 +26,26 @@ app.use(
 app.use(cookieParser());
 console.log('Middleware configured.'); // After middleware setup
 
+app.use((req, res, next) => {
+	console.log("--- Incoming Request Details ---");
+	console.log("Original URL (req.originalUrl):", req.originalUrl); // Full original URL from client
+	console.log("URL (req.url):", req.url); // Path from the mount point, or same as originalUrl if no mount
+	console.log("Path (req.path):", req.path); // Just the pathname of the request
+	console.log("Method (req.method):", req.method);
+	console.log("--- End Request Details ---");
+	next(); // IMPORTANT: Pass control to the next middleware/route in the chain
+});
+
 
 // Connect to MongoDB
 connectDB();
 console.log('connectDB() called.'); // After calling DB connection
+
+// Add a simple, direct test route right here to check direct API hits
+app.get('/test-api', (req, res) => {
+	console.log('--> api/server.js: /test-api route hit directly!');
+	res.status(200).json({ message: 'Test API route working directly!' });
+});
 
 
 // Routes
