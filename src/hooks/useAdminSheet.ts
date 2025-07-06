@@ -7,23 +7,11 @@ import { RootState } from "@store/index";
 import useAlert from "@hooks/useAlert";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
-import { ApiSuccess } from "@src/types/apiResponse";
 
-import { BaseFormMutations } from "@src/types/baseMutations";
+import { SheetMutations } from "@src/types/baseMutations";
+import { FieldValues } from "react-hook-form";
 
-export type SheetMutations<T> = BaseFormMutations<T> & {
-	getAll: () => {
-		data?: ApiSuccess<T[]>;
-		isLoading: boolean;
-		error?: unknown;
-	};
-	delete: () => readonly [
-		(id: string) => Promise<{ data?: unknown; error?: unknown }>,
-		unknown
-	];
-};
-
-export const useAdminSheet = <TData, TMutations extends SheetMutations<TData>>(
+export const useAdminSheet = <TData extends FieldValues, TMutations extends SheetMutations<TData>>(
 	config: AdminConfig<TMutations>
 ) => {
 	const [deleteMutation] = config.mutations.delete();

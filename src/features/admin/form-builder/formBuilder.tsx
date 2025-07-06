@@ -101,7 +101,7 @@ const FormBuilder = <
 	if (openDialog && dataById && differences) {
 		return (
 			<ConfirmAction
-				title={`Are you confirm to change the ${dataById.title} info?`}
+				title={`Are you confirm to change the ${dataById?.data?.title} info?`}
 				openDialog={openDialog}
 				onConfirm={handleEdit}
 				onCancel={() => handleEdit(false)}>

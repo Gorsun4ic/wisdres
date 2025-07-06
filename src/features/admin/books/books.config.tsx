@@ -15,7 +15,6 @@ import {
 	useLazyGetBookByIdQuery,
 	useDeleteBookMutation,
 	useGetBooksQuery,
-	apiBooksSlice,
 } from "@api/apiBooksSlice";
 
 // Utils
@@ -23,19 +22,19 @@ import { validateImageType, imageTypes } from "@utils/imgValidation";
 import { getLangEntity } from "@utils/getLangEntity";
 
 // Types
-import { AdminConfig, InferHook } from "@src/types/adminFormConfig";
+import { AdminConfig } from "@src/types/adminFormConfig";
 import { IAuthor } from "@custom-types/author";
 import { IPublisher } from "@custom-types/publisher";
 import { IGenre } from "@custom-types/genre";
 import { ILanguage } from "@custom-types/language";
 
 export type BookMutations = {
-	add: InferHook<typeof apiBooksSlice, "addBook", "useMutation">;
-	addMany: InferHook<typeof apiBooksSlice, "addBooks", "useMutation">;
-	update: InferHook<typeof apiBooksSlice, "updateBook", "useMutation">;
-	getById: InferHook<typeof apiBooksSlice, "getBookById", "useLazyQuery">;
-	delete: InferHook<typeof apiBooksSlice, "deleteBook", "useMutation">;
-	getAll: InferHook<typeof apiBooksSlice, "getBooks", "useQuery">;
+	add: () => ReturnType<typeof useAddBookMutation>;
+	addMany: () => ReturnType<typeof useAddBooksMutation>;
+	update: () => ReturnType<typeof useUpdateBookMutation>;
+	getById: () => ReturnType<typeof useLazyGetBookByIdQuery>;
+	delete: () => ReturnType<typeof useDeleteBookMutation>;
+	getAll: () => ReturnType<typeof useGetBooksQuery>;
 };
 
 export const booksConfig: AdminConfig<BookMutations> = {

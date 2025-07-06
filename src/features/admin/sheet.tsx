@@ -15,7 +15,7 @@ import ErrorMessage from "@components/error";
 
 import { AdminConfig } from "@custom-types/adminFormConfig";
 import { AlertColors } from "@custom-types/alert";
-import { SheetMutations } from "@hooks/useAdminSheet";
+import { SheetMutations, BaseFormMutations } from "@custom-types/baseMutations";
 
 import upperCaseFirstLetter from "@utils/upperCaseFirstLetter";
 interface SheetProps<
@@ -69,7 +69,7 @@ const Sheet = <
 				{config.fields && (
 					<Modal open={open} onClose={handleClose}>
 						<FormBuilder
-							config={config}
+							config={config as AdminConfig<BaseFormMutations<FieldValues>>}
 							mode={formMode}
 							id={toEditId ?? ""}
 							fieldData={fieldData}
@@ -81,7 +81,7 @@ const Sheet = <
 			<ErrorBoundary fallback={<ErrorMessage />}>
 				<GridData
 					handleEdit={handleOpen}
-					data={data as Entity[]}
+					data={data as unknown as Entity[]}
 					isLoading={isLoading}
 					error={error}
 					onDelete={handleDelete}

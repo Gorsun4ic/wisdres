@@ -1,3 +1,4 @@
+import { FieldValues } from "react-hook-form";
 import { ApiSuccess } from "./apiResponse";
 
 // base‑mutations.ts
@@ -19,13 +20,13 @@ export type GetByIdMutation<D> = readonly [
 	unknown
 ];
 
-export type BaseFormMutations<T> = {
+export type BaseFormMutations<T extends FieldValues= FieldValues> = {
 	add: () => AddMutation<T>;
 	update: () => UpdateMutation<T>;
 	getById: () => GetByIdMutation<T>;
 };
 
-export type SheetMutations<T> = BaseFormMutations<T> & {
+export type SheetMutations<T extends FieldValues> = BaseFormMutations<T> & {
 	getAll: () => { data?: ApiSuccess<T[]>; isLoading: boolean; error?: unknown };
 	delete: () => readonly [
 		(id: string) => Promise<{ data?: unknown; error?: unknown }>,
