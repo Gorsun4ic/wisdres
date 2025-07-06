@@ -53,6 +53,11 @@ export const getAllBooks = async (req, res) => {
 			console.log(
 				"----> bookController.js: Books fetched from DB successfully."
 			); // Log after successful DB query
+			console.log(
+				"----> bookController.js: Fetched books data:",
+				JSON.stringify(books, null, 2)
+			);
+
 			if (books.length === 0) {
 				console.log("----> bookController.js: No books found.");
 			}
